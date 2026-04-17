@@ -9,22 +9,21 @@ Send, User, MessageSquare, X, Moon, Sun, MoreVertical, Folder, Contact2,
   Trash2, RefreshCw, Smartphone, Monitor, LogOut, Search, Sparkles, Image as ImageIcon, ScanIcon, 
   Download, Share2, Paperclip, Smile, Mic, PaperclipIcon, FileText, PieChart, Activity, Layers, Cpu, HardDrive, 
   TrendingUp, BarChart3, Fingerprint, Key, MousePointer2, Briefcase, GraduationCap, Award, LifeBuoy,
-  Image
+  Image, Upload
 } from 'lucide-react';
 
 const socket = io('http://localhost:5000');
 
 function App() {
-  // --- CORE AUTH & UI STATES ---
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [activeTab, setActiveTab] = useState('general');
+// --- CORE AUTH & UI STATES ---
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [darkMode, setDarkMode] = useState(true); 
   const [currentUser, setCurrentUser] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [view, setView] = useState("dashboard"); 
   const [activeSubject, setActiveSubject] = useState(null);
-
   // --- ADDITIONAL SETTINGS STATES ---
   const [notifChannels, setNotifChannels] = useState({ academic: true, security: true, system: false, social: true });
   const [criticalAlerts, setCriticalAlerts] = useState(true);
@@ -66,6 +65,25 @@ function App() {
   const [showPicOptions, setShowPicOptions] = useState(false);
   const [systemAlerts, setSystemAlerts] = useState(3);
   const fileInputRef = useRef(null);
+  
+  // --- NOTIFICATION STATES ---
+  const [notifications, setNotifications] = useState([
+    { id: 1, type: "announcement", title: "Welcome to EduPulse LMS", message: "System is now ready for academic year 2026", time: "2 hours ago", priority: "high", read: false },
+    { id: 2, type: "assignment", title: "New Assignment Posted", message: "Chapter 2 Methodology - Capstone 1", time: "5 hours ago", priority: "medium", read: false },
+    { id: 3, type: "grade", title: "Grade Posted", message: "Lab Exercise 5 graded - 96/50", time: "1 day ago", priority: "low", read: true }
+  ]);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  // --- ASSIGNMENT STATES ---
+  const [assignments, setAssignments] = useState([
+    { id: 1, subjectId: "CAP1", title: "Chapter 2 Methodology", type: "Research Paper", dueDate: "April 8, 2026", status: "pending", points: 100, submitted: false },
+    { id: 2, subjectId: "WS102", title: "React Portfolio Project", type: "Project", dueDate: "April 10, 2026", status: "pending", points: 150, submitted: false },
+    { id: 3, subjectId: "SIA101", title: "Lab Exercise 5", type: "Hands-on", dueDate: "April 7, 2026", status: "submitted", points: 50, submitted: true, grade: 96 },
+    { id: 4, subjectId: "TECH32", title: "Business Model Canvas", type: "Presentation", dueDate: "April 6, 2026", status: "graded", points: 100, submitted: true, grade: 92 }
+  ]);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
 
   // --- ACADEMIC PROGRESS & ANALYTICS ---
   const [gpa, setGpa] = useState(1.25);
@@ -308,62 +326,14 @@ function App() {
 
   // --- DATA ARRAYS ---
  const subjects = [
-    { 
-      id: "CAP1", code: "Capstone 1", title: "Capstone Project & Research 1", 
-      prof: "Sheryl Ann Ricafort", color: "bg-blue-600", shadowColor: "rgba(37, 99, 235, 0.5)", 
-      announcement: "Please submit your Chapter 2 drafts by Saturday.", 
-      room: "Lab 302", sched: "Mon/Wed 8:00-10:00AM", progress: 45,
-      meetLink: "https://meet.google.com/cap-stone-one" // Idinagdag
-    },
-    { 
-      id: "SP101", code: "SP 101", title: "Social Issues and Professional Practices", 
-      prof: "Cynthia B. Dulagan", color: "bg-emerald-600", shadowColor: "rgba(16, 185, 129, 0.5)", 
-      announcement: "I have already recorded your midterm grades and attendance.", 
-      room: "RM 401", sched: "Tue/Thu 1:00-2:30PM", progress: 70,
-      meetLink: "https://meet.google.com/soc-issues-prof" // Idinagdag
-    },
-    { 
-      id: "SIA101", code: "SIA 101", title: "System Integration and Architecture", 
-      prof: "Toni D. Granado", color: "bg-slate-600", shadowColor: "rgba(71, 85, 105, 0.5)", 
-      announcement: "Prepare for the hands-on lab next week.", 
-      room: "Lab 305", sched: "Fri 9:00-12:00PM", progress: 30,
-      meetLink: "https://meet.google.com/sia-sys-integ" // Idinagdag
-    },
-    { 
-      id: "TECH32", code: "TECH 32", title: "Technopreneurship", 
-      prof: "Katherine C. Baggay", color: "bg-cyan-700", shadowColor: "rgba(14, 116, 144, 0.5)", 
-      announcement: "Pitch deck presentations start on Monday.", 
-      room: "RM 202", sched: "Mon 1:00-4:00PM", progress: 85,
-      meetLink: "https://meet.google.com/tech-nopre-neur" // Idinagdag
-    },
-    { 
-      id: "MRC22", code: "MRC 22", title: "Methods of Research in Computing", 
-      prof: "Toni D. Granado", color: "bg-sky-800", shadowColor: "rgba(7, 89, 133, 0.5)", 
-      announcement: "Finalize your research titles for approval.", 
-      room: "RM 405", sched: "Wed 2:00-5:00PM", progress: 10,
-      meetLink: "https://meet.google.com/mrc-research-met" // Idinagdag
-    },
-    { 
-      id: "WS102", code: "WS 102", title: "Web Programming", 
-      prof: "Roclyn Yamson", color: "bg-teal-700", shadowColor: "rgba(15, 118, 110, 0.5)", 
-      announcement: "Don't forget to push your React projects to GitHub.", 
-      room: "Lab 301", sched: "Tue 8:00-11:00AM", progress: 60,
-      meetLink: "https://meet.google.com/web-prog-react" // Idinagdag
-    },
-    { 
-      id: "ED101", code: "ED 101", title: "Embedded Systems / Robotics", 
-      prof: "Edmar Tan", color: "bg-blue-500", shadowColor: "rgba(59, 130, 246, 0.5)", 
-      announcement: "Bring your Arduino kits on our face-to-face class.", 
-      room: "Lab 402", sched: "Thu 9:00-12:00PM", progress: 50,
-      meetLink: "https://meet.google.com/ed-robotics-sys" // Idinagdag
-    },
-    { 
-      id: "ET102", code: "ET 102", title: "Network Admin & Maintenance", 
-      prof: "Harvey Rey B. Del Rosario", color: "bg-blue-700", shadowColor: "rgba(29, 78, 216, 0.5)", 
-      announcement: "Server configuration quiz is scheduled for Tuesday.", 
-      room: "Lab 306", sched: "Sat 8:00-11:00AM", progress: 20,
-      meetLink: "https://meet.google.com/et-net-admin-mnt" // Idinagdag
-    }
+    { id: 1, name: "SP 101- Social Issues and Professional Practices", instructor: "Cynthia B. Dulagan" },
+    { id: 2, name: "Capstone 1", instructor: "Sheryl Ann Ricafort" },
+    { id: 3, name: "SIA 101- System Integration and Architecture", instructor: "Toni D. Granado" },
+    { id: 4, name: "TECH 32 - Technopreneurship", instructor: "Katherine C. Baggay" },
+    { id: 5, name: "MRC 22- Methods of Research in Computing", instructor: "Toni D. Granado" },
+    { id: 6, name: "WS 102 Web Programming", instructor: "Roclyn Yamson" },
+    { id: 7, name: "ED 101- Embedded Systems/ Robotics", instructor: "Edmar Tan" },
+    { id: 8, name: "NET 102- Network Administration and Maintenance", instructor: "Harvey Rey B. Del Rosario" }
   ];
 
   const languages = [
@@ -390,7 +360,7 @@ function App() {
     ]}
   ];
 
-  const notifications = [
+  const Notifications = [
     { id: 101, title: "Grade Posted", desc: "Prof. Ricafort posted Midterm for CAP1", time: "2h ago", icon: <Award size={14}/> },
     { id: 102, title: "Class Canceled", desc: "WS 102 Lab session tomorrow is moved", time: "5h ago", icon: <AlertCircle size={14}/> },
     { id: 103, title: "System Update", desc: "EduPulse core updated to v3.0 Stable", time: "1d ago", icon: <Cpu size={14}/> }
@@ -401,6 +371,17 @@ function App() {
     socket.on('receive_private_message', (data) => { setChatLog((prev) => [...prev, data]); });
     return () => socket.off();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showNotifications && !event.target.closest('.notification-dropdown')) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showNotifications]);
 
   // --- HANDLERS ---
   const handleSubjectClick = (sub) => { 
@@ -446,6 +427,35 @@ function App() {
     }
   };
 
+  const handleAssignmentFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadedFile(file);
+    }
+  };
+
+  const handleAssignmentSubmit = () => {
+    if (selectedAssignment && uploadedFile) {
+      setAssignments(assignments.map(assignment => 
+        assignment.id === selectedAssignment.id 
+          ? { ...assignment, submitted: true, status: "submitted" }
+          : assignment
+      ));
+      setShowSubmitModal(false);
+      setSelectedAssignment(null);
+      setUploadedFile(null);
+    }
+  };
+
+  const openSubmitModal = (assignment) => {
+    setSelectedAssignment(assignment);
+    setShowSubmitModal(true);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
   // --- UI COMPONENTS ---
   const EmptyState = ({ type }) => (
     <div className="flex flex-col items-center justify-center p-20 text-center animate-in fade-in zoom-in duration-700">
@@ -488,27 +498,118 @@ function App() {
     </div>
   );
 
+  // --- LOGIN STATES ---
+  const [loginError, setLoginError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // --- LOGIN VALIDATION ---
+  const handleLogin = () => {
+    if (!email || !password) {
+      setLoginError("Please enter both email and password");
+      return;
+    }
+    
+    if (!email.includes("@") || !email.includes(".")) {
+      setLoginError("Please enter a valid email address");
+      return;
+    }
+    
+    if (password.length < 6) {
+      setLoginError("Password must be at least 6 characters");
+      return;
+    }
+    
+    setIsLoading(true);
+    setLoginError("");
+    
+    // Simulate API call
+    setTimeout(() => {
+      // Mock validation - accept any valid email/password combo
+      setIsLoggedIn(true);
+      setCurrentUser(email);
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  const handleForgotPassword = () => {
+    const email = prompt("Enter your email address for password reset:");
+    if (email && email.includes("@")) {
+      alert(`Password reset link sent to ${email}`);
+    }
+  };
+
+  const handleNewStudent = () => {
+    alert("Please contact the registrar's office for new student enrollment.");
+  };
+
   // --- AUTH PAGE ---
   if (!isLoggedIn) {
     return (
       <div className={`min-h-screen flex items-center justify-center p-6 ${darkMode ? 'bg-[#0a0a0a]' : 'bg-[#f0f2f5]'}`}>
         <div className={`w-full max-w-md p-12 rounded-[3rem] border shadow-[0_40px_100px_rgba(0,0,0,0.4)] animate-in fade-in zoom-in-95 duration-1000 ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'} text-center relative overflow-hidden`}>
           <div className="absolute top-0 right-0 p-10 opacity-5 -rotate-12"><Cpu size={200}/></div>
-          <div className="flex justify-center mb-8"><div className="w-20 h-20 bg-emerald-500 rounded-[2rem] rotate-12 flex items-center justify-center shadow-2xl shadow-emerald-500/20"><Zap size={40} className="text-white -rotate-12 animate-pulse"/></div></div>
+          <div className="flex justify-center mb-8">
+            <div className="w-20 h-20 bg-emerald-500 rounded-[2rem] rotate-12 flex items-center justify-center shadow-2xl shadow-emerald-500/20">
+              <Zap size={40} className="text-white -rotate-12 animate-pulse"/>
+            </div>
+          </div>
           <h1 className="text-4xl font-black italic text-emerald-500 mb-2 tracking-tighter uppercase">EduPulse</h1>
           <p className="text-[10px] font-black uppercase text-slate-500 tracking-[0.4em] mb-10">Synchronized Academic OS</p>
+          
+          {loginError && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
+              <p className="text-[10px] font-black text-red-500 uppercase tracking-widest">{loginError}</p>
+            </div>
+          )}
+          
           <div className="space-y-5 text-left relative z-10">
             <div>
-               <label className="text-[10px] font-black uppercase text-slate-500 ml-4 mb-2 block tracking-widest">Student Credentials</label>
-               <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full border rounded-2xl px-6 py-4 text-sm outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a] text-white' : 'bg-slate-50 border-slate-200'}`}/>
+               <label className="text-[10px] font-black uppercase text-slate-500 ml-4 mb-2 block tracking-widest">Student Email</label>
+               <input 
+                 type="email" 
+                 placeholder="student@university.edu" 
+                 value={email} 
+                 onChange={(e) => {
+                   setEmail(e.target.value);
+                   setLoginError("");
+                 }} 
+                 className={`w-full border rounded-2xl px-6 py-4 text-sm outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a] text-white' : 'bg-slate-50 border-slate-200'} ${loginError && !email ? 'border-red-500' : ''}`}
+               />
             </div>
             <div>
-               <input type="password" placeholder="System Password" value={password} onChange={(e) => setPassword(e.target.value)} className={`w-full border rounded-2xl px-6 py-4 text-sm outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a] text-white' : 'bg-slate-50 border-slate-200'}`}/>
+               <label className="text-[10px] font-black uppercase text-slate-500 ml-4 mb-2 block tracking-widest">System Password</label>
+               <input 
+                 type="password" 
+                 placeholder="Enter your password" 
+                 value={password} 
+                 onChange={(e) => {
+                   setPassword(e.target.value);
+                   setLoginError("");
+                 }} 
+                 className={`w-full border rounded-2xl px-6 py-4 text-sm outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a] text-white' : 'bg-slate-50 border-slate-200'} ${loginError && !password ? 'border-red-500' : ''}`}
+               />
             </div>
-            <button onClick={() => { setIsLoggedIn(true); setCurrentUser(email); }} className="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl hover:bg-emerald-500 transition-all uppercase text-[11px] tracking-[0.2em] shadow-2xl shadow-emerald-900/30 active:scale-95 mt-4">Access Dashboard</button>
+            <button 
+              onClick={handleLogin} 
+              disabled={isLoading}
+              className={`w-full font-black py-5 rounded-2xl transition-all uppercase text-[11px] tracking-[0.2em] shadow-2xl active:scale-95 mt-4 ${
+                isLoading 
+                  ? 'bg-slate-600 text-white cursor-not-allowed' 
+                  : 'bg-emerald-600 text-white hover:bg-emerald-500 shadow-emerald-900/30'
+              }`}
+            >
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Authenticating...
+                </span>
+              ) : (
+                'Access Dashboard'
+              )}
+            </button>
             <div className="pt-4 flex justify-between px-2">
-               <span className="text-[9px] font-black text-slate-500 uppercase cursor-pointer hover:text-emerald-500 transition-colors">Emergency Reset</span>
-               <span className="text-[9px] font-black text-emerald-500 uppercase cursor-pointer hover:underline">New Student Access</span>
+               <span onClick={handleForgotPassword} className="text-[9px] font-black text-slate-500 uppercase cursor-pointer hover:text-emerald-500 transition-colors">Forgot Password?</span>
+               <span onClick={handleNewStudent} className="text-[9px] font-black text-emerald-500 uppercase cursor-pointer hover:underline">New Student?</span>
             </div>
           </div>
         </div>
@@ -574,28 +675,7 @@ function App() {
 
 </div>
 {/* --- END OF ADDITION --- */}
-      {/* --- START OF SETTINGS NAVIGATION (DAGDAG LANG) --- */}
-      <div className={`flex gap-6 p-4 border-b ${darkMode ? 'border-zinc-800' : 'border-gray-200'}`}>
-        <button 
-          onClick={() => setActiveTab('general')} 
-          className={`pb-2 font-bold transition-all ${activeTab === 'general' ? 'text-emerald-500 border-b-2 border-emerald-500' : 'text-zinc-500'}`}
-        >
-          General Settings
-        </button>
-        <button 
-          onClick={() => setActiveTab('support')} 
-          className={`pb-2 font-bold transition-all ${activeTab === 'support' ? 'text-emerald-500 border-b-2 border-emerald-500' : 'text-zinc-500'}`}
-        >
-          Support & Help
-        </button>
-        <button 
-          onClick={() => setActiveTab('alerts')} 
-          className={`pb-2 font-bold transition-all ${activeTab === 'alerts' ? 'text-emerald-500 border-b-2 border-emerald-500' : 'text-zinc-500'}`}
-        >
-          Alert Configurations
-        </button>
-      </div>
-
+     
       {/* --- CONTENT AREA --- */}
       <div className="p-6">
         {/* I-wrap mo itong activeTab === 'support' logic */}
@@ -654,9 +734,33 @@ function App() {
         </div>
         
         <div className="flex items-center gap-8">
-          <div className="relative group cursor-pointer hidden sm:block">
+          <div className="relative group cursor-pointer hidden sm:block" onClick={toggleNotifications}>
              <Bell size={20} className="text-slate-500 group-hover:text-emerald-500 transition-colors"/>
-             {systemAlerts > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white text-[8px] font-black flex items-center justify-center rounded-full border-2 border-[#0f0f0f]">{systemAlerts}</span>}
+             {notifications.filter(n => !n.read).length > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white text-[8px] font-black flex items-center justify-center rounded-full border-2 border-[#0f0f0f]">{notifications.filter(n => !n.read).length}</span>}
+             
+             {/* Notification Dropdown */}
+             {showNotifications && (
+               <div className={`notification-dropdown absolute top-12 right-0 w-80 rounded-2xl border shadow-2xl z-50 ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-slate-200'}`}>
+                 <div className="p-4 border-b border-slate-500/10">
+                    <h3 className="text-sm font-black uppercase tracking-tighter">Notifications</h3>
+                 </div>
+                 <div className="max-h-96 overflow-y-auto">
+                    {notifications.map(notif => (
+                       <div key={notif.id} className={`p-4 border-b border-slate-500/5 hover:bg-emerald-500/5 transition-all cursor-pointer ${!notif.read ? 'bg-emerald-500/5' : ''}`}
+                            onClick={() => setNotifications(notifications.map(n => n.id === notif.id ? {...n, read: true} : n))}>
+                          <div className="flex items-start gap-3">
+                             <div className={`w-2 h-2 rounded-full mt-1.5 ${notif.priority === 'high' ? 'bg-red-500' : notif.priority === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'}`}></div>
+                             <div className="flex-1">
+                                <p className="text-xs font-black uppercase tracking-tight">{notif.title}</p>
+                                <p className="text-[10px] text-slate-500">{notif.message}</p>
+                                <p className="text-[8px] text-slate-600">{notif.time}</p>
+                             </div>
+                          </div>
+                       </div>
+                    ))}
+                 </div>
+               </div>
+             )}
           </div>
           <button onClick={() => setDarkMode(!darkMode)} className={`p-3 rounded-2xl transition-all active:scale-90 ${darkMode ? 'bg-yellow-500/10 text-yellow-500' : 'bg-blue-500/10 text-blue-500'}`}>{darkMode ? <Sun size={20}/> : <Moon size={20}/>}</button>
           
@@ -696,9 +800,9 @@ function App() {
             </div>
             <div className="space-y-2">
               {subjects.map(sub => (
-                <div key={sub.id} onClick={() => handleSubjectClick(sub)} className={`group px-5 py-4 text-[10px] font-black uppercase tracking-tight cursor-pointer truncate rounded-[1.5rem] transition-all flex items-center gap-4 ${activeSubject?.id === sub.id ? `${sub.color} text-white shadow-xl` : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600 shadow-sm')}`}>
-                  <div className={`w-2.5 h-2.5 rounded-full border-2 ${activeSubject?.id === sub.id ? 'bg-white border-white' : `${sub.color} border-transparent`}`}></div>
-                  <div className="flex-1 truncate">{sub.code}</div>
+                <div key={sub.id} onClick={() => handleSubjectClick(sub)} className={`group px-5 py-4 text-[10px] font-black uppercase tracking-tight cursor-pointer truncate rounded-[1.5rem] transition-all flex items-center gap-4 ${activeSubject?.id === sub.id ? 'bg-emerald-600 text-white shadow-xl' : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600 shadow-sm')}`}>
+                  <div className={`w-2.5 h-2.5 rounded-full border-2 ${activeSubject?.id === sub.id ? 'bg-white border-white' : 'bg-emerald-500 border-transparent'}`}></div>
+                  <div className="flex-1 truncate">{sub.name.split(' ')[0]}</div>
                   <ChevronRight size={14} className={`opacity-0 group-hover:opacity-100 transition-opacity ${activeSubject?.id === sub.id ? 'opacity-100' : ''}`}/>
                 </div>
               ))}
@@ -1504,6 +1608,49 @@ function App() {
                     </div>
                   )}
 
+                  {/* SUBJECTS LIST SECTION */}
+                  <div className="space-y-8 animate-in slide-in-from-bottom-6">
+                    <div className={`p-10 rounded-[3rem] border ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
+                      <div className="flex items-center gap-6 mb-10">
+                        <div className="p-4 bg-emerald-500/10 text-emerald-500 rounded-[1.5rem] shadow-inner"><BookOpen size={32}/></div>
+                        <div>
+                          <p className="text-lg font-black uppercase tracking-tighter italic mb-1">Current Subjects</p>
+                          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">3rd Year - College of Information and Computing Sciences</p>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {subjects.map(sub => (
+                          <div key={sub.id} className={`p-6 rounded-[2rem] border transition-all hover:scale-[1.02] cursor-pointer group ${darkMode ? 'bg-white/5 border-white/10 hover:bg-emerald-500/5 hover:border-emerald-500/20' : 'bg-slate-50 border-slate-100 hover:bg-white'}`}
+                               onClick={() => handleSubjectClick(sub)}>
+                            <div className="flex items-start gap-4">
+                              <div className={`w-3 h-3 rounded-full ${sub.color} shadow-lg mt-1`}></div>
+                              <div className="flex-1">
+                                <p className="text-sm font-black uppercase tracking-tighter mb-1 group-hover:text-emerald-500 transition-colors">{sub.code}</p>
+                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">{sub.title}</p>
+                                <div className="flex items-center gap-3 text-[9px] font-bold text-slate-600 uppercase">
+                                  <span className="flex items-center gap-1">
+                                    <User size={12}/> {sub.prof}
+                                  </span>
+                                  <span>•</span>
+                                  <span className="flex items-center gap-1">
+                                    <MapPin size={12}/> {sub.room}
+                                  </span>
+                                </div>
+                                <div className="mt-3 flex items-center gap-2">
+                                  <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                                    <div className={`h-full ${sub.color} rounded-full transition-all`} style={{ width: `${sub.progress}%` }}></div>
+                                  </div>
+                                  <span className="text-[8px] font-bold text-slate-500 uppercase">{sub.progress}%</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
                   {/* PREFERENCES TAB - Chain Reactions */}
                   {settingsTab === 'preferences' && (
                     <div className="space-y-6 animate-in slide-in-from-bottom-6 duration-500">
@@ -1589,8 +1736,13 @@ function App() {
                  <button onClick={() => setIsChatOpen(false)} className="p-3 hover:bg-white/20 rounded-2xl transition-all relative z-10"><X size={24}/></button>
               </div>
               <div className="p-4 flex gap-2 border-b border-white/5">
-                 <button onClick={() => setActiveChatTab("messages")} className={`flex-1 py-3 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${activeChatTab === 'messages' ? 'bg-emerald-500/10 text-emerald-500' : 'text-slate-500'}`}>Messages</button>
-                 <button onClick={() => setActiveChatTab("files")} className={`flex-1 py-3 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${activeChatTab === 'files' ? 'bg-emerald-500/10 text-emerald-500' : 'text-slate-500'}`}>Shared Assets</button>
+                 <div className="flex gap-2">
+                 <button onClick={() => setActiveChatTab("stream")} className={`flex-1 py-3 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${activeChatTab === 'stream' ? 'bg-emerald-500/10 text-emerald-500' : 'text-slate-500'}`}>Stream</button>
+                 <button onClick={() => setActiveChatTab("classwork")} className={`flex-1 py-3 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${activeChatTab === 'classwork' ? 'bg-emerald-500/10 text-emerald-500' : 'text-slate-500'}`}>Classwork</button>
+                 <button onClick={() => setActiveChatTab("people")} className={`flex-1 py-3 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${activeChatTab === 'people' ? 'bg-emerald-500/10 text-emerald-500' : 'text-slate-500'}`}>People</button>
+                 <button onClick={() => setActiveChatTab("grades")} className={`flex-1 py-3 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${activeChatTab === 'grades' ? 'bg-emerald-500/10 text-emerald-500' : 'text-slate-500'}`}>Grades</button>
+                 <button onClick={() => setActiveChatTab("assignments")} className={`flex-1 py-3 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${activeChatTab === 'assignments' ? 'bg-emerald-500/10 text-emerald-500' : 'text-slate-500'}`}>Assignments</button>
+              </div>
               </div>
               <div className="flex-1 p-8 overflow-y-auto space-y-6 custom-scrollbar bg-transparent">
                  <div className="text-center p-6 mb-4">
@@ -1606,7 +1758,140 @@ function App() {
                           {msg.sender === currentUser && <CheckCircle2 size={10} className="text-emerald-500"/>}
                        </div>
                     </div>
-                 )) : (
+                 )) : activeChatTab === 'assignments' ? (
+                    <div className="space-y-4">
+                       <div className="text-center p-4 mb-4">
+                          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-emerald-500 bg-emerald-500/5 px-6 py-2.5 rounded-full border border-emerald-500/20 italic">Assignment Center</span>
+                       </div>
+                       {assignments.filter(assignment => subjects.find(sub => sub.id === assignment.subjectId)).map(assignment => {
+                         const subject = subjects.find(sub => sub.id === assignment.subjectId);
+                         return (
+                           <div key={assignment.id} className={`p-6 rounded-[2rem] border transition-all hover:scale-[1.01] ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-100'}`}>
+                             <div className="flex justify-between items-start mb-4">
+                               <div className="flex-1">
+                                 <div className="flex items-center gap-3 mb-2">
+                                   <span className="px-3 py-1 bg-emerald-600 text-white text-[8px] font-black uppercase rounded-lg">{subject.name.split(' ')[0]}</span>
+                                   <span className="px-3 py-1 bg-slate-600 text-white text-[8px] font-black uppercase rounded-lg">{assignment.type}</span>
+                                 </div>
+                                 <p className="text-sm font-black uppercase tracking-tighter mb-2">{assignment.title}</p>
+                                 <div className="flex items-center gap-4 text-[9px] font-bold text-slate-500 uppercase">
+                                   <span className="flex items-center gap-1">
+                                     <Clock size={12}/> Due: {assignment.dueDate}
+                                   </span>
+                                   <span>•</span>
+                                   <span>{assignment.points} pts</span>
+                                 </div>
+                               </div>
+                               <div className="text-right">
+                                 <span className={`px-3 py-1 text-[8px] font-black uppercase rounded-lg ${
+                                   assignment.status === 'graded' ? 'bg-emerald-600 text-white' :
+                                   assignment.status === 'submitted' ? 'bg-blue-600 text-white' :
+                                   'bg-red-600 text-white'
+                                 }`}>
+                                   {assignment.status}
+                                 </span>
+                               </div>
+                             </div>
+                             {assignment.grade && (
+                               <div className="mt-3 p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                                 <p className="text-[10px] font-black text-emerald-500 uppercase">Grade: {assignment.grade}/{assignment.points}</p>
+                               </div>
+                             )}
+                             {!assignment.submitted && (
+                               <button 
+                                 onClick={() => openSubmitModal(assignment)}
+                                 className="mt-4 w-full py-3 bg-emerald-600 text-white rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-emerald-500 transition-all"
+                               >
+                                 Submit Assignment
+                               </button>
+                             )}
+                           </div>
+                         );
+                       })}
+                    </div>
+                 ) : activeChatTab === 'classwork' ? (
+                    <div className="space-y-6">
+                       <div className="text-center p-4 mb-4">
+                          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-blue-500 bg-blue-500/5 px-6 py-2.5 rounded-full border border-blue-500/20 italic">Class Materials</span>
+                       </div>
+                       <div className="grid grid-cols-1 gap-4">
+                          <div className={`p-6 rounded-[2rem] border transition-all hover:scale-[1.01] cursor-pointer ${darkMode ? 'bg-white/5 border-white/10 hover:bg-blue-500/5' : 'bg-slate-50 border-slate-100 hover:bg-blue-50'}`}>
+                             <div className="flex items-center gap-4">
+                                <div className="p-3 bg-blue-500/10 text-blue-500 rounded-xl">
+                                   <FileText size={20}/>
+                                </div>
+                                <div className="flex-1">
+                                   <p className="text-sm font-black uppercase tracking-tighter">Course Syllabus</p>
+                                   <p className="text-[9px] font-bold text-slate-500 uppercase">PDF • 2.4 MB</p>
+                                </div>
+                                <Download size={16} className="text-blue-500"/>
+                             </div>
+                          </div>
+                          <div className={`p-6 rounded-[2rem] border transition-all hover:scale-[1.01] cursor-pointer ${darkMode ? 'bg-white/5 border-white/10 hover:bg-blue-500/5' : 'bg-slate-50 border-slate-100 hover:bg-blue-50'}`}>
+                             <div className="flex items-center gap-4">
+                                <div className="p-3 bg-emerald-500/10 text-emerald-500 rounded-xl">
+                                   <ImageIcon size={20}/>
+                                </div>
+                                <div className="flex-1">
+                                   <p className="text-sm font-black uppercase tracking-tighter">Reading Resources</p>
+                                   <p className="text-[9px] font-bold text-slate-500 uppercase">ZIP • 15.7 MB</p>
+                                </div>
+                                <Download size={16} className="text-emerald-500"/>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                 ) : activeChatTab === 'people' ? (
+                    <div className="space-y-6">
+                       <div className="text-center p-4 mb-4">
+                          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-purple-500 bg-purple-500/5 px-6 py-2.5 rounded-full border border-purple-500/20 italic">Classmates</span>
+                       </div>
+                       <div className="grid grid-cols-2 gap-4">
+                          {['Juan Dela Cruz', 'Maria Santos', 'Jose Reyes', 'Ana Lopez'].map((name, i) => (
+                             <div key={i} className={`p-4 rounded-xl border transition-all hover:scale-[1.02] ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-100'}`}>
+                                <div className="flex items-center gap-3">
+                                   <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500 font-black text-sm">
+                                      {name.split(' ').map(n => n[0]).join('')}
+                                   </div>
+                                   <div className="flex-1">
+                                      <p className="text-[10px] font-black uppercase tracking-tighter">{name}</p>
+                                      <p className="text-[8px] font-bold text-slate-500 uppercase">Student</p>
+                                   </div>
+                                </div>
+                             </div>
+                          ))}
+                       </div>
+                    </div>
+                 ) : activeChatTab === 'grades' ? (
+                    <div className="space-y-6">
+                       <div className="text-center p-4 mb-4">
+                          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-yellow-500 bg-yellow-500/5 px-6 py-2.5 rounded-full border border-yellow-500/20 italic">Academic Performance</span>
+                       </div>
+                       <div className={`p-6 rounded-[2rem] border ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-100'}`}>
+                          <div className="text-center mb-6">
+                             <p className="text-3xl font-black text-yellow-500">1.25</p>
+                             <p className="text-[10px] font-black text-slate-500 uppercase">Current GPA</p>
+                          </div>
+                          <div className="space-y-3">
+                             {assignments.filter(a => a.grade).map(assignment => {
+                               const subject = subjects.find(sub => sub.id === assignment.subjectId);
+                               return (
+                                 <div key={assignment.id} className="flex justify-between items-center p-3 bg-slate-800/30 rounded-lg">
+                                   <div>
+                                      <p className="text-[10px] font-black uppercase">{assignment.title}</p>
+                                      <p className="text-[8px] font-bold text-slate-500">{subject.name.split(' ')[0]}</p>
+                                   </div>
+                                   <div className="text-right">
+                                      <p className="text-lg font-black text-yellow-500">{assignment.grade}</p>
+                                      <p className="text-[8px] font-bold text-slate-500">/{assignment.points}</p>
+                                   </div>
+                                 </div>
+                               );
+                             })}
+                          </div>
+                       </div>
+                    </div>
+                 ) : (
                     <div className="h-full flex flex-col items-center justify-center opacity-20 text-center space-y-4">
                        <Mic size={60} className="text-slate-500"/>
                        <p className="text-[10px] font-black uppercase tracking-widest">No active transmission logs</p>
@@ -1704,6 +1989,87 @@ function App() {
                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Localization updates require system-wide handshake (3ms latency expected)</p>
                </div>
             </div>
+        </div>
+      )}
+
+      {/* ASSIGNMENT SUBMISSION MODAL */}
+      {showSubmitModal && selectedAssignment && (
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[300] flex items-center justify-center p-6 animate-in fade-in duration-500">
+           <div className={`w-full max-w-lg rounded-[4rem] border shadow-[0_60px_120px_rgba(0,0,0,0.7)] overflow-hidden ${darkMode ? 'bg-[#121212] border-[#252525]' : 'bg-white border-slate-200'}`}>
+              <div className="p-10 border-b border-slate-500/10 flex justify-between items-center bg-emerald-600 text-white relative">
+                <div className="absolute top-0 right-0 p-10 opacity-10"><Upload size={100}/></div>
+                <div className="text-left relative z-10">
+                   <h3 className="text-2xl font-black uppercase tracking-tighter leading-none mb-1">Submit Assignment</h3>
+                   <p className="text-[10px] font-bold uppercase opacity-80 leading-none italic">{selectedAssignment.title}</p>
+                </div>
+                <button onClick={() => setShowSubmitModal(false)} className="p-3 hover:bg-white/20 rounded-2xl transition-all relative z-10"><X size={32}/></button>
+              </div>
+              <div className="p-8 space-y-6">
+                 <div className="space-y-2">
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Assignment Details</p>
+                    <div className={`p-6 rounded-2xl border ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+                       <div className="flex justify-between items-center mb-3">
+                          <span className="text-sm font-black uppercase">{selectedAssignment.title}</span>
+                          <span className="px-3 py-1 bg-red-600 text-white text-[8px] font-black uppercase rounded-lg">{selectedAssignment.points} pts</span>
+                       </div>
+                       <p className="text-[10px] font-bold text-slate-500 uppercase">Due: {selectedAssignment.dueDate}</p>
+                    </div>
+                 </div>
+                 
+                 <div className="space-y-2">
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Upload File</p>
+                    <div className={`p-8 rounded-2xl border-2 border-dashed ${darkMode ? 'border-white/20 bg-white/5' : 'border-slate-300 bg-slate-50'} text-center`}>
+                       <input 
+                          type="file" 
+                          onChange={handleAssignmentFileChange}
+                          className="hidden"
+                          id="assignment-file-input"
+                        />
+                       <label htmlFor="assignment-file-input" className="cursor-pointer">
+                          {uploadedFile ? (
+                             <div className="flex items-center gap-4">
+                                <div className="p-3 bg-emerald-500 rounded-xl text-white">
+                                   <FileText size={24}/>
+                                </div>
+                                <div className="text-left">
+                                   <p className="text-sm font-black uppercase">{uploadedFile.name}</p>
+                                   <p className="text-[10px] font-bold text-slate-500">{(uploadedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                                </div>
+                             </div>
+                          ) : (
+                             <div className="space-y-4">
+                                <div className="p-4 bg-emerald-500/10 rounded-full text-emerald-500 w-fit mx-auto">
+                                   <Upload size={32}/>
+                                </div>
+                                <p className="text-[10px] font-black text-slate-500 uppercase">Click to upload or drag and drop</p>
+                                <p className="text-[8px] font-bold text-slate-600">PDF, DOC, DOCX, PPT, PPTX (MAX 25MB)</p>
+                             </div>
+                          )}
+                       </label>
+                    </div>
+                 </div>
+                 
+                 <div className="space-y-2">
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Comments (Optional)</p>
+                    <textarea 
+                       placeholder="Add any comments for your instructor..."
+                       className={`w-full h-24 p-6 rounded-2xl text-xs font-bold uppercase tracking-widest outline-none border ${darkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-800'}`}
+                    />
+                 </div>
+              </div>
+              <div className="p-8 border-t border-slate-500/10 flex gap-4">
+                 <button onClick={() => setShowSubmitModal(false)} className="flex-1 py-4 bg-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10 hover:bg-white/10">
+                    Cancel
+                 </button>
+                 <button 
+                    onClick={handleAssignmentSubmit}
+                    disabled={!uploadedFile}
+                    className="flex-1 py-4 bg-emerald-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-2xl shadow-emerald-500/20 hover:bg-emerald-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                 >
+                    Submit Assignment
+                 </button>
+              </div>
+           </div>
         </div>
       )}
      
