@@ -621,105 +621,6 @@ function App() {
   return (
     <div className={`min-h-screen flex flex-col transition-all duration-700 selection:bg-emerald-500 selection:text-white ${darkMode ? 'bg-[#0a0a0a] text-[#d1d1d1]' : 'bg-[#f8f9fa] text-slate-900'}`}>
       
-      {/* --- START OF SETTINGS CONTENT AREA (DAGDAG LANG) --- */}
-<div className="flex-1 p-8"> 
-  
-  {/* Lalabas lang ito kapag cliniclick yung Alert Configurations */}
-  {activeTab === 'alerts' && (
-    <div className="animate-in fade-in duration-500">
-      <h2 className="text-2xl font-bold text-emerald-500 mb-6 uppercase tracking-wider">Alert Configurations</h2>
-      <div className={`p-6 rounded-2xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-100 shadow-sm'}`}>
-        <p className="mb-6 opacity-70">Manage how you receive system updates and classroom notifications.</p>
-        <div className="space-y-4">
-          {['Email Notifications', 'Browser Push Alerts', 'Classroom Activity', 'Urgent Maintenance SMS'].map((item) => (
-            <label key={item} className="flex items-center justify-between p-4 rounded-xl hover:bg-emerald-500/5 transition-colors cursor-pointer group">
-              <span className="font-medium">{item}</span>
-              <input type="checkbox" defaultChecked className="w-5 h-5 accent-emerald-500" />
-            </label>
-          ))}
-        </div>
-        <button className="mt-8 w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20">
-          Save Changes
-        </button>
-      </div>
-    </div>
-  )}
-
-  {/* Lalabas lang ito kapag cliniclick yung Support & Help */}
-  {activeTab === 'support' && (
-    <div className="animate-in fade-in duration-500">
-      <h2 className="text-2xl font-bold text-emerald-500 mb-6 uppercase tracking-wider">Support & Help</h2>
-      <div className={`p-6 rounded-2xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-100 shadow-sm'}`}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-5 rounded-xl border border-emerald-500/20 bg-emerald-500/5">
-            <h4 className="font-bold mb-3">Quick FAQ</h4>
-            <ul className="text-sm space-y-2 opacity-80">
-              <li>• How to join a class? Use the '+' button.</li>
-              <li>• Assignment upload? Check Classwork tab.</li>
-              <li>• System lag? Clear your browser cache.</li>
-            </ul>
-          </div>
-          <div className="p-5 rounded-xl border border-zinc-700">
-            <h4 className="font-bold mb-3">Contact Us</h4>
-            <p className="text-sm opacity-70">Email: support@lms-gclass.edu.ph</p>
-            <p className="text-sm opacity-70">Response time: Within 24 hours</p>
-            <button className="mt-4 text-emerald-500 font-bold text-sm hover:underline">Open Support Ticket →</button>
-          </div>
-        </div>
-        <div className="mt-6 p-4 bg-zinc-800/30 rounded-lg text-center text-xs opacity-50">
-          LMS-GCLASS VERSION 1.0.4 - STABLE BUILD
-        </div>
-      </div>
-    </div>
-  )}
-
-</div>
-{/* --- END OF ADDITION --- */}
-     
-      {/* --- CONTENT AREA --- */}
-      <div className="p-6">
-        {/* I-wrap mo itong activeTab === 'support' logic */}
-        {activeTab === 'support' && (
-          <div className={`p-6 rounded-xl border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-200 shadow-sm'}`}>
-            <h3 className="text-xl font-bold text-emerald-500 mb-4">Support and Help</h3>
-            <div className="space-y-4">
-              <div className="p-4 rounded-lg bg-opacity-10 bg-emerald-500 border border-emerald-500/20">
-                <h4 className="font-bold">Frequently Asked Questions</h4>
-                <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
-                  <li>How to join a class? - Use the '+' button and enter the class code.</li>
-                  <li>How to submit assignments? - Go to the 'Classwork' tab and upload your file.</li>
-                  <li>Forgot password? - Contact your system administrator.</li>
-                </ul>
-              </div>
-              <div className="p-4 rounded-lg border border-zinc-700">
-                <h4 className="font-bold text-sm">Contact Support</h4>
-                <p className="text-sm opacity-80">Email: support@lms-gclass.edu.ph</p>
-                <p className="text-sm opacity-80">Live Chat: Available 8:00 AM - 5:00 PM</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* I-wrap mo itong activeTab === 'alerts' logic */}
-        {activeTab === 'alerts' && (
-          <div className={`p-6 rounded-xl border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-200 shadow-sm'}`}>
-            <h3 className="text-xl font-bold text-emerald-500 mb-4">Alert Configurations</h3>
-            <div className="space-y-4">
-              {['Email Notifications', 'Browser Push Notifications', 'Class Comment Alerts', 'SMS Alerts'].map((label, idx) => (
-                <label key={idx} className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800/50 cursor-pointer transition-all">
-                  <input type="checkbox" defaultChecked={idx % 2 === 0} className="w-5 h-5 accent-emerald-500" />
-                  <span className="text-sm">{label}</span>
-                </label>
-              ))}
-              <button className="w-full mt-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg transition-all shadow-lg shadow-emerald-500/20">
-                Save Configurations
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-      {/* --- END OF ADDITION --- */}
-
       {/* NAVBAR */}
       <nav className={`px-10 py-4 flex justify-between items-center border-b sticky top-0 z-[100] transition-colors ${darkMode ? 'bg-[#0f0f0f]/80 border-[#1f1f1f]' : 'bg-white/80 border-slate-200 shadow-sm'} backdrop-blur-2xl`}>
         <div className="flex items-center gap-8">
@@ -778,343 +679,103 @@ function App() {
         </div>
       </nav>
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex flex-1 max-w-[1440px] mx-auto gap-6 p-6 min-h-screen">
         {/* SIDEBAR NAVIGATION */}
-        <aside className={`w-72 border-r hidden xl:flex flex-col p-6 overflow-y-auto transition-colors z-40 ${darkMode ? 'bg-[#0f0f0f] border-[#1f1f1f]' : 'bg-[#f1f3f5] border-slate-200'}`}>
+        <aside className={`w-52 border-r hidden xl:flex flex-col p-4 overflow-y-auto transition-colors z-40 ${darkMode ? 'bg-[#0f0f0f] border-[#1f1f1f]' : 'bg-[#f1f3f5] border-slate-200'}`}>
           <div className="space-y-2 text-left">
               {[
-                { id: 'dashboard', name: t("navHome"), icon: <HomeIcon size={18}/> },
-                { id: 'calendar', name: t("navCal"), icon: <CalendarIcon size={18}/> },
-                { id: 'todo', name: t("navTodo"), icon: <ClipboardList size={18}/> },
-              ].map((item) => (
-                  <div key={item.id} onClick={() => { setView(item.id); setActiveSubject(null); }} className={`px-5 py-4 rounded-[1.5rem] text-[11px] font-black uppercase tracking-[0.1em] cursor-pointer flex items-center gap-4 transition-all ${view === item.id ? 'bg-emerald-600 text-white shadow-2xl shadow-emerald-900/40 scale-[1.03]' : (darkMode ? 'text-slate-400 hover:bg-emerald-500/10 hover:text-emerald-500' : 'text-slate-600 hover:bg-white')}`}>
-                    {item.icon} {item.name}
-                  </div>
+                { id: 'dashboard', name: t("navHome"), icon: <HomeIcon size={14}/> },
+                { id: 'calendar', name: t("navCal"), icon: <CalendarIcon size={14}/> },
+                { id: 'todo', name: t("navTodo"), icon: <ClipboardList size={14}/> },
+                { id: 'archived', name: t("navArc"), icon: <Archive size={14}/> },
+                { id: 'settings', name: t("navSet"), icon: <SettingsIcon size={14}/> },
+              ].map(item => (
+                <div key={item.id} onClick={() => { setView(item.id); setActiveSubject(null); }} className={`px-2 py-2 rounded-lg text-xs font-black uppercase tracking-widest cursor-pointer flex items-center gap-2 transition-all ${view === item.id ? 'bg-emerald-600 text-white shadow-lg' : (darkMode ? 'text-slate-400 hover:bg-white/5' : 'text-slate-600 hover:bg-white shadow-sm')}`}>
+                  {item.icon} <span className="truncate">{item.name}</span>
+                </div>
               ))}
           </div>
-
-          <div className="mt-10 pt-8 border-t border-slate-500/10">
-            <div className="flex justify-between items-center px-4 mb-6">
-               <p className="text-[10px] font-black uppercase text-slate-500 tracking-[0.2em] opacity-60">{t("activeCourses")}</p>
-               <PlusCircle size={14} className="text-emerald-500 cursor-pointer hover:rotate-90 transition-transform"/>
-            </div>
-            <div className="space-y-2">
+          <div className="space-y-1">
               {subjects.map(sub => (
-                <div key={sub.id} onClick={() => handleSubjectClick(sub)} className={`group px-5 py-4 text-[10px] font-black uppercase tracking-tight cursor-pointer truncate rounded-[1.5rem] transition-all flex items-center gap-4 ${activeSubject?.id === sub.id ? 'bg-emerald-600 text-white shadow-xl' : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600 shadow-sm')}`}>
-                  <div className={`w-2.5 h-2.5 rounded-full border-2 ${activeSubject?.id === sub.id ? 'bg-white border-white' : 'bg-emerald-500 border-transparent'}`}></div>
+                <div key={sub.id} onClick={() => handleSubjectClick(sub)} className={`group px-2 py-1.5 text-xs font-black uppercase tracking-tight cursor-pointer truncate rounded-lg transition-all flex items-center gap-2 ${activeSubject?.id === sub.id ? 'bg-emerald-600 text-white shadow-lg' : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600 shadow-sm')}`}>
+                  <div className={`w-1.5 h-1.5 rounded-full border ${activeSubject?.id === sub.id ? 'bg-white border-white' : 'bg-emerald-500 border-transparent'}`}></div>
                   <div className="flex-1 truncate">{sub.name.split(' ')[0]}</div>
-                  <ChevronRight size={14} className={`opacity-0 group-hover:opacity-100 transition-opacity ${activeSubject?.id === sub.id ? 'opacity-100' : ''}`}/>
+                  <ChevronRight size={10} className={`opacity-0 group-hover:opacity-100 transition-opacity ${activeSubject?.id === sub.id ? 'opacity-100' : ''}`}/>
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="mt-auto pt-8 border-t border-slate-500/10 space-y-2 text-left">
-              <div onClick={() => setView('archived')} className={`px-5 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest cursor-pointer flex items-center gap-4 transition-all ${view === 'archived' ? 'bg-emerald-600 text-white shadow-lg' : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600')}`}>
-                <Archive size={18}/> {t("navArc")}
+            <div className="mt-auto pt-4 border-t border-slate-500/10 space-y-1 text-left">
+              <div onClick={() => setView("todo")} className={`px-2 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest cursor-pointer flex items-center gap-2 transition-all ${view === 'todo' ? 'bg-emerald-600 text-white shadow-lg' : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600 shadow-sm')}`}>
+                <ClipboardList size={12} className="text-emerald-500"/>
+                <span>{t("navTodo")}</span>
               </div>
-              <div onClick={() => setView('settings')} className={`px-5 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest cursor-pointer flex items-center gap-4 transition-all ${view === 'settings' ? 'bg-emerald-600 text-white shadow-lg' : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600')}`}>
-                <SettingsIcon size={18}/> {t("navSet")}
+              <div onClick={() => setView("calendar")} className={`px-2 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest cursor-pointer flex items-center gap-2 transition-all ${view === 'calendar' ? 'bg-emerald-600 text-white shadow-lg' : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600 shadow-sm')}`}>
+                <CalendarIcon size={12} className="text-emerald-500"/>
+                <span>{t("navCal")}</span>
               </div>
           </div>
         </aside>
         
-
-        {/* --- START OF COMPLETE CONTROL CENTER --- */}
-<div className="flex flex-col lg:flex-row gap-12">
-  
-  {/* SIDEBAR (Walang bawas, anim na buttons pa rin) */}
-  <aside className="w-full lg:w-80 space-y-3">
-    {[
-      { id: 'identity', name: 'Identity & Credentials', icon: <User size={18}/> },
-      { id: 'security', name: 'Security & Access', icon: <Shield size={18}/> },
-      { id: 'alerts', name: 'Alert Configurations', icon: <Bell size={18}/> },
-      { id: 'interface', name: 'System Interface', icon: <Languages size={18}/> },
-      { id: 'cloud', name: 'Cloud & Sync', icon: <Database size={18}/> },
-      { id: 'support', name: 'Support & Help', icon: <LifeBuoy size={18}/> },
-    ].map((tab) => (
-      <button
-        key={tab.id}
-        onClick={() => setSettingsTab(tab.id)}
-        className={`w-full px-8 py-5 rounded-3xl flex items-center gap-5 text-[11px] font-black uppercase tracking-widest transition-all ${settingsTab === tab.id ? 'bg-emerald-500 text-white shadow-2xl shadow-emerald-500/40 translate-x-2' : (darkMode ? 'text-slate-400 hover:bg-white/5' : 'text-slate-600 hover:bg-white shadow-sm')}`}
-      >
-        {tab.icon} {tab.name}
-      </button>
-    ))}
-  </aside>
-
-  {/* --- COMPACT SETTINGS DISPLAY --- */}
-{view === 'settings' && (
-  <div className="flex-1 overflow-y-auto p-4" style={{ zoom: "0.8" }}>
-    <div className="max-w-[1000px] mx-auto text-left">
-      <h2 className="text-3xl font-black italic uppercase tracking-tighter text-emerald-500 mb-6">Control Center</h2>
-      
-      {/* Dito sa loob, gagamit lang tayo ng DIV para sa "internal sidebar" 
-          ng settings para hindi na ito mag-conflict sa ASIDE ng main app mo.
-      */}
-      <div className="flex flex-col lg:flex-row gap-6 items-start">
-        
-        {/* SETTINGS MENU (DIV lang ito, hindi ASIDE para hindi mag-tatlo) */}
-        <div className="w-full lg:w-60 flex-shrink-0 space-y-1.5">
-          {[
-            { id: 'identity', name: 'Identity & Credentials', icon: <User size={14}/> },
-            { id: 'security', name: 'Security & Access', icon: <Shield size={14}/> },
-            { id: 'alerts', name: 'Alert Configurations', icon: <Bell size={14}/> },
-            { id: 'interface', name: 'System Interface', icon: <Languages size={14}/> },
-            { id: 'cloud', name: 'Cloud & Sync', icon: <Database size={14}/> },
-            { id: 'support', name: 'Support & Help', icon: <LifeBuoy size={14}/> },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setSettingsTab(tab.id)}
-              className={`w-full px-4 py-2.5 rounded-xl flex items-center gap-3 text-[9px] font-black uppercase tracking-widest transition-all ${settingsTab === tab.id ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 translate-x-1' : (darkMode ? 'text-slate-400 hover:bg-white/5' : 'text-slate-600 hover:bg-white border border-slate-100 shadow-sm')}`}
-            >
-              {tab.icon} {tab.name}
-            </button>
-          ))}
-        </div>
-
-        {/* CONTENT CARD */}
-        <div className={`flex-1 rounded-[2rem] p-8 min-h-[450px] relative overflow-hidden transition-all ${darkMode ? 'bg-[#121212] border border-zinc-800' : 'bg-white shadow-xl border border-slate-50'}`}>
-          
-          {/* 1. IDENTITY & CREDENTIALS */}
-          {settingsTab === 'identity' && (
-            <div className="animate-in fade-in duration-300">
-              <div className="flex items-start gap-6">
-                <div className="w-24 h-24 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/10 relative">
-                  {profilePic ? <img src={profilePic} className="w-full h-full object-cover rounded-2xl" /> : <User size={30}/>}
-                </div>
-                <div>
-                  <h3 className="text-2xl font-black uppercase tracking-tighter italic text-slate-800 dark:text-white leading-tight">AUTHENTICATED_USER</h3>
-                  <div className="flex gap-1.5 mt-2">
-                    <span className="px-2.5 py-1 bg-emerald-500 text-white text-[8px] font-black uppercase rounded-md tracking-tighter">Global</span>
-                    <span className="px-2.5 py-1 bg-blue-500 text-white text-[8px] font-black uppercase rounded-md tracking-tighter">3rd Year</span>
-                  </div>
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-4 italic">UID: 2022-5089</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-6 pt-8 border-t border-slate-500/5 mt-8">
-                <div className="space-y-1">
-                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">Primary Email</p>
-                  <p className="text-sm font-black italic text-emerald-500 truncate">{currentUser}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">Identifier</p>
-                  <p className="text-sm font-black italic uppercase text-slate-700 dark:text-slate-300">2022-5089</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 2. ALERT CONFIGURATIONS */}
-          {settingsTab === 'alerts' && (
-            <div className="animate-in fade-in duration-300">
-              <h3 className="text-2xl font-black uppercase tracking-tighter mb-1 italic text-emerald-500 leading-none">Alert Engine</h3>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-6 italic leading-none">Notification Management</p>
-              <div className="space-y-2 max-w-sm">
-                {['Email Alerts', 'Push Alerts', 'Classroom Activity'].map((label) => (
-                  <div key={label} className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800">
-                    <span className="font-black uppercase italic text-[10px] tracking-widest">{label}</span>
-                    <input type="checkbox" defaultChecked className="w-4 h-4 accent-emerald-500" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 3. SUPPORT & HELP */}
-          {settingsTab === 'support' && (
-            <div className="animate-in fade-in duration-300">
-              <h3 className="text-2xl font-black uppercase tracking-tighter mb-1 italic text-emerald-500 leading-none">Support Hub</h3>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-6 italic leading-none">Technical Assistance</p>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-6 rounded-2xl bg-emerald-600 text-white shadow-md">
-                  <LifeBuoy size={24} className="mb-3"/>
-                  <p className="text-lg font-black uppercase italic leading-none leading-none">Admin Help</p>
-                  <p className="text-[9px] mt-2 opacity-90 truncate italic">support@lms-gclass.edu.ph</p>
-                </div>
-                <div className="p-6 rounded-2xl border border-slate-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-center">
-                  <p className="text-[9px] font-black uppercase text-slate-400 border-b border-slate-50 dark:border-zinc-800 pb-2 tracking-widest">• Joining a class</p>
-                  <p className="text-[9px] font-black uppercase text-slate-400 pt-2 tracking-widest">• Profile Sync</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Fallback */}
-          {!['identity', 'alerts', 'support'].includes(settingsTab) && (
-            <div className="h-full flex items-center justify-center opacity-20 italic font-black uppercase tracking-[0.4em] text-[10px]">
-               {settingsTab} module initializing...
-            </div>
-          )}
-
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-  
-
-
-  {/* MAIN PANEL (The White Card) */}
-  <main className={`flex-1 rounded-[4rem] p-12 relative overflow-hidden transition-all ${darkMode ? 'bg-[#121212] border border-zinc-800' : 'bg-white shadow-2xl border border-slate-100'}`}>
-    
-    {/* 1. IDENTITY & CREDENTIALS (RETAINED) */}
-    {settingsTab === 'identity' && (
-      <div className="animate-in fade-in slide-in-from-right-8 duration-500">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
-          <div className="w-48 h-48 rounded-[3rem] bg-emerald-500/10 flex items-center justify-center text-emerald-500 border-2 border-emerald-500/20 relative">
-            {profilePic ? <img src={profilePic} className="w-full h-full object-cover rounded-[3rem]" /> : <User size={80}/>}
-            <div className="absolute -bottom-2 -right-2 p-3 bg-emerald-500 text-white rounded-2xl shadow-lg cursor-pointer hover:scale-110 transition-transform">
-              <Camera size={18}/>
-            </div>
-          </div>
-          <div className="text-center md:text-left flex-1">
-            <h3 className="text-4xl font-black uppercase tracking-tighter mb-3 italic">AUTHENTICATED_USER</h3>
-            <div className="flex flex-wrap justify-center md:justify-start gap-3">
-              <span className="px-4 py-1.5 bg-emerald-500 text-white text-[10px] font-black uppercase rounded-xl">Global Account</span>
-              <span className="px-4 py-1.5 bg-blue-500 text-white text-[10px] font-black uppercase rounded-xl">3rd Year Student</span>
-              <span className="px-4 py-1.5 bg-slate-700 text-white text-[10px] font-black uppercase rounded-xl">Verified ID</span>
-            </div>
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-8 italic">Member since August 2022 • UID: 2022-5089</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12 border-t border-slate-500/10 mt-12 text-left">
-          <div className="space-y-2">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Academic Primary Email</p>
-            <p className="text-lg font-black italic text-emerald-500 truncate">{currentUser}</p>
-          </div>
-          <div className="space-y-2">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Institutional Identifier</p>
-            <p className="text-lg font-black italic uppercase tracking-tighter">2022-5089</p>
-          </div>
-        </div>
-        <div className="flex gap-4 mt-12">
-           <button className="px-8 py-4 bg-emerald-500 text-white font-black uppercase italic tracking-widest rounded-2xl shadow-lg">Update System Metadata</button>
-           <button className="px-8 py-4 border-2 border-slate-100 text-slate-400 font-black uppercase italic tracking-widest rounded-2xl hover:bg-slate-50">Request Change</button>
-        </div>
-      </div>
-    )}
-
-    {/* 2. ALERT CONFIGURATIONS (NEW CONTENT) */}
-    {settingsTab === 'alerts' && (
-      <div className="animate-in fade-in slide-in-from-right-8 duration-500 text-left">
-        <h3 className="text-4xl font-black uppercase tracking-tighter mb-2 italic text-emerald-500">Alert Engine</h3>
-        <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-12 italic">Configure system-wide notification engine</p>
-        <div className="grid grid-cols-1 gap-4 max-w-xl">
-          {['Email Notifications', 'Browser Push Alerts', 'Class Activity', 'Grade Updates'].map((label) => (
-            <div key={label} className="flex items-center justify-between p-7 rounded-[2.5rem] bg-slate-50 border border-slate-100 hover:border-emerald-500/30 transition-all group shadow-sm">
-              <span className="font-black uppercase italic tracking-tighter text-sm tracking-widest">{label}</span>
-              <input type="checkbox" defaultChecked className="w-6 h-6 accent-emerald-500 cursor-pointer scale-125" />
-            </div>
-          ))}
-          <button className="mt-4 px-10 py-5 bg-emerald-500 text-white font-black uppercase italic tracking-widest rounded-2xl shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all">Update Preferences</button>
-        </div>
-      </div>
-    )}
-
-    {/* 3. SUPPORT & HELP (NEW CONTENT) */}
-    {settingsTab === 'support' && (
-      <div className="animate-in fade-in slide-in-from-right-8 duration-500 text-left">
-        <h3 className="text-4xl font-black uppercase tracking-tighter mb-2 italic text-emerald-500">Support Hub</h3>
-        <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-12 italic">Direct link to technical assistance</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="p-10 rounded-[3.5rem] bg-emerald-600 text-white shadow-2xl shadow-emerald-500/30 relative overflow-hidden group">
-            <div className="relative z-10">
-              <LifeBuoy size={40} className="mb-6 group-hover:rotate-90 transition-transform duration-700"/>
-              <p className="text-2xl font-black uppercase italic tracking-tighter">IT Admin Support</p>
-              <p className="text-[10px] font-bold uppercase opacity-80 mt-4 italic leading-none">Official Response Channel:</p>
-              <p className="text-sm font-black italic tracking-tighter mt-1">support@lms-gclass.edu.ph</p>
-              <div className="mt-8 flex items-center gap-2">
-                <div className="w-2.5 h-2.5 bg-white rounded-full animate-ping"></div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em]">Technicians Online</p>
-              </div>
-            </div>
-          </div>
-          <div className="p-10 rounded-[3.5rem] border-2 border-slate-100 bg-white shadow-sm flex flex-col justify-center">
-            <p className="text-2xl font-black uppercase italic tracking-tighter text-slate-800 mb-6">Knowledge Base</p>
-            <div className="space-y-4">
-              {['Join a class via code', 'Submission file limits', 'Profile ID Verification'].map(faq => (
-                <p key={faq} className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-50 pb-2 cursor-help hover:text-emerald-500 transition-colors tracking-widest">• {faq}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    )}
-
-    {/* PLACEHOLDER FOR REMAINING TABS (Security, Interface, Cloud) */}
-    {['security', 'interface', 'cloud'].includes(settingsTab) && (
-      <div className="h-full flex flex-col items-center justify-center animate-pulse">
-         <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-            <Database size={40} className="text-slate-300"/>
-         </div>
-         <p className="text-slate-400 font-black uppercase italic tracking-[0.5em]">{settingsTab} module pending...</p>
-      </div>
-    )}
-
-  </main>
-</div>
-{/* --- END OF CONTROL CENTER --- */}
 
         {/* MAIN DISPLAY AREA */}
         <main className="flex-1 overflow-y-auto bg-transparent relative custom-scrollbar">
           
           {/* VIEW: DASHBOARD */}
           {view === "dashboard" && (
-            <div className="p-10 max-w-7xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-1000">
-              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+            <div className="p-4 space-y-4 animate-in fade-in slide-in-from-bottom-5 duration-1000">
+              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-3">
                 <div className="text-left">
-                  <div className="flex items-center gap-3 mb-2">
-                     <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase rounded-lg border border-emerald-500/20">{department}</span>
-                     <span className="px-3 py-1 bg-blue-500/10 text-blue-500 text-[9px] font-black uppercase rounded-lg border border-blue-500/20">{currentYear}</span>
+                  <div className="flex items-center gap-2 mb-1">
+                     <span className="px-2 py-1 bg-emerald-500/10 text-emerald-500 text-[8px] font-black uppercase rounded-lg border border-emerald-500/20">{department}</span>
+                     <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.2em]">{currentYear}</span>
                   </div>
-                  <h2 className="text-5xl font-black italic uppercase tracking-tighter text-emerald-500 mb-1">{t("welcome")}, {currentUser.split('@')[0]}!</h2>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] italic opacity-80">Synchronized Portal Status: Optimal • Version 3.0.4 Stable</p>
+                  <h1 className="text-xl font-black italic text-emerald-500 tracking-tighter mb-1">{t("welcome")}, {currentUser.split('@')[0] || "Student"}</h1>
+                  <p className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.3em]">Academic Dashboard Overview</p>
                 </div>
-                
-                <div className="flex gap-4 overflow-x-auto pb-2 w-full lg:w-auto">
-                   <StatCard icon={PieChart} label={t("gpaText")} value={gpa} subValue="Top 5% of Class" colorClass="bg-emerald-500" />
-                   <StatCard icon={Activity} label={t("attendText")} value={`${attendance}%`} subValue="Perfect Record" colorClass="bg-blue-600" />
-                   <StatCard icon={Layers} label={t("units")} value={completedUnits} subValue={`of ${totalCredits} Total`} colorClass="bg-slate-700" />
+                <div className="flex gap-2">
+                  <button className={`px-3 py-1.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a] text-slate-400 hover:bg-[#252525]' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
+                    <Filter size={12}/> Filter
+                  </button>
+                  <button className={`px-3 py-1.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a] text-slate-400 hover:bg-[#252525]' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
+                    <Search size={12}/> Search
+                  </button>
                 </div>
               </div>
 
-
-
               {/* RECENT NOTIFICATIONS & SYSTEM ANALYTICS */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <div className={`col-span-2 p-10 rounded-[3rem] border text-left ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'}`}>
-                     <div className="flex justify-between items-center mb-8">
-                        <h3 className="text-xl font-black uppercase italic tracking-tighter text-emerald-500">Live Class Activity</h3>
-                        <div className="flex gap-2">
-                           <span className="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
-                           <span className="text-[10px] font-black text-emerald-500 uppercase">Updates Live</span>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <div className={`col-span-2 p-4 rounded-xl border text-left ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'}`}>
+                     <div className="flex justify-between items-center mb-3">
+                        <h3 className="text-base font-black uppercase italic tracking-tighter text-emerald-500">Live Class Activity</h3>
+                        <div className="flex gap-1">
+                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                           <span className="text-[7px] font-black text-emerald-500 uppercase">Live</span>
                         </div>
                      </div>
-                     <div className="space-y-4">
+                     <div className="space-y-2">
                         {notifications.map(notif => (
-                           <div key={notif.id} className={`p-6 rounded-[2rem] border flex items-center justify-between transition-all hover:translate-x-2 ${darkMode ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-slate-50 border-slate-100'}`}>
-                              <div className="flex items-center gap-5">
-                                 <div className="p-3 bg-emerald-500 rounded-2xl text-white shadow-lg shadow-emerald-500/20">{notif.icon}</div>
+                           <div key={notif.id} className={`p-3 rounded-lg border flex items-center justify-between transition-all hover:translate-x-1 ${darkMode ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-slate-50 border-slate-100'}`}>
+                              <div className="flex items-center gap-3">
+                                 <div className="p-2 bg-emerald-500 rounded-lg text-white shadow-lg shadow-emerald-500/20">{notif.icon}</div>
                                  <div>
-                                    <p className="text-[11px] font-black uppercase tracking-tight leading-none mb-1">{notif.title}</p>
-                                    <p className="text-[10px] font-bold text-slate-500 uppercase">{notif.desc}</p>
+                                    <p className="text-[9px] font-black uppercase tracking-tight leading-none mb-1">{notif.title}</p>
+                                    <p className="text-[8px] font-bold text-slate-500 uppercase">{notif.desc}</p>
                                  </div>
                               </div>
-                              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{notif.time}</span>
+                              <div className="text-right">
+                                 <p className="text-[7px] font-black text-slate-500">{notif.time}</p>
+                              </div>
                            </div>
                         ))}
                      </div>
                   </div>
-                  <div className={`p-10 rounded-[3rem] border text-left flex flex-col justify-between ${darkMode ? 'bg-emerald-600 text-white border-emerald-500' : 'bg-emerald-500 text-white border-emerald-400'}`}>
+                  <div className={`p-3 rounded-lg border text-left flex flex-col justify-between ${darkMode ? 'bg-emerald-600 text-white border-emerald-500' : 'bg-emerald-500 text-white border-emerald-400'}`}>
                      <div className="space-y-2">
-                        <div className="p-4 bg-white/20 rounded-3xl w-fit mb-6 shadow-xl"><TrendingUp size={32}/></div>
-                        <h3 className="text-2xl font-black uppercase italic tracking-tighter leading-tight mb-2">Academic Performance Index</h3>
-                        <p className="text-xs font-bold opacity-80 leading-relaxed uppercase">You are currently surpassing 92% of students in your department. Keep maintaining your GPA for the President's List.</p>
+                        <div className="p-2 bg-white/20 rounded-lg w-fit mb-3 shadow-xl"><TrendingUp size={20}/></div>
+                        <h3 className="text-base font-black uppercase italic tracking-tighter leading-tight mb-1">Academic Performance</h3>
+                        <p className="text-[9px] font-bold opacity-80 leading-relaxed uppercase">You're surpassing 92% of students.</p>
                      </div>
-                     <button className="mt-10 py-5 bg-white text-emerald-600 rounded-[2rem] font-black uppercase text-[11px] tracking-[0.2em] shadow-2xl hover:scale-[1.05] transition-all">View Detailed Transcript</button>
+                     <button className="mt-4 py-2 bg-white text-emerald-600 rounded-lg font-black uppercase text-[8px] tracking-[0.2em] shadow-lg hover:scale-[1.02] transition-all">View Transcript</button>
                   </div>
               </div>
             </div>
@@ -1931,6 +1592,7 @@ function App() {
               <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white text-[10px] font-black flex items-center justify-center rounded-full border-4 border-[#0a0a0a]">1</span>
            </button>
         )}
+        </main>
       </div>
 
       {/* MODAL: PHOTO SOURCE HUB */}
