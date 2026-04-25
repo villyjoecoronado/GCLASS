@@ -359,7 +359,6 @@ const App = () => {
   const [attendance, setAttendance] = useState(98);
   const [totalCredits, setTotalCredits] = useState(124);
   const [completedUnits, setCompletedUnits] = useState(86);
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [username, setUsername] = useState("");
@@ -505,7 +504,7 @@ const App = () => {
   // Initialize filtered courses
   useEffect(() => {
     setFilteredCourses(courses);
-  }, [courses]);
+  }, []);
 
   // =================================
 
@@ -554,14 +553,14 @@ const App = () => {
     </form>
   );
 
-  if (!isLoggedIn) return <LoginScreen />;
-
   const handleLogout = () => {
     setIsLoggedIn(false);
     setShowProfileDropdown(false);
     setUsername("");
     setPassword("");
   };
+
+  if (!isLoggedIn) return <LoginScreen />;
 
   const addTask = () => {
     if (newTaskTitle.trim()) {
@@ -2844,34 +2843,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
   );
 
   
-  // --- AUTH PAGE ---
-  if (!isLoggedIn) {
-    return (
-      <div className={`min-h-screen flex items-center justify-center p-6 ${darkMode ? 'bg-[#0a0a0a]' : 'bg-[#f0f2f5]'}`}>
-        <div className={`w-full max-w-md p-6 rounded-[3rem] border shadow-[0_40px_100px_rgba(0,0,0,0.4)] animate-in fade-in zoom-in-95 duration-1000 ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'} text-center relative overflow-hidden`}>
-          <div className="absolute top-0 right-0 p-5 opacity-5 -rotate-12"><Cpu size={200}/></div>
-          <div className="flex justify-center mb-4"><div className="w-16 h-16 bg-emerald-500 rounded-[2rem] rotate-12 flex items-center justify-center shadow-2xl shadow-emerald-500/20"><Zap size={32} className="text-white -rotate-12 animate-pulse"/></div></div>
-          <h1 className="text-4xl font-black italic text-emerald-500 mb-2 tracking-tighter uppercase">EduPulse</h1>
-          <p className="text-[10px] font-black uppercase text-slate-500 tracking-[0.4em] mb-10">Synchronized Academic OS</p>
-          <div className="space-y-5 text-left relative z-10">
-            <div>
-               <label className="text-[10px] font-black uppercase text-slate-500 ml-4 mb-2 block tracking-widest">Student Credentials</label>
-               <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full border rounded-2xl px-6 py-4 text-sm outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a] text-white' : 'bg-slate-50 border-slate-200'}`}/>
-            </div>
-            <div>
-               <input type="password" placeholder="System Password" value={password} onChange={(e) => setPassword(e.target.value)} className={`w-full border rounded-2xl px-6 py-4 text-sm outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 ${darkMode ? 'bg-[#1a1a1a] border-[#2a2a2a] text-white' : 'bg-slate-50 border-slate-200'}`}/>
-            </div>
-            <button onClick={() => { setIsLoggedIn(true); setCurrentUser(email); }} className="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl hover:bg-emerald-500 transition-all uppercase text-[11px] tracking-[0.2em] shadow-2xl shadow-emerald-900/30 active:scale-95 mt-4">Access Dashboard</button>
-            <div className="pt-4 flex justify-between px-2">
-               <span className="text-[9px] font-black text-slate-500 uppercase cursor-pointer hover:text-emerald-500 transition-colors">Emergency Reset</span>
-               <span className="text-[9px] font-black text-emerald-500 uppercase cursor-pointer hover:underline">New Student Access</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  const renderCCContent = () => {
+    const renderCCContent = () => {
     switch(activeCCTab) {
       case 'identity':
         return (
@@ -3224,6 +3196,242 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
     );
   };
 
+  // --- SUBJECTS VIEW COMPONENT ---
+  const SubjectsView = () => {
+    return (
+      <div className="p-8">
+        {/* HEADER */}
+        <div className="mb-8">
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, type: "spring" }}
+            className="text-3xl font-light text-gray-900 mb-2"
+          >
+            {dynamicGreeting}
+          </motion.h1>
+          <p className="text-gray-600">Manage your courses and assignments</p>
+        </div>
+
+        {/* SUBJECT GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {subjects.map((s, index) => (
+            <motion.div
+              key={s.id}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.6, 
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 100
+              }}
+              whileHover={{ 
+                scale: 1.02,
+                rotateY: 5,
+                rotateX: -5,
+                transition: { duration: 0.3 }
+              }}
+              onClick={() => handleSubjectClick(s)}
+              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer overflow-hidden border border-gray-200"
+            >
+              {/* CARD HEADER */}
+              <div className={`${s.color} h-28 p-5 relative`}>
+                <h3 className="text-lg font-semibold text-white">
+                  {s.code}
+                </h3>
+                <p className="text-white/90 text-sm mt-1">{s.title}</p>
+              </div>
+
+              {/* CARD CONTENT */}
+              <div className="p-6 bg-white">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                      <User size={16} className="text-gray-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">{s.prof}</span>
+                  </div>
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    s.progress >= 75 ? 'bg-green-100 text-green-800' :
+                    s.progress >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {s.progress}%
+                  </span>
+                </div>
+                <div className="flex items-center gap-4 text-xs text-gray-500">
+                  <span className="flex items-center gap-1">
+                    <Calendar size={14} />
+                    {s.sched}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Users size={14} />
+                    {s.progress}%
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // --- CALENDAR VIEW COMPONENT ---
+  const CalendarViewComponent = () => {
+    return (
+      <div className="max-w-7xl mx-auto p-6 animate-in fade-in zoom-in-95 duration-1000">
+        <SectionHeader icon={CalendarIcon} title={t("navCal")} subtitle="Synchronized Academic Schedule 2026" />
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-4 space-y-8">
+            <div className={`p-5 rounded-[2rem] border ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-2xl'}`}>
+              <div className="flex justify-between items-center mb-10">
+                 <button onClick={() => setCalendarMonth("March 2026")} className="p-3 hover:bg-emerald-500 hover:text-white rounded-2xl transition-all"><ChevronLeft size={20}/></button>
+                 <span className="text-sm font-black uppercase tracking-[0.3em] italic text-emerald-500">{calendarMonth}</span>
+                 <button onClick={() => setCalendarMonth("May 2026")} className="p-3 hover:bg-emerald-500 hover:text-white rounded-2xl transition-all"><ChevronRight size={20}/></button>
+              </div>
+              <div className="grid grid-cols-7 gap-4 text-center mb-8">
+                {['S','M','T','W','T','F','S'].map(d => <span key={d} className="text-[11px] font-black text-slate-500 opacity-50">{d}</span>)}
+                {[...Array(30)].map((_, i) => (
+                  <div key={i} onClick={() => setSelectedDate(i+1)} className={`text-[11px] font-black py-3.5 rounded-2xl cursor-pointer transition-all ${selectedDate === i+1 ? 'bg-emerald-600 text-white shadow-2xl shadow-emerald-500/30 scale-110' : (darkMode ? 'hover:bg-white/10 text-slate-300' : 'hover:bg-slate-100 text-slate-600')}`}>
+                    {i + 1}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="md:col-span-8 space-y-8">
+            <div className={`p-5 rounded-[2rem] border text-left ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-2xl'}`}>
+              <div className="flex justify-between items-center mb-6">
+                 <h3 className="text-base font-black uppercase italic tracking-tighter text-emerald-500">Events for {selectedDate} {calendarMonth}</h3>
+                 <button onClick={() => setShowAddEventModal(true)} className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-black text-[10px] tracking-widest hover:bg-emerald-500 transition-all">
+                   ADD EVENT
+                 </button>
+              </div>
+              <div className="space-y-4">
+                 {events.flatMap(e => e.items).filter(item => item.date === selectedDate).map(item => (
+                    <div key={item.id} className={`p-4 rounded-xl border-l-4 ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'} ${item.type === 'deadline' ? 'border-red-500' : 'border-emerald-500'}`}>
+                       <div className="flex justify-between items-start">
+                          <div>
+                             <p className="text-[11px] font-black uppercase tracking-tight">{item.title}</p>
+                             <p className="text-[9px] font-bold text-slate-500 uppercase">{item.subId} · {item.time}</p>
+                          </div>
+                          <span className={`text-[9px] font-black px-2 py-1 rounded ${item.type === 'deadline' ? 'bg-red-500/20 text-red-600' : 'bg-emerald-500/20 text-emerald-600'}`}>
+                             {item.type}
+                          </span>
+                       </div>
+                    </div>
+                 ))}
+                 {events.flatMap(e => e.items).filter(item => item.date === selectedDate).length === 0 && (
+                    <div className="text-center py-8">
+                       <p className="text-slate-500 font-bold text-sm">No events scheduled</p>
+                    </div>
+                 )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // --- STREAM VIEW COMPONENT ---
+  const StreamView = () => {
+    if (!activeSubject) return null;
+    
+    return (
+      <div className="animate-in slide-in-from-right-12 duration-700">
+        <div className={`h-60 p-8 flex flex-col justify-end text-left relative overflow-hidden ${activeSubject.color}`}>
+           <div className="absolute top-0 right-0 p-5 opacity-10 rotate-12 scale-[2]"><Layers size={150}/></div>
+           <h2 className="text-6xl font-black italic uppercase tracking-tighter text-white mb-2 drop-shadow-2xl">{activeSubject.title}</h2>
+           <div className="flex items-center gap-6">
+              <p className="text-white font-black text-sm uppercase tracking-[0.4em] opacity-90">{activeSubject.code} • Prof. {activeSubject.prof}</p>
+              <div className="h-6 w-px bg-white/20"></div>
+              <p className="text-white font-black text-[10px] uppercase tracking-widest opacity-70 italic">{activeSubject.room} • {activeSubject.sched}</p>
+           </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto p-6 grid grid-cols-12 gap-5">
+           <div className="col-span-12 lg:col-span-4 space-y-6">
+              <div className={`p-4 rounded-[2rem] border text-left ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
+                 <h4 className="text-[12px] font-black uppercase text-emerald-500 mb-6 tracking-[0.2em] flex items-center gap-3"><ClipboardList size={18}/> Modules & Tasks</h4>
+                 <div className="space-y-6">
+                    <div className="border-l-4 border-emerald-500 pl-5 group cursor-pointer">
+                       <p className="text-[10px] font-black text-emerald-500 uppercase mb-1">Upcoming Deadline</p>
+                       <p className="text-sm font-black uppercase tracking-tight group-hover:underline">Laboratory Activity 05</p>
+                       <p className="text-[9px] font-bold text-slate-500 uppercase mt-2">Due in 14 Hours</p>
+                    </div>
+                    <div className="border-l-4 border-slate-500/30 pl-5 opacity-60">
+                       <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Completed</p>
+                       <p className="text-sm font-black uppercase tracking-tight line-through">Preliminary Exam</p>
+                       <p className="text-[9px] font-bold text-slate-500 uppercase mt-2">Graded: 96/100</p>
+                    </div>
+                 </div>
+                 <button className="w-full mt-10 py-5 rounded-[2rem] bg-emerald-600 text-white font-black uppercase text-[10px] tracking-[0.2em] shadow-xl shadow-emerald-900/30 hover:bg-emerald-500 transition-all flex items-center justify-center gap-3">
+                    <PlusCircle size={18}/> Submit Work
+                 </button>
+              </div>
+              <div className={`p-8 rounded-[3rem] border text-left ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'}`}>
+                  <h4 className="text-[12px] font-black uppercase text-slate-500 mb-6 tracking-widest">Instructor Info</h4>
+                  <div className="flex items-center gap-4 mb-6">
+                     <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-black text-lg italic shadow-inner">P</div>
+                     <div>
+                        <p className="text-sm font-black uppercase">{activeSubject.prof}</p>
+                        <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Lead Researcher</p>
+                     </div>
+                  </div>
+                  <button className={`w-full py-4 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all ${darkMode ? 'border-white/10 hover:bg-white/5' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}`}>Contact Instructor</button>
+              </div>
+           </div>
+
+           <div className="col-span-12 lg:col-span-8 space-y-8">
+              <div className={`p-8 rounded-[3rem] border flex items-center gap-6 shadow-2xl ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'}`}>
+                 <div className="w-14 h-14 rounded-[1.5rem] bg-emerald-500/10 flex items-center justify-center text-emerald-500 shadow-inner"><User size={24}/></div>
+                 <input type="text" placeholder="Share something with your classmates..." className="flex-1 bg-transparent outline-none text-base font-bold placeholder:text-slate-500/50"/>
+                 <div className="flex items-center gap-2">
+                    <button className="p-4 rounded-2xl hover:bg-slate-500/10 transition-all"><Paperclip size={20}/></button>
+                    <button className="p-4 bg-emerald-500 rounded-2xl text-white shadow-xl shadow-emerald-500/20 hover:scale-105 transition-all"><Send size={22}/></button>
+                 </div>
+              </div>
+              
+              {/* Announcement Feed */}
+              <div className={`p-5 rounded-[2rem] border text-left relative overflow-hidden ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
+                 <div className="absolute top-0 right-0 p-4 opacity-5"><MessageSquare size={80}/></div>
+                 <div className="flex items-center gap-5 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white font-black shadow-lg">P</div>
+                    <div>
+                       <p className="text-sm font-black uppercase tracking-tight italic">Prof. {activeSubject.prof}</p>
+                       <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Posted 2 Days Ago • Global Announcement</p>
+                    </div>
+                 </div>
+                 <div className={`p-8 rounded-[2rem] mb-8 border-l-4 border-emerald-500 ${darkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
+                    <p className="text-base font-black leading-relaxed italic text-emerald-500">"{activeSubject.announcement}"</p>
+                 </div>
+                 <div className="flex gap-4 mb-10">
+                    <div className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase flex items-center gap-3 transition-all cursor-pointer ${darkMode ? 'bg-white/5 border border-white/10 hover:bg-white/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                       <FileText size={16} className="text-emerald-500"/> Syllabus_Outline.pdf
+                    </div>
+                    <div className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase flex items-center gap-3 transition-all cursor-pointer ${darkMode ? 'bg-white/5 border border-white/10 hover:bg-white/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                       <ImageIcon size={16} className="text-blue-500"/> Reading_Resources.zip
+                    </div>
+                 </div>
+                 <div className="pt-8 border-t border-slate-500/10 flex justify-between items-center">
+                    <div className="flex items-center gap-4 text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer hover:text-emerald-500 group">
+                       <MessageSquare size={16} className="group-hover:rotate-12 transition-transform"/> 24 Class Comments
+                    </div>
+                    <div className="flex gap-2">
+                       <button className="p-3 rounded-xl hover:bg-slate-500/10 transition-all"><Share2 size={18}/></button>
+                       <button className="p-3 rounded-xl hover:bg-slate-500/10 transition-all"><MoreVertical size={18}/></button>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </div>
+    );
+  };
+
   // --- MAIN APP ---
   return (
     // ROOT: Dito nakalagay ang background color para selyado ang ilalim (Void Fix)
@@ -3430,140 +3638,10 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
             {activeNav === 'Calendar' && <CalendarView />}
             {activeNav === 'Tasks' && <TasksView />}
             {activeNav === 'Settings' && <SettingsView />}
-            {view === "subjects" && (
-              <div className="p-8">
-                {/* HEADER */}
-                <div className="mb-8">
-                  <motion.h1 
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, type: "spring" }}
-                    className="text-3xl font-light text-gray-900 mb-2"
-                  >
-                    {dynamicGreeting}
-                  </motion.h1>
-                  <p className="text-gray-600">Manage your courses and assignments</p>
-                </div>
-
-                {/* SUBJECT GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {subjects.map((s, index) => (
-                    <motion.div
-                      key={s.id}
-                      initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ 
-                        duration: 0.6, 
-                        delay: index * 0.1,
-                        type: "spring",
-                        stiffness: 100
-                      }}
-                      whileHover={{ 
-                        scale: 1.02,
-                        rotateY: 5,
-                        rotateX: -5,
-                        transition: { duration: 0.3 }
-                      }}
-                      onClick={() => handleSubjectClick(s)}
-                      className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer overflow-hidden border border-gray-200"
-                    >
-                      {/* CARD HEADER */}
-                      <div className={`${s.color} h-28 p-5 relative`}>
-                        <h3 className="text-lg font-semibold text-white">
-                          {s.code}
-                        </h3>
-                        <p className="text-white/90 text-sm mt-1">{s.title}</p>
-                      </div>
-
-                      {/* CARD CONTENT */}
-                      <div className="p-6 bg-white">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                              <User size={16} className="text-gray-600" />
-                            </div>
-                            <span className="text-sm font-medium text-gray-700">{s.prof}</span>
-                          </div>
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            s.progress >= 75 ? 'bg-green-100 text-green-800' :
-                            s.progress >= 50 ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {s.progress}%
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <Calendar size={14} />
-                            {s.sched}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Users size={14} />
-                            {s.progress}%
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {view === "subjects" && <SubjectsView />}
 
           {/* VIEW: CALENDAR HUB */}
-          {view === "calendar" && (
-            <div className="max-w-7xl mx-auto p-6 animate-in fade-in zoom-in-95 duration-1000">
-              <SectionHeader icon={CalendarIcon} title={t("navCal")} subtitle="Synchronized Academic Schedule 2026" />
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <div className="md:col-span-4 space-y-8">
-                  <div className={`p-5 rounded-[2rem] border ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-2xl'}`}>
-                    <div className="flex justify-between items-center mb-10">
-                       <button onClick={() => setCalendarMonth("March 2026")} className="p-3 hover:bg-emerald-500 hover:text-white rounded-2xl transition-all"><ChevronLeft size={20}/></button>
-                       <span className="text-sm font-black uppercase tracking-[0.3em] italic text-emerald-500">{calendarMonth}</span>
-                       <button onClick={() => setCalendarMonth("May 2026")} className="p-3 hover:bg-emerald-500 hover:text-white rounded-2xl transition-all"><ChevronRight size={20}/></button>
-                    </div>
-                    <div className="grid grid-cols-7 gap-4 text-center mb-8">
-                      {['S','M','T','W','T','F','S'].map(d => <span key={d} className="text-[11px] font-black text-slate-500 opacity-50">{d}</span>)}
-                      {[...Array(30)].map((_, i) => (
-                        <div key={i} onClick={() => setSelectedDate(i+1)} className={`text-[11px] font-black py-3.5 rounded-2xl cursor-pointer transition-all ${selectedDate === i+1 ? 'bg-emerald-600 text-white shadow-2xl shadow-emerald-500/30 scale-110' : (darkMode ? 'hover:bg-white/10 text-slate-300' : 'hover:bg-slate-100 text-slate-600')}`}>
-                          {i + 1}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div className="md:col-span-8 space-y-8">
-                  <div className={`p-5 rounded-[2rem] border text-left ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-2xl'}`}>
-                    <div className="flex justify-between items-center mb-6">
-                       <h3 className="text-base font-black uppercase italic tracking-tighter text-emerald-500">Events for {selectedDate} {calendarMonth}</h3>
-                       <button onClick={() => setShowAddEventModal(true)} className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-black text-[10px] tracking-widest hover:bg-emerald-500 transition-all">
-                         ADD EVENT
-                       </button>
-                    </div>
-                    <div className="space-y-4">
-                       {events.flatMap(e => e.items).filter(item => item.date === selectedDate).map(item => (
-                          <div key={item.id} className={`p-4 rounded-xl border-l-4 ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'} ${item.type === 'deadline' ? 'border-red-500' : 'border-emerald-500'}`}>
-                             <div className="flex justify-between items-start">
-                                <div>
-                                   <p className="text-[11px] font-black uppercase tracking-tight">{item.title}</p>
-                                   <p className="text-[9px] font-bold text-slate-500 uppercase">{item.subId} · {item.time}</p>
-                                </div>
-                                <span className={`text-[9px] font-black px-2 py-1 rounded ${item.type === 'deadline' ? 'bg-red-500/20 text-red-600' : 'bg-emerald-500/20 text-emerald-600'}`}>
-                                   {item.type}
-                                </span>
-                             </div>
-                          </div>
-                       ))}
-                       {events.flatMap(e => e.items).filter(item => item.date === selectedDate).length === 0 && (
-                          <div className="text-center py-8">
-                             <p className="text-slate-500 font-bold text-sm">No events scheduled</p>
-                          </div>
-                       )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            )}
+          {view === "calendar" && <CalendarViewComponent />}
 
           {/* VIEW: GAME */}
           {view === "game" && (
@@ -3574,170 +3652,9 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
 
 
           {/* VIEW: CLASS STREAM MODULE */}
-          {view === "stream" && activeSubject && (
-            <div className="animate-in slide-in-from-right-12 duration-700">
-              <div className={`h-60 p-8 flex flex-col justify-end text-left relative overflow-hidden ${activeSubject.color}`}>
-                 <div className="absolute top-0 right-0 p-5 opacity-10 rotate-12 scale-[2]"><Layers size={150}/></div>
-                 <h2 className="text-6xl font-black italic uppercase tracking-tighter text-white mb-2 drop-shadow-2xl">{activeSubject.title}</h2>
-                 <div className="flex items-center gap-6">
-                    <p className="text-white font-black text-sm uppercase tracking-[0.4em] opacity-90">{activeSubject.code} • Prof. {activeSubject.prof}</p>
-                    <div className="h-6 w-px bg-white/20"></div>
-                    <p className="text-white font-black text-[10px] uppercase tracking-widest opacity-70 italic">{activeSubject.room} • {activeSubject.sched}</p>
-                 </div>
-              </div>
+          {view === "stream" && <StreamView />}
 
-              <div className="max-w-7xl mx-auto p-6 grid grid-cols-12 gap-5">
-                 <div className="col-span-12 lg:col-span-4 space-y-6">
-                    <div className={`p-4 rounded-[2rem] border text-left ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
-                       <h4 className="text-[12px] font-black uppercase text-emerald-500 mb-6 tracking-[0.2em] flex items-center gap-3"><ClipboardList size={18}/> Modules & Tasks</h4>
-                       <div className="space-y-6">
-                          <div className="border-l-4 border-emerald-500 pl-5 group cursor-pointer">
-                             <p className="text-[10px] font-black text-emerald-500 uppercase mb-1">Upcoming Deadline</p>
-                             <p className="text-sm font-black uppercase tracking-tight group-hover:underline">Laboratory Activity 05</p>
-                             <p className="text-[9px] font-bold text-slate-500 uppercase mt-2">Due in 14 Hours</p>
-                          </div>
-                          <div className="border-l-4 border-slate-500/30 pl-5 opacity-60">
-                             <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Completed</p>
-                             <p className="text-sm font-black uppercase tracking-tight line-through">Preliminary Exam</p>
-                             <p className="text-[9px] font-bold text-slate-500 uppercase mt-2">Graded: 96/100</p>
-                          </div>
-                       </div>
-                       <button className="w-full mt-10 py-5 rounded-[2rem] bg-emerald-600 text-white font-black uppercase text-[10px] tracking-[0.2em] shadow-xl shadow-emerald-900/30 hover:bg-emerald-500 transition-all flex items-center justify-center gap-3">
-                          <PlusCircle size={18}/> Submit Work
-                       </button>
-                    </div>
-                    <div className={`p-8 rounded-[3rem] border text-left ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'}`}>
-                        <h4 className="text-[12px] font-black uppercase text-slate-500 mb-6 tracking-widest">Instructor Info</h4>
-                        <div className="flex items-center gap-4 mb-6">
-                           <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-black text-lg italic shadow-inner">P</div>
-                           <div>
-                              <p className="text-sm font-black uppercase">{activeSubject.prof}</p>
-                              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Lead Researcher</p>
-                           </div>
-                        </div>
-                        <button className={`w-full py-4 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all ${darkMode ? 'border-white/10 hover:bg-white/5' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}`}>Contact Instructor</button>
-                    </div>
-                 </div>
-
-                 <div className="col-span-12 lg:col-span-8 space-y-8">
-                    <div className={`p-8 rounded-[3rem] border flex items-center gap-6 shadow-2xl ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'}`}>
-                       <div className="w-14 h-14 rounded-[1.5rem] bg-emerald-500/10 flex items-center justify-center text-emerald-500 shadow-inner"><User size={24}/></div>
-                       <input type="text" placeholder="Share something with your classmates..." className="flex-1 bg-transparent outline-none text-base font-bold placeholder:text-slate-500/50"/>
-                       <div className="flex items-center gap-2">
-                          <button className="p-4 rounded-2xl hover:bg-slate-500/10 transition-all"><Paperclip size={20}/></button>
-                          <button className="p-4 bg-emerald-500 rounded-2xl text-white shadow-xl shadow-emerald-500/20 hover:scale-105 transition-all"><Send size={22}/></button>
-                       </div>
-                    </div>
-                    
-                    {/* Announcement Feed */}
-                    <div className={`p-5 rounded-[2rem] border text-left relative overflow-hidden ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
-                       <div className="absolute top-0 right-0 p-4 opacity-5"><MessageSquare size={80}/></div>
-                       <div className="flex items-center gap-5 mb-8">
-                          <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white font-black shadow-lg">P</div>
-                          <div>
-                             <p className="text-sm font-black uppercase tracking-tight italic">Prof. {activeSubject.prof}</p>
-                             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Posted 2 Days Ago • Global Announcement</p>
-                          </div>
-                       </div>
-                       <div className={`p-8 rounded-[2rem] mb-8 border-l-4 border-emerald-500 ${darkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
-                          <p className="text-base font-black leading-relaxed italic text-emerald-500">"{activeSubject.announcement}"</p>
-                       </div>
-                       <div className="flex gap-4 mb-10">
-                          <div className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase flex items-center gap-3 transition-all cursor-pointer ${darkMode ? 'bg-white/5 border border-white/10 hover:bg-white/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
-                             <FileText size={16} className="text-emerald-500"/> Syllabus_Outline.pdf
-                          </div>
-                          <div className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase flex items-center gap-3 transition-all cursor-pointer ${darkMode ? 'bg-white/5 border border-white/10 hover:bg-white/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
-                             <ImageIcon size={16} className="text-blue-500"/> Reading_Resources.zip
-                          </div>
-                       </div>
-                       <div className="pt-8 border-t border-slate-500/10 flex justify-between items-center">
-                          <div className="flex items-center gap-4 text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer hover:text-emerald-500 group">
-                             <MessageSquare size={16} className="group-hover:rotate-12 transition-transform"/> 24 Class Comments
-                          </div>
-                          <div className="flex gap-2">
-                             <button className="p-3 rounded-xl hover:bg-slate-500/10 transition-all"><Share2 size={18}/></button>
-                             <button className="p-3 rounded-xl hover:bg-slate-500/10 transition-all"><MoreVertical size={18}/></button>
-                          </div>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* VIEW: CALENDAR HUB */}
-          {view === "calendar" && (
-            <div className="max-w-7xl mx-auto p-6 animate-in fade-in zoom-in-95 duration-1000">
-              <SectionHeader icon={CalendarIcon} title={t("navCal")} subtitle="Synchronized Academic Schedule 2026" />
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <div className="md:col-span-4 space-y-8">
-                  <div className={`p-5 rounded-[2rem] border ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-2xl'}`}>
-                    <div className="flex justify-between items-center mb-10">
-                       <button onClick={() => setCalendarMonth("March 2026")} className="p-3 hover:bg-emerald-500 hover:text-white rounded-2xl transition-all"><ChevronLeft size={20}/></button>
-                       <span className="text-sm font-black uppercase tracking-[0.3em] italic text-emerald-500">{calendarMonth}</span>
-                       <button onClick={() => setCalendarMonth("May 2026")} className="p-3 hover:bg-emerald-500 hover:text-white rounded-2xl transition-all"><ChevronRight size={20}/></button>
-                    </div>
-                    <div className="grid grid-cols-7 gap-4 text-center mb-8">
-                      {['S','M','T','W','T','F','S'].map(d => <span key={d} className="text-[11px] font-black text-slate-500 opacity-50">{d}</span>)}
-                      {[...Array(30)].map((_, i) => (
-                        <div key={i} onClick={() => setSelectedDate(i+1)} className={`text-[11px] font-black py-3.5 rounded-2xl cursor-pointer transition-all ${selectedDate === i+1 ? 'bg-emerald-600 text-white shadow-2xl shadow-emerald-500/30 scale-110' : (darkMode ? 'hover:bg-white/10 text-slate-300' : 'hover:bg-slate-100 text-slate-600')}`}>
-                          {i + 1}
-                        </div>
-                      ))}
-                    </div>
-                    <button onClick={() => setIsAddingTask(true)} className="w-full py-5 bg-emerald-600/10 text-emerald-500 border border-emerald-500/20 rounded-[2rem] font-black uppercase text-[10px] tracking-[0.2em] hover:bg-emerald-600 hover:text-white transition-all shadow-lg">Schedule Event</button>
-                  </div>
-
-                  <div className={`p-5 rounded-[2rem] border text-left ${darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-200'}`}>
-                      <h4 className="text-[10px] font-black uppercase text-slate-500 mb-6 tracking-widest">Upcoming Deadlines</h4>
-                      <div className="space-y-6">
-                         {events.flatMap(e => e.items).slice(0, 3).map(it => (
-                            <div key={it.id} className="flex items-center gap-4">
-                               <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
-                               <div className="flex-1">
-                                  <p className="text-[11px] font-black uppercase tracking-tight">{it.title}</p>
-                                  <p className="text-[9px] font-bold text-slate-500 uppercase">{it.subId} • {it.time}</p>
-                               </div>
-                            </div>
-                         ))}
-                      </div>
-                  </div>
-                </div>
-
-                <div className="md:col-span-8 space-y-8">
-                  {events.map((day, idx) => (
-                    <div key={idx} className={`relative pl-10 border-l-4 text-left transition-all duration-700 ${selectedDate === day.fullDate ? 'opacity-100 translate-x-0' : 'opacity-20 scale-[0.98] -translate-x-4'}`}>
-                      <div className={`absolute -left-[14px] top-0 w-6 h-6 rounded-full border-4 shadow-2xl ${selectedDate === day.fullDate ? 'bg-emerald-500 border-emerald-500/30 animate-pulse' : 'bg-slate-700 border-slate-800'}`}></div>
-                      <h3 className={`text-lg font-black uppercase tracking-[0.3em] mb-6 italic ${selectedDate === day.fullDate ? 'text-emerald-500' : 'text-slate-500'}`}>{day.day}, {day.date}</h3>
-                      {day.items.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                          {day.items.map(item => (
-                            <div key={item.id} onClick={() => handleCalendarEventClick(item.subId)} className={`group p-8 rounded-[2.5rem] border-t-8 transition-all hover:translate-y-[-5px] hover:shadow-2xl cursor-pointer ${item.color.replace('border-', 'border-')} ${darkMode ? 'bg-[#121212] border-x-[#222222] border-b-[#222222]' : 'bg-white border-x-slate-100 border-b-slate-100 shadow-lg'}`}>
-                              <div className="flex justify-between items-start mb-6">
-                                 <span className="text-[10px] font-black px-4 py-1.5 rounded-full bg-emerald-500 text-white uppercase tracking-widest shadow-lg shadow-emerald-500/20">{item.type}</span>
-                                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">{item.subId}</span>
-                              </div>
-                              <h4 className="text-xl font-black uppercase italic tracking-tighter mb-4 group-hover:text-emerald-500 transition-colors">{item.title}</h4>
-                              <div className="flex items-center justify-between mt-auto">
-                                 <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase"><Clock size={16} className="text-emerald-500"/> {item.time}</div>
-                                 <div className="flex items-center gap-2 text-[10px] font-black text-emerald-500 uppercase hover:underline">Module <ExternalLink size={14}/></div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className={`p-8 rounded-[2rem] border-2 border-dashed flex flex-col items-center justify-center opacity-50 ${darkMode ? 'border-[#222222] bg-[#0f0f0f]' : 'border-slate-200 bg-slate-50'}`}>
-                           <CalendarIcon size={40} className="text-slate-500 mb-4"/>
-                           <p className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em] italic">No Academic Assignments</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
+          
           {/* VIEW: TO-DO SYSTEM */}
           {view === "todo" && (
              <div className="p-6 max-w-5xl mx-auto animate-in slide-in-from-bottom-10 duration-700">
