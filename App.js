@@ -499,7 +499,7 @@ const App = () => {
   
   useEffect(() => {
     socket.on('receive_private_message', (data) => { setChatLog((prev) => [...prev, data]); });
-    return () => socket.off();
+    return () => socket.off('receive_private_message');
   }, []);
 
   // Initialize filtered courses
@@ -3278,7 +3278,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
               {/* HOME DASHBOARD LINK */}
               <a
                 href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Home'); setView('dashboard'); setActiveSubject(null); }}
+                onClick={(e) => { e.preventDefault(); setActiveNav('Home'); setActiveSubject(null); }}
                 className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
                   activeNav === 'Home'
                     ? 'bg-blue-100 text-blue-800'
@@ -3295,7 +3295,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
               {/* CALENDAR LINK */}
               <a
                 href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Calendar'); setView('calendar'); setActiveSubject(null); }}
+                onClick={(e) => { e.preventDefault(); setActiveNav('Calendar'); setActiveSubject(null); }}
                 className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
                   activeNav === 'Calendar'
                     ? 'bg-blue-100 text-blue-800'
@@ -3312,7 +3312,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
               {/* TO-DO LINK */}
               <a
                 href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Tasks'); setView('todo'); setActiveSubject(null); }}
+                onClick={(e) => { e.preventDefault(); setActiveNav('Tasks'); setActiveSubject(null); }}
                 className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
                   activeNav === 'Tasks'
                     ? 'bg-blue-100 text-blue-800'
@@ -3430,9 +3430,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
             {activeNav === 'Calendar' && <CalendarView />}
             {activeNav === 'Tasks' && <TasksView />}
             {activeNav === 'Settings' && <SettingsView />}
-
-            {/* VIEW: DASHBOARD - GOOGLE CLASSROOM GRID */}
-            {view === "dashboard" && (
+            {view === "subjects" && (
               <div className="p-8">
                 {/* HEADER */}
                 <div className="mb-8">
