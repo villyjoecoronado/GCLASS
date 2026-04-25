@@ -316,6 +316,7 @@ const App = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [chatLog, setChatLog] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [activeChatTab, setActiveChatTab] = useState("messages");
   
@@ -330,7 +331,9 @@ const App = () => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(true);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [autoSave, setAutoSave] = useState(true);
   const [profilePic, setProfilePic] = useState(null);
   
   // Advanced Branching State Management
@@ -359,6 +362,7 @@ const App = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [currentUser, setCurrentUser] = useState("");
+  const [username, setUsername] = useState("");
   const [showMetadataAdvanced, setShowMetadataAdvanced] = useState(false);
   const [isRequestChangeActive, setIsRequestChangeActive] = useState(false);
   const [supportTicket, setSupportTicket] = useState("");
@@ -498,11 +502,29 @@ const App = () => {
     return () => socket.off();
   }, []);
 
+  // Initialize filtered courses
+  useEffect(() => {
+    setFilteredCourses(courses);
+  }, [courses]);
+
   // =================================
 
+  // Utility functions
+  const handleLogin = (e) => {
+    e.preventDefault();
+    
+    if (!username || !password) return;
+    
+    // Simple login validation - you can modify this as needed
+    if (username === "admin" && password === "admin") {
+      setIsLoggedIn(true);
+      setCurrentUser(username);
+    }
+  };
+
   // --- LOGIN SCREEN COMPONENT ---
-  const LoginScreen = ({ onLogin }) => (
-    <div className="h-screen flex items-center justify-center bg-slate-50 p-6">
+  const LoginScreen = () => (
+    <form onSubmit={handleLogin} className="h-screen flex items-center justify-center bg-slate-50 p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-12 rounded-[3rem] shadow-2xl w-full max-w-lg border border-gray-100 text-center">
         <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-blue-100">
           <Sparkles size={40} className="text-white" />
@@ -510,22 +532,35 @@ const App = () => {
         <h1 className="text-4xl font-black mb-3 tracking-tight">EduPulse</h1>
         <p className="text-gray-400 font-medium mb-10 leading-relaxed">The next generation of classroom management.<br/>Enter your credentials to begin.</p>
         <div className="space-y-4 mb-8">
-          <input type="text" placeholder="Student ID" className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold" />
-          <input type="password" placeholder="Password" className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold" />
+          <input 
+            type="text" 
+            placeholder="Student ID" 
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold" 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold" 
+          />
         </div>
-        <button onClick={onLogin} className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-[0.98]">
+        <button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-[0.98]">
           Sign In to Portal
         </button>
       </motion.div>
-    </div>
+    </form>
   );
 
-  if (!isLoggedIn) return <LoginScreen onLogin={() => setIsLoggedIn(true)} />;
+  if (!isLoggedIn) return <LoginScreen />;
 
-  // Utility functions
   const handleLogout = () => {
     setIsLoggedIn(false);
     setShowProfileDropdown(false);
+    setUsername("");
+    setPassword("");
   };
 
   const addTask = () => {
@@ -834,11 +869,7 @@ const App = () => {
     }
   };
 
-  // Initialize filtered courses
-  useEffect(() => {
-    setFilteredCourses(courses);
-  }, [courses]);
-
+  
   // --- ADVANCED REUSABLE UI COMPONENTS ---
   
   // Stat Card Component
@@ -1743,20 +1774,7 @@ const App = () => {
   const CalendarView = () => {
     const [selectedDate, setSelectedDate] = useState(15);
     
-    const events = [
-      { day: 'Monday', date: 'April 21', items: [
-        { id: 1, title: 'Business Model Canvas', type: 'deadline', time: '11:59 PM' },
-        { id: 2, title: 'Midterm Review', type: 'quiz', time: '1:30 PM' }
-      ]},
-      { day: 'Wednesday', date: 'April 23', items: [
-        { id: 3, title: 'Server Config Lab', type: 'lab', time: '9:00 AM' },
-        { id: 4, title: 'Chapter 2 Methodology', type: 'submission', time: '5:00 PM' }
-      ]},
-      { day: 'Friday', date: 'April 25', items: [
-        { id: 5, title: 'React Portfolio', type: 'project', time: '11:59 PM' }
-      ]}
-    ];
-
+    
     return (
       <div className="p-8">
         <motion.h1 
@@ -2656,270 +2674,8 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
   };
 
       
-  const FloatingChat = ({ show, onToggle, chatTab, onTabChange, aiMessage, onAiMessageChange, onSendAiMessage, aiResponse, isAiLoading }) => {
-    return (
-      <div className="fixed bottom-6 right-6 z-40">
-        <AnimatePresence>
-          {show && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 20 }}
-              className="mb-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
-            >
-              {/* Header */}
-              <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold">AI Assistant</h3>
-                  <button onClick={onToggle} className="text-white/80 hover:text-white">
-                    <X size={16} />
-                  </button>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => onTabChange('messages')}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                      chatTab === 'messages' ? 'bg-white/20' : 'bg-white/10 hover:bg-white/20'
-                    }`}
-                  >
-                    Messages
-                  </button>
-                  <button
-                    onClick={() => onTabChange('ai')}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                      chatTab === 'ai' ? 'bg-white/20' : 'bg-white/10 hover:bg-white/20'
-                    }`}
-                  >
-                    AI Help
-                  </button>
-                </div>
-              </div>
-              
-              {/* Content */}
-              <div className="h-96 overflow-y-auto">
-                {chatTab === 'messages' ? (
-                  <div className="p-4 space-y-3">
-                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <MessageSquare size={16} className="text-blue-600" />
-                      </div>
-                      <p>Hi! How can I help you today?</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-4 space-y-3">
-                    {aiResponse && (
-                      <div className="bg-gray-50 rounded-lg p-3">
-                        <p className="text-sm text-gray-700">{aiResponse}</p>
-                      </div>
-                    )}
-                    {isAiLoading && (
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <div className="animate-pulse">Thinking...</div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              
-              {/* Input */}
-              {chatTab === 'ai' && (
-                <div className="p-4 border-t border-gray-100">
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={aiMessage}
-                      onChange={(e) => onAiMessageChange(e.target.value)}
-                      placeholder="Ask me anything..."
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      onKeyPress={(e) => e.key === 'Enter' && onSendAiMessage()}
-                    />
-                    <button
-                      onClick={onSendAiMessage}
-                      disabled={isAiLoading || !aiMessage.trim()}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <Send size={16} />
-                    </button>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-        
-        {/* Floating Button */}
-        <motion.button
-          onClick={onToggle}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-lg flex items-center justify-center text-white hover:shadow-xl transition-shadow"
-        >
-          <MessageSquare size={24} />
-          {getUnreadCount() > 0 && (
-            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold">
-              {getUnreadCount()}
-            </div>
-          )}
-        </motion.button>
-      </div>
-    );
-  };
-
-  const CourseModal = ({ show, onClose, course, courseTab, onTabChange, courseDetails }) => {
-    if (!show || !course) return null;
-    
-    return (
-      <AnimatePresence>
-        {show && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-            onClick={onClose}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div className="p-6 border-b border-gray-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{course.title}</h2>
-                    <p className="text-gray-600">{course.code} • {course.section}</p>
-                  </div>
-                  <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-                    <X size={24} />
-                  </button>
-                </div>
-              </div>
-              
-              {/* Tabs */}
-              <div className="flex border-b border-gray-100">
-                {['overview', 'announcements', 'assignments', 'people', 'files'].map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => onTabChange(tab)}
-                    className={`px-6 py-3 font-medium text-sm capitalize transition-colors ${
-                      courseTab === tab 
-                        ? 'text-blue-600 border-b-2 border-blue-600' 
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-              
-              {/* Content */}
-              <div className="p-6 overflow-y-auto max-h-96">
-                {courseTab === 'overview' && (
-                  <div className="space-y-6">
-                    <div className="premium-card p-6">
-                      <h3 className="font-semibold text-gray-900 mb-4">Course Information</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-gray-600">Instructor</p>
-                          <p className="font-medium">{course.professor}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Section</p>
-                          <p className="font-medium">{course.section}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {courseTab === 'announcements' && (
-                  <div className="space-y-4">
-                    {courseDetails.announcements.map(announcement => (
-                      <div key={announcement.id} className="premium-card p-4">
-                        <h4 className="font-semibold text-gray-900 mb-2">{announcement.title}</h4>
-                        <p className="text-gray-600 text-sm mb-2">{announcement.content}</p>
-                        <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span>{announcement.author}</span>
-                          <span>{announcement.date}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                {courseTab === 'assignments' && (
-                  <div className="space-y-4">
-                    {courseDetails.assignments.map(assignment => (
-                      <div key={assignment.id} className="premium-card p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-gray-900">{assignment.title}</h4>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            assignment.status === 'submitted' 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-yellow-100 text-yellow-700'
-                          }`}>
-                            {assignment.status}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm text-gray-600">
-                          <span>Due: {assignment.dueDate}</span>
-                          <span>{assignment.points} points</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                {courseTab === 'people' && (
-                  <div className="space-y-4">
-                    {courseDetails.people.map(person => (
-                      <div key={person.id} className="premium-card p-4">
-                        <div className="flex items-center gap-3">
-                          <div className="text-2xl">{person.avatar}</div>
-                          <div>
-                            <p className="font-medium text-gray-900">{person.name}</p>
-                            <p className="text-sm text-gray-600">{person.role}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                {courseTab === 'files' && (
-                  <div className="space-y-4">
-                    {courseDetails.files.map(file => (
-                      <div key={file.id} className="premium-card p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 bg-blue-100 rounded-lg">
-                              <FileText size={16} className="text-blue-600" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-gray-900">{file.name}</p>
-                              <p className="text-sm text-gray-600">{file.size} • {file.uploaded}</p>
-                            </div>
-                          </div>
-                          <button className="text-blue-600 hover:text-blue-700">
-                            <Download size={16} />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    );
-  };
-  // =============================
+  
+    // =============================
 
   // --- DATA ARRAYS ---
 
@@ -3556,37 +3312,21 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
               {/* TO-DO LINK */}
               <a
                 href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Todo'); setView('todo'); setActiveSubject(null); }}
+                onClick={(e) => { e.preventDefault(); setActiveNav('Tasks'); setView('todo'); setActiveSubject(null); }}
                 className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
-                  activeNav === 'Todo'
+                  activeNav === 'Tasks'
                     ? 'bg-blue-100 text-blue-800'
                     : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                 }`}
               >
                 <ClipboardList
-                  className={`mr-3 h-5 w-5 ${activeNav === 'Todo' ? 'text-blue-700' : 'text-gray-500'}`}
+                  className={`mr-3 h-5 w-5 ${activeNav === 'Tasks' ? 'text-blue-700' : 'text-gray-500'}`}
                   size={20}
                 />
                 <span className="sidebar-link-text">To-Do</span>
               </a>
 
-              {/* GAME LINK */}
-              <a
-                href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Game'); setView('game'); setActiveSubject(null); }}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
-                  activeNav === 'Game'
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-              >
-                <Zap
-                  className={`mr-3 h-5 w-5 ${activeNav === 'Game' ? 'text-blue-700' : 'text-gray-500'}`}
-                  size={20}
-                />
-                <span className="sidebar-link-text">Game</span>
-              </a>
-            </nav>
+                          </nav>
 
           <div className="mt-6 pt-4 border-t border-slate-500/10">
             <div className="flex justify-between items-center px-3 mb-4">
