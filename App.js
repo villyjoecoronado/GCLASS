@@ -312,34 +312,17 @@ const App = () => {
     return saved ? JSON.parse(saved) : false;
   });
   
-  // Chat & Messaging States
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [message, setMessage] = useState("");
-  const [chatLog, setChatLog] = useState([]);
-  const [chatMessages, setChatMessages] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [activeChatTab, setActiveChatTab] = useState("messages");
-  
-  // Calendar & Todo States
-  const [todoTab, setTodoTab] = useState("assigned");
-  const [selectedDate, setSelectedDate] = useState(6);
-  const [isAddingTask, setIsAddingTask] = useState(false);
-  
-  // Settings & Interactive States
-  const [settingsTab, setSettingsTab] = useState("profile");
-  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  // Used State Variables for Google Classroom Layout
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-  const [autoSave, setAutoSave] = useState(true);
-  const [profilePic, setProfilePic] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showCourseModal, setShowCourseModal] = useState(false);
+  const [selectedCourseDetail, setSelectedCourseDetail] = useState(null);
+  const [courseTab, setCourseTab] = useState('overview');
+  const [password, setPassword] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
+  const [username, setUsername] = useState("");
   
-  // Advanced Branching State Management
-  const [dashboardView, setDashboardView] = useState({ main: 'dashboard', sub: null, detail: null });
-  
-  // Data States
+  // Data States - Used in the current layout
   const [tasks, setTasks] = useState([
     { id: 1, title: "Complete Chapter 5 Quiz", completed: false, dueDate: "2026-04-25", priority: 'high' },
     { id: 2, title: "Submit Lab Report", completed: true, dueDate: "2026-04-23", priority: 'medium' },
@@ -351,77 +334,49 @@ const App = () => {
     { id: 2, title: "Grade Posted", message: "Your midterm grade is available", time: "1 hour ago", read: false, type: "grade" },
     { id: 3, title: "Class Update", message: "Schedule change for tomorrow", time: "3 hours ago", read: true, type: "update" }
   ]);
-  
-  // Missing state variables
-  const [showAddEventModal, setShowAddEventModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [gpa, setGpa] = useState(1.25);
-  const [attendance, setAttendance] = useState(98);
-  const [totalCredits, setTotalCredits] = useState(124);
-  const [completedUnits, setCompletedUnits] = useState(86);
-  const [password, setPassword] = useState("");
-  const [currentUser, setCurrentUser] = useState("");
-  const [username, setUsername] = useState("");
-  const [showMetadataAdvanced, setShowMetadataAdvanced] = useState(false);
-  const [isRequestChangeActive, setIsRequestChangeActive] = useState(false);
-  const [supportTicket, setSupportTicket] = useState("");
-  const [aiDiagnostic, setAiDiagnostic] = useState("");
-  const [faqSearch, setFaqSearch] = useState("");
-  const [changeType, setChangeType] = useState("");
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [showEventModal, setShowEventModal] = useState(false);
-  const [showCourseModal, setShowCourseModal] = useState(false);
-  const [selectedCourseDetail, setSelectedCourseDetail] = useState(null);
-  const [courseTab, setCourseTab] = useState('overview');
-  const [chatTab, setChatTab] = useState('messages');
-  const [aiMessage, setAiMessage] = useState("");
-  const [aiResponse, setAiResponse] = useState("");
-  const [isAiLoading, setIsAiLoading] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [selectedTaskDate, setSelectedTaskDate] = useState(new Date().toISOString().split('T')[0]);
-  const [isKeyRotating, setIsKeyRotating] = useState(false);
-  const [showSessionLogs, setShowSessionLogs] = useState(false);
-  const [storageUsage, setStorageUsage] = useState(65);
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [showPicOptions, setShowPicOptions] = useState(false);
-  
-  // Additional missing states
-  const [activeCCTab, setActiveCCTab] = useState('identity');
-  const [calendarMonth, setCalendarMonth] = useState('April 2026');
-  const [showKillSessionsModal, setShowKillSessionsModal] = useState(false);
-  
-  // NEW ADVANCED FEATURES STATES
-  // AI Study Buddy States
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [fileSummaries, setFileSummaries] = useState({});
-  const [isProcessingFile, setIsProcessingFile] = useState(false);
-
-  // Gamification States
-  const [userXP, setUserXP] = useState(0);
-  const [userLevel, setUserLevel] = useState(1);
-  const [userBadges, setUserBadges] = useState([]);
-  const [completedAssignments, setCompletedAssignments] = useState([]);
-  const [showLevelUpModal, setShowLevelUpModal] = useState(false);
-
-  // Real-time Collaboration States
-  const [whiteboardContent, setWhiteboardContent] = useState('');
-  const [sharedNotes, setSharedNotes] = useState([]);
-  const [activeCollaborators, setActiveCollaborators] = useState([]);
-  const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
-
-  // Smart Attendance States
-  const [moduleStartTime, setModuleStartTime] = useState(null);
-  const [attendanceData, setAttendanceData] = useState({});
-  const [totalTimeInModules, setTotalTimeInModules] = useState(0);
-
-  // Progress Tracker States
-  const [courseProgress, setCourseProgress] = useState({});
-  const [recentActivities, setRecentActivities] = useState([]);
 
   // Search States
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
+  
+  // Additional Missing States
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatLog, setChatLog] = useState([]);
+  const [message, setMessage] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [systemAlerts, setSystemAlerts] = useState([]);
+  const [profilePic, setProfilePic] = useState('');
+  const [showPicOptions, setShowPicOptions] = useState(false);
+  const [activeCCTab, setActiveCCTab] = useState('overview');
+  const [showMetadataAdvanced, setShowMetadataAdvanced] = useState(false);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [showKillSessionsModal, setShowKillSessionsModal] = useState(false);
+  const [storageUsage, setStorageUsage] = useState(0);
+  const [dashboardView, setDashboardView] = useState('overview');
+  const [dynamicGreeting, setDynamicGreeting] = useState('Welcome');
+  const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
+  const [selectedDate, setSelectedDate] = useState(new Date().getDate());
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [selectedTaskDate, setSelectedTaskDate] = useState('');
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('English (US)');
+  
+  // Missing Functions
+  const addTask = () => {
+    if (newTaskTitle.trim()) {
+      const newTask = {
+        id: tasks.length + 1,
+        title: newTaskTitle,
+        completed: false,
+        dueDate: selectedTaskDate || new Date().toISOString().split('T')[0],
+        priority: 'medium'
+      };
+      setTasks([...tasks, newTask]);
+      setNewTaskTitle('');
+      setSelectedTaskDate('');
+    }
+  };
   
   // Enhanced Course data with Google Meet links
   const courses = [
@@ -435,43 +390,7 @@ const App = () => {
   
   const studentID = "2022-5089";
   const currentYear = "3rd Year";
-  const department = "College of Information and Computing Sciences";
   
-  // Languages
-  const languages = ["English (US)", "English (UK)", "Spanish", "French", "German", "Japanese", "Korean", "Mandarin", "Filipino", "Italian", "Portuguese", "Russian", "Arabic", "Hindi", "Vietnamese"];
-  
-  // System Alerts
-  const [systemAlerts, setSystemAlerts] = useState({
-    "CRITICAL SYSTEM BREACH": true,
-    "DATABASE SYNC ERRORS": true,
-    "NEW LOGIN ATTEMPTS": false,
-    "PERFORMANCE MONITORING": false,
-    "BACKUP STATUS ALERTS": true
-  });
-  
-  // optional safe default
-  const dynamicGreeting = "Welcome back";
-  
-  // Enhanced course data with details
-  const [courseDetails, setCourseDetails] = useState({
-    announcements: [
-      { id: 1, title: "Midterm Exam Schedule", content: "Exam will be on Friday at 2PM", date: "2024-04-20", author: "Prof. Smith" },
-      { id: 2, title: "Project Deadline Extended", content: "New deadline is next Monday", date: "2024-04-18", author: "Prof. Johnson" },
-    ],
-    assignments: [
-      { id: 1, title: "Chapter 5 Quiz", dueDate: "2024-04-22", status: "pending", points: 100 },
-      { id: 2, title: "Project Proposal", dueDate: "2024-04-25", status: "submitted", points: 200 },
-    ],
-    people: [
-      { id: 1, name: "Prof. Smith", role: "Instructor", avatar: "👨‍🏫" },
-      { id: 2, name: "John Doe", role: "TA", avatar: "👨‍🎓" },
-      { id: 3, name: "Jane Smith", role: "Student", avatar: "👩‍🎓" },
-    ],
-    files: [
-      { id: 1, name: "Lecture Slides Week 5", type: "pdf", size: "2.5 MB", uploaded: "2024-04-15" },
-      { id: 2, name: "Assignment Guidelines", type: "doc", size: "1.2 MB", uploaded: "2024-04-14" },
-    ]
-  });
   // =============================
   
   // Refs
@@ -511,6 +430,7 @@ const App = () => {
   // Utility functions
   const handleLogin = (e) => {
     e.preventDefault();
+    console.log('Logging in...');
     
     if (!username || !password) return;
     
@@ -519,6 +439,11 @@ const App = () => {
       setIsLoggedIn(true);
       setCurrentUser(username);
     }
+  };
+
+  const handleSignIn = () => {
+    console.log('Logging in...');
+    setIsLoggedIn(true);
   };
 
   // --- LOGIN SCREEN COMPONENT ---
@@ -546,7 +471,7 @@ const App = () => {
             className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold" 
           />
         </div>
-        <button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-[0.98]">
+        <button type="button" onClick={handleSignIn} className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-[0.98]">
           Sign In to Portal
         </button>
       </motion.div>
@@ -562,294 +487,25 @@ const App = () => {
 
   if (!isLoggedIn) return <LoginScreen />;
 
-  const addTask = () => {
-    if (newTaskTitle.trim()) {
-      const newTask = {
-        id: Date.now(),
-        title: newTaskTitle,
-        completed: false,
-        dueDate: selectedTaskDate,
-        priority: 'medium'
-      };
-      setTasks([...tasks, newTask]);
-      setNewTaskTitle('');
-    }
-  };
-
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
-  };
-
+  // Used Functions for Google Classroom Layout
   const toggleTask = (id) => {
     setTasks(tasks.map(task => 
       task.id === id ? { ...task, completed: !task.completed } : task
     ));
   };
 
-  const markAllNotificationsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })));
-  };
-
   const handleNotificationClick = (notification) => {
     setNotifications(notifications.map(n => 
       n.id === notification.id ? { ...n, read: true } : n
     ));
-    // Navigate to related content based on notification type
-    if (notification.type === 'assignment') {
-      setActiveNav('Assignments');
-    } else if (notification.type === 'grade') {
-      setActiveNav('Home');
-    }
   };
 
   const getUnreadCount = () => {
     return notifications.filter(n => !n.read).length;
   };
 
-  const getCompletedTasksCount = () => {
-    return tasks.filter(task => task.completed).length;
-  };
-
   const getPendingTasksCount = () => {
     return tasks.filter(task => !task.completed).length;
-  };
-
-  const sendAiMessage = async () => {
-    if (aiMessage.trim()) {
-      // Add user's message to chatMessages array
-      setChatMessages(prev => [...prev, { id: Date.now(), sender: 'user', text: aiMessage }]);
-      
-      setIsAiLoading(true);
-      
-      // Use setTimeout (1.5s) to add realistic AI response
-      setTimeout(() => {
-        const message = aiMessage.toLowerCase();
-        let response = "";
-        
-        // Contextual responses based on user input
-        if (message.includes('meet') || message.includes('class') || message.includes('video')) {
-          response = "I can help you join your Google Meet sessions! Each course has a 'Join Meet' button in the Courses tab. Would you like me to show you how to access your ongoing classes?";
-        } else if (message.includes('assignment') || message.includes('task') || message.includes('deadline')) {
-          response = "I see you're asking about assignments. You have several pending tasks with upcoming deadlines. Would you like me to help you organize your study schedule or show you the Tasks tab?";
-        } else if (message.includes('calendar') || message.includes('schedule')) {
-          response = "Your academic calendar shows important deadlines and events. I can help you plan your week better. Would you like me to highlight your upcoming deadlines?";
-        } else if (message.includes('help') || message.includes('study')) {
-          response = "I'm here to help you succeed! I can assist with assignment tracking, course navigation, Google Meet links, and study planning. What specific challenge are you facing today?";
-        } else {
-          // Default contextual response
-          const responses = [
-            "Hello! I'm your EduPulse AI assistant. I can help you navigate your courses, track assignments, and join virtual classes. How can I assist you today?",
-            "Welcome back! I've noticed you have several courses with active Google Meet sessions. Need help joining a class or managing your assignments?",
-            "I'm here to support your learning journey! I can help you find your course materials, join virtual meetings, and track your academic progress. What would you like to work on?"
-          ];
-          response = responses[Math.floor(Math.random() * responses.length)];
-        }
-        
-        // Add AI response to chatMessages array
-        setChatMessages(prev => [...prev, { id: Date.now(), sender: 'ai', text: response }]);
-        
-        setAiResponse(response);
-        setIsAiLoading(false);
-        setAiMessage('');
-      }, 1500);
-    }
-  };
-
-  // NEW ADVANCED FUNCTIONS
-  
-  // AI Study Buddy Functions
-  const handleFileUpload = (event) => {
-    const files = Array.from(event.target.files);
-    const newFiles = files.map(file => ({
-      id: Date.now() + Math.random(),
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      uploadDate: new Date().toISOString()
-    }));
-    
-    setUploadedFiles([...uploadedFiles, ...newFiles]);
-    
-    // Simulate AI processing and summarization
-    newFiles.forEach(file => {
-      setIsProcessingFile(true);
-      setTimeout(() => {
-        const summary = generateFileSummary(file);
-        setFileSummaries(prev => ({
-          ...prev,
-          [file.id]: summary
-        }));
-        setIsProcessingFile(false);
-        
-        // Add to recent activities
-        addRecentActivity(`Processed document: ${file.name}`, 'file');
-        
-        // Award XP for file upload
-        awardXP(10, 'Document Upload');
-      }, 2000);
-    });
-  };
-
-  const generateFileSummary = (file) => {
-    // Simulate AI-generated summary based on file type
-    const summaries = {
-      'application/pdf': `This PDF document contains comprehensive information about ${file.name.replace('.pdf', '')}. Key topics include theoretical concepts, practical examples, and case studies. Recommended for in-depth study and exam preparation.`,
-      'application/msword': `This Word document covers detailed notes on ${file.name.replace('.docx', '').replace('.doc', '')}. Contains structured content with headings, bullet points, and important definitions suitable for quick review.`,
-      'text/plain': `This text file contains concise notes about ${file.name.replace('.txt', '')}. Includes key terms, formulas, and summary points ideal for last-minute revision.`
-    };
-    
-    return summaries[file.type] || `Document processed: ${file.name}. Content is now available for AI-assisted study and Q&A.`;
-  };
-
-  // Gamification Functions
-  const calculateLevel = (xp) => {
-    return Math.floor(xp / 100) + 1;
-  };
-
-  const awardXP = (amount, activity) => {
-    const newXP = userXP + amount;
-    const newLevel = calculateLevel(newXP);
-    
-    setUserXP(newXP);
-    
-    if (newLevel > userLevel) {
-      setUserLevel(newLevel);
-      setShowLevelUpModal(true);
-      
-      // Award badge for level up
-      const newBadge = {
-        id: Date.now(),
-        name: `Level ${newLevel} Achiever`,
-        description: `Reached level ${newLevel}`,
-        icon: '🏆',
-        earnedDate: new Date().toISOString()
-      };
-      setUserBadges([...userBadges, newBadge]);
-      
-      // Add to recent activities
-      addRecentActivity(`Level up! Now level ${newLevel}`, 'achievement');
-    }
-    
-    // Add to recent activities
-    addRecentActivity(`+${amount} XP - ${activity}`, 'xp');
-  };
-
-  const completeAssignment = (assignmentId) => {
-    if (!completedAssignments.includes(assignmentId)) {
-      setCompletedAssignments([...completedAssignments, assignmentId]);
-      awardXP(50, 'Assignment Completed');
-      
-      // Update course progress
-      const course = courses.find(c => c.id === assignmentId);
-      if (course) {
-        setCourseProgress(prev => ({
-          ...prev,
-          [assignmentId]: (prev[assignmentId] || 0) + 25
-        }));
-      }
-    }
-  };
-
-  // Real-time Collaboration Functions
-  const updateWhiteboard = (content) => {
-    setWhiteboardContent(content);
-    
-    // Simulate real-time collaboration
-    if (Math.random() > 0.7) {
-      const collaborator = {
-        id: Date.now(),
-        name: `Student ${Math.floor(Math.random() * 100)}`,
-        avatar: '👤',
-        isActive: true
-      };
-      
-      setActiveCollaborators(prev => {
-        const exists = prev.find(c => c.id === collaborator.id);
-        return exists ? prev : [...prev, collaborator];
-      });
-    }
-  };
-
-  const addSharedNote = (note) => {
-    const newNote = {
-      id: Date.now(),
-      content: note,
-      author: 'You',
-      timestamp: new Date().toISOString(),
-      course: activeNav === 'Courses' ? 'Current Course' : 'General'
-    };
-    
-    setSharedNotes([newNote, ...sharedNotes]);
-    awardXP(5, 'Shared Note');
-    addRecentActivity(`Added note: ${note.substring(0, 30)}...`, 'collaboration');
-  };
-
-  // Smart Attendance Functions
-  const startModuleTracking = (moduleId) => {
-    setModuleStartTime(Date.now());
-    
-    // Clear previous tracking if exists
-    if (attendanceData[moduleId]) {
-      const previousTime = attendanceData[moduleId].totalTime || 0;
-      setAttendanceData(prev => ({
-        ...prev,
-        [moduleId]: {
-          ...prev[moduleId],
-          totalTime: previousTime,
-          lastVisit: new Date().toISOString()
-        }
-      }));
-    }
-  };
-
-  const endModuleTracking = (moduleId) => {
-    if (moduleStartTime) {
-      const timeSpent = Date.now() - moduleStartTime;
-      const minutesSpent = Math.floor(timeSpent / 60000);
-      
-      setAttendanceData(prev => ({
-        ...prev,
-        [moduleId]: {
-          ...prev[moduleId],
-          totalTime: (prev[moduleId]?.totalTime || 0) + minutesSpent,
-          lastVisit: new Date().toISOString(),
-          visits: (prev[moduleId]?.visits || 0) + 1
-        }
-      }));
-      
-      setTotalTimeInModules(prev => prev + minutesSpent);
-      
-      // Award XP for time spent (1 XP per 5 minutes)
-      if (minutesSpent >= 5) {
-        awardXP(Math.floor(minutesSpent / 5), 'Module Engagement');
-      }
-      
-      setModuleStartTime(null);
-    }
-  };
-
-  // Progress Tracker Functions
-  const addRecentActivity = (description, type) => {
-    const activity = {
-      id: Date.now(),
-      description,
-      type,
-      timestamp: new Date().toISOString()
-    };
-    
-    setRecentActivities([activity, ...recentActivities].slice(0, 10)); // Keep only last 10 activities
-  };
-
-  const updateCourseProgress = (courseId, progress) => {
-    setCourseProgress(prev => ({
-      ...prev,
-      [courseId]: Math.min(100, Math.max(0, progress))
-    }));
-    
-    if (progress >= 100) {
-      awardXP(100, 'Course Completed');
-      addRecentActivity(`Completed course!`, 'achievement');
-    }
   };
 
   // Search Functions
@@ -1444,890 +1100,6 @@ const App = () => {
       </AnimatePresence>
     );
   };
-
-  // --- DASHBOARD VIEW COMPONENT ---
-  const DashboardView = () => {
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    
-    const handleCourseClick = (course) => {
-      setSelectedCourse(course);
-      startModuleTracking(course.id);
-    };
-
-    return (
-      <div className="p-8 max-w-7xl mx-auto">
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold mb-2 text-gray-900 dark:text-white"
-        >
-          Welcome back, Student! 👋
-        </motion.h1>
-        <p className="text-lg mb-8 text-gray-600 dark:text-gray-300">
-          You have {getPendingTasksCount()} assignments due this week.
-        </p>
-        
-        {/* Dashboard Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            title="Active Courses"
-            value={courses.length}
-            subtitle="This semester"
-            icon={BookOpen}
-            color="bg-blue-500"
-          />
-          
-          <StatCard
-            title="Current GPA"
-            value={gpa.toFixed(2)}
-            subtitle="Excellent progress"
-            icon={Award}
-            color="bg-green-500"
-            trend={5.2}
-          />
-          
-          <StatCard
-            title="Experience Points"
-            value={userXP}
-            subtitle={`Level ${userLevel}`}
-            icon={Zap}
-            color="bg-purple-500"
-            trend={12.5}
-          />
-          
-          <StatCard
-            title="Study Hours"
-            value={Math.floor(totalTimeInModules / 60)}
-            subtitle="This week"
-            icon={Clock}
-            color="bg-orange-500"
-            trend={8.3}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content Area */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Course Progress */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Course Progress</h2>
-              <div className="space-y-4">
-                {courses.map((course, index) => (
-                  <ProgressCard
-                    key={course.id}
-                    title={course.code}
-                    progress={course.progress}
-                    color={course.color}
-                    icon={BookOpen}
-                    description={`${course.title} • Prof. ${course.professor}`}
-                  />
-                ))}
-              </div>
-            </motion.div>
-
-            {/* AI Study Buddy Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}
-            >
-              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">AI Study Buddy</h2>
-              
-              {/* File Upload Area */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                  Upload Documents for AI Analysis
-                </label>
-                <div className={`border-2 border-dashed rounded-lg p-8 text-center ${
-                  darkMode ? 'border-slate-600 bg-slate-900' : 'border-gray-300 bg-gray-50'
-                }`}>
-                  <input
-                    type="file"
-                    multiple
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    <FileText size={48} className="mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600 dark:text-gray-400 mb-2">
-                      Drop files here or click to upload
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      PDF, DOC, TXT files supported
-                    </p>
-                  </label>
-                </div>
-              </div>
-
-              {/* Uploaded Files */}
-              {uploadedFiles.length > 0 && (
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Processed Files</h3>
-                  {uploadedFiles.map(file => (
-                    <FileUploadItem
-                      key={file.id}
-                      file={file}
-                      summary={fileSummaries[file.id]}
-                      isProcessing={isProcessingFile}
-                    />
-                  ))}
-                </div>
-              )}
-            </motion.div>
-
-            {/* Recent Activities */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}
-            >
-              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Recent Activities</h2>
-              <div className="space-y-3">
-                {recentActivities.length > 0 ? (
-                  recentActivities.map(activity => (
-                    <ActivityItem
-                      key={activity.id}
-                      icon={
-                        activity.type === 'achievement' ? <Award size={16} /> :
-                        activity.type === 'xp' ? <Zap size={16} /> :
-                        activity.type === 'collaboration' ? <Users size={16} /> :
-                        activity.type === 'file' ? <FileText size={16} /> :
-                        <Activity size={16} />
-                      }
-                      title={activity.description}
-                      description={new Date(activity.timestamp).toLocaleString()}
-                      time={new Date(activity.timestamp).toLocaleTimeString()}
-                      type={activity.type}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Activity size={48} className="mx-auto mb-4 opacity-20" />
-                    <p>No recent activities</p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-8">
-            {/* Gamification Panel */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}
-            >
-              <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Achievements</h2>
-              
-              <div className="text-center mb-6">
-                <div className="text-4xl font-bold text-purple-600 mb-2">Level {userLevel}</div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
-                  <div 
-                    className="bg-purple-600 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${(userXP % 100)}%` }}
-                  />
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {userXP % 100} / 100 XP to next level
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                {userBadges.slice(0, 3).map(badge => (
-                  <div key={badge.id} className="flex items-center gap-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                    <span className="text-2xl">{badge.icon}</span>
-                    <div>
-                      <p className="font-medium text-sm text-gray-900 dark:text-white">{badge.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">{badge.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Quick Actions */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}
-            >
-              <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Quick Actions</h2>
-              <div className="space-y-3">
-                <button
-                  onClick={() => setShowChat(true)}
-                  className="w-full flex items-center gap-3 px-4 py-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg font-medium hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-all"
-                >
-                  <MessageSquare size={20} />
-                  Ask AI Assistant
-                </button>
-                <button
-                  onClick={() => setActiveNav('Tasks')}
-                  className="w-full flex items-center gap-3 px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg font-medium hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all"
-                >
-                  <ClipboardList size={20} />
-                  View Tasks
-                </button>
-                <button
-                  onClick={() => setActiveNav('Calendar')}
-                  className="w-full flex items-center gap-3 px-4 py-3 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg font-medium hover:bg-green-100 dark:hover:bg-green-900/30 transition-all"
-                >
-                  <Calendar size={20} />
-                  Check Calendar
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Course Modal */}
-        {selectedCourse && (
-          <CourseModal
-            show={!!selectedCourse}
-            onClose={() => {
-              setSelectedCourse(null);
-              endModuleTracking(selectedCourse.id);
-            }}
-            course={selectedCourse}
-            courseTab={courseTab}
-            onTabChange={setCourseTab}
-          />
-        )}
-      </div>
-    );
-  };
-
-  // --- COURSES VIEW COMPONENT ---
-  const CoursesView = () => {
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    
-    return (
-      <div className="p-8">
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold mb-8 text-gray-900 dark:text-white"
-        >
-          My Courses
-        </motion.h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course, index) => (
-            <motion.div
-              key={course.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className={`p-6 rounded-xl border hover:shadow-lg transition-all cursor-pointer ${
-                darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
-              }`}
-              onClick={() => setSelectedCourse(course)}
-            >
-              <div className={`${course.color} h-24 rounded-lg mb-4 flex items-center justify-center`}>
-                <h3 className="text-white font-bold text-lg">{course.code}</h3>
-              </div>
-              <h4 className="font-bold mb-2 text-gray-900 dark:text-white">{course.title}</h4>
-              <p className="text-sm mb-4 text-gray-600 dark:text-gray-400">Prof. {course.professor}</p>
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-sm font-medium text-blue-600">{course.progress}% Complete</span>
-                <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full transition-all duration-300" style={{ width: `${course.progress}%` }}></div>
-                </div>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.open(course.meetLink, '_blank');
-                }}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 rounded-lg font-medium hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all"
-              >
-                <Camera size={16} />
-                Join Meet
-              </button>
-            </motion.div>
-          ))}
-        </div>
-        
-        {/* Course Modal */}
-        <CourseModal
-          show={!!selectedCourse}
-          onClose={() => setSelectedCourse(null)}
-          course={selectedCourse}
-          courseTab={courseTab}
-          onTabChange={setCourseTab}
-        />
-      </div>
-    );
-  };
-
-  // --- CALENDAR VIEW COMPONENT ---
-  const CalendarView = () => {
-    const [selectedDate, setSelectedDate] = useState(15);
-    
-    
-    return (
-      <div className="p-8">
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold mb-8 text-gray-900 dark:text-white"
-        >
-          Academic Calendar
-        </motion.h1>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Upcoming Events</h3>
-            <div className="space-y-3">
-              {events.map(event => (
-                <div key={event.day} className={`p-4 rounded-lg ${darkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                  <h4 className="font-bold mb-2 text-gray-900 dark:text-white">{event.day} - {event.date}</h4>
-                  {event.items.map(item => (
-                    <div key={item.id} className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{item.title}</span>
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        item.type === 'deadline' ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' : 
-                        item.type === 'quiz' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' :
-                        item.type === 'lab' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' :
-                        'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
-                      }`}>{item.type}</span>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className={`p-6 rounded-xl border lg:col-span-2 ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Calendar View</h3>
-            <div className="grid grid-cols-7 gap-2 text-center">
-              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => (
-                <div key={day} className="p-2 text-sm font-bold text-gray-600 dark:text-gray-400">{day}</div>
-              ))}
-              {[...Array(30)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className={`p-3 rounded cursor-pointer transition-colors ${
-                    selectedDate === i + 1 
-                      ? 'bg-blue-600 text-white' 
-                      : 'hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-900 dark:text-gray-100'
-                  }`} 
-                  onClick={() => setSelectedDate(i + 1)}
-                >
-                  {i + 1}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // --- TASKS VIEW COMPONENT ---
-  const TasksView = () => {
-    const [activeTab, setActiveTab] = useState('upcoming');
-    const [tasksList, setTasksList] = useState([
-      { id: 1, title: "Complete Chapter 5 Quiz", completed: false, dueDate: "2026-04-25", priority: 'high' },
-      { id: 2, title: "Submit Lab Report", completed: true, dueDate: "2026-04-23", priority: 'medium' },
-      { id: 3, title: "Review Lecture Notes", completed: false, dueDate: "2026-04-26", priority: 'low' },
-      { id: 4, title: "Business Model Canvas", completed: false, dueDate: "2026-04-21", priority: 'high' },
-      { id: 5, title: "React Portfolio", completed: true, dueDate: "2026-04-20", priority: 'medium' }
-    ]);
-
-    const toggleTask = (id) => {
-      setTasksList(tasksList.map(task => 
-        task.id === id ? { ...task, completed: !task.completed } : task
-      ));
-    };
-
-    const upcomingTasks = tasksList.filter(t => !t.completed);
-    const completedTasks = tasksList.filter(t => t.completed);
-
-    return (
-      <div className="p-8">
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold mb-8 text-gray-900 dark:text-white"
-        >
-          Tasks & Assignments
-        </motion.h1>
-        
-        {/* Tabs */}
-        <div className="flex gap-4 mb-6">
-          <button
-            onClick={() => setActiveTab('upcoming')}
-            className={`px-6 py-2 rounded-lg font-medium transition-all ${
-              activeTab === 'upcoming' 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-400'
-            }`}
-          >
-            Upcoming ({upcomingTasks.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('completed')}
-            className={`px-6 py-2 rounded-lg font-medium transition-all ${
-              activeTab === 'completed' 
-                ? 'bg-green-600 text-white' 
-                : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-400'
-            }`}
-          >
-            Completed ({completedTasks.length})
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Task List */}
-          <div className="lg:col-span-2">
-            <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-              <div className="space-y-3">
-                {(activeTab === 'upcoming' ? upcomingTasks : completedTasks).map(task => (
-                  <div key={task.id} className={`p-4 rounded-lg ${
-                    task.completed ? 'bg-gray-50 dark:bg-slate-700 opacity-75' : 'bg-gray-50 dark:bg-slate-700'
-                  }`}>
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h4 className={`font-medium mb-2 ${
-                          task.completed 
-                            ? 'line-through text-gray-600 dark:text-gray-400' 
-                            : 'text-gray-900 dark:text-white'
-                        }`}>
-                          {task.title}
-                        </h4>
-                        <div className="flex items-center gap-4 text-sm">
-                          <span className="text-gray-600 dark:text-gray-400">Due: {task.dueDate}</span>
-                          <span className={`px-2 py-1 rounded text-xs ${
-                            task.priority === 'high' ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' :
-                            task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' :
-                            'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                          }`}>
-                            {task.priority}
-                          </span>
-                        </div>
-                      </div>
-                      <button 
-                        onClick={() => toggleTask(task.id)}
-                        className={`px-3 py-1 rounded text-sm transition-all ${
-                          task.completed 
-                            ? 'bg-gray-200 dark:bg-slate-600 text-gray-600 dark:text-gray-400' 
-                            : 'bg-blue-600 text-white hover:bg-blue-700'
-                        }`}
-                      >
-                        {task.completed ? 'Undo' : 'Complete'}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          {/* Add New Task */}
-          <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Add New Task</h3>
-            <input
-              type="text"
-              value={newTaskTitle}
-              onChange={(e) => setNewTaskTitle(e.target.value)}
-              placeholder="Task title..."
-              className={`w-full p-3 rounded-lg mb-3 ${darkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-900'}`}
-            />
-            <input
-              type="date"
-              value={selectedTaskDate}
-              onChange={(e) => setSelectedTaskDate(e.target.value)}
-              className={`w-full p-3 rounded-lg mb-3 ${darkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-900'}`}
-            />
-            <button
-              onClick={addTask}
-              className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
-            >
-              Add Task
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // --- SETTINGS VIEW COMPONENT ---
-  const SettingsView = () => {
-    return (
-      <div className="p-8">
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold mb-8 text-gray-900 dark:text-white"
-        >
-          Settings
-        </motion.h1>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Profile Settings */}
-          <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Profile Settings</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Student ID</label>
-                <input
-                  type="text"
-                  value={studentID}
-                  disabled
-                  className={`w-full p-3 rounded-lg ${darkMode ? 'bg-slate-700 text-gray-400' : 'bg-gray-100 text-gray-600'}`}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email</label>
-                <input
-                  type="email"
-                  value={currentUser}
-                  disabled
-                  className={`w-full p-3 rounded-lg ${darkMode ? 'bg-slate-700 text-gray-400' : 'bg-gray-100 text-gray-600'}`}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Department</label>
-                <input
-                  type="text"
-                  value={department}
-                  disabled
-                  className={`w-full p-3 rounded-lg ${darkMode ? 'bg-slate-700 text-gray-400' : 'bg-gray-100 text-gray-600'}`}
-                />
-              </div>
-            </div>
-          </div>
-          
-          {/* Preferences */}
-          <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Preferences</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="font-medium text-gray-700 dark:text-gray-300">Dark Mode</span>
-                <button
-                  onClick={() => setDarkMode(!darkMode)}
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${
-                    darkMode ? 'bg-blue-600' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${
-                    darkMode ? 'translate-x-6' : 'translate-x-0'
-                  }`}></div>
-                </button>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="font-medium text-gray-700 dark:text-gray-300">Push Notifications</span>
-                <button
-                  onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${
-                    notificationsEnabled ? 'bg-blue-600' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${
-                    notificationsEnabled ? 'translate-x-6' : 'translate-x-0'
-                  }`}></div>
-                </button>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="font-medium text-gray-700 dark:text-gray-300">Email Notifications</span>
-                <button
-                  onClick={() => setEmailNotifications(!emailNotifications)}
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${
-                    emailNotifications ? 'bg-blue-600' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${
-                    emailNotifications ? 'translate-x-6' : 'translate-x-0'
-                  }`}></div>
-                </button>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="font-medium text-gray-700 dark:text-gray-300">Auto-save</span>
-                <button
-                  onClick={() => setAutoSave(!autoSave)}
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${
-                    autoSave ? 'bg-blue-600' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${
-                    autoSave ? 'translate-x-6' : 'translate-x-0'
-                  }`}></div>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Language Settings */}
-          <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Language & Region</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Language</label>
-                <select 
-                  value={selectedLanguage}
-                  onChange={(e) => setSelectedLanguage(e.target.value)}
-                  className={`w-full p-3 rounded-lg ${darkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-900'}`}
-                >
-                  {languages.map(lang => (
-                    <option key={lang} value={lang}>{lang}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Time Zone</label>
-                <select className={`w-full p-3 rounded-lg ${darkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-900'}`}>
-                  <option value="UTC+8">UTC+8 (Philippines)</option>
-                  <option value="UTC+0">UTC+0 (London)</option>
-                  <option value="UTC-5">UTC-5 (New York)</option>
-                  <option value="UTC-8">UTC-8 (California)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Security */}
-          <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Security</h3>
-            <div className="space-y-4">
-              <button className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all">
-                Change Password
-              </button>
-              <button className="w-full py-3 bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-all">
-                Enable Two-Factor Authentication
-              </button>
-              <button className="w-full py-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all">
-                Sign Out All Devices
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // --- CYBER REFLEX GAME COMPONENT ---
-  const CyberReflexGame = () => (
-    <div className="p-8 max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Cyber Reflex Training</h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Improve your reaction time and cybersecurity awareness with interactive training modules.
-        </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6">
-            <h3 className="font-semibold text-blue-600 dark:text-blue-400 mb-2">Quick Response</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Test your reflexes with cybersecurity scenarios</p>
-            <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-              Start Challenge
-            </button>
-          </div>
-          
-          <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-6">
-            <h3 className="font-semibold text-green-600 dark:text-green-400 mb-2">Threat Detection</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Identify security threats in simulated environments</p>
-            <button className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-              Practice Mode
-            </button>
-          </div>
-        </div>
-        
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Coming soon: Advanced modules, multiplayer challenges, and leaderboards
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-
-  // --- HEADER COMPONENT ---
-  const Header = () => (
-    <header className="glass-header border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
-      <div className="max-w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Left side - Logo and Search */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">EP</span>
-              </div>
-              <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">EduPulse</span>
-            </div>
-            
-            <div className="hidden md:block relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search courses, assignments, students..."
-                className="pl-10 pr-4 py-2 w-64 lg:w-96 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              />
-            </div>
-          </div>
-
-          {/* Right side - Actions */}
-          <div className="flex items-center gap-3">
-            {/* Dark mode toggle */}
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              {darkMode ? (
-                <Sun className="w-5 h-5 text-yellow-500" />
-              ) : (
-                <Moon className="w-5 h-5 text-gray-600" />
-              )}
-            </button>
-
-            {/* Notifications */}
-            <div className="relative">
-              <button 
-                onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                {getUnreadCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {getUnreadCount()}
-                  </span>
-                )}
-              </button>
-              
-              {/* Notification Dropdown */}
-              <AnimatePresence>
-                {showNotifications && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                    className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50"
-                  >
-                    <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Notifications</h3>
-                        <div className="flex items-center gap-2">
-                          {getUnreadCount() > 0 && (
-                            <button
-                              onClick={markAllNotificationsRead}
-                              className="text-xs text-blue-600 hover:text-blue-700 font-medium"
-                            >
-                              Mark all read
-                            </button>
-                          )}
-                          <button
-                            onClick={() => setShowNotifications(false)}
-                            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-                          >
-                            <X className="w-4 h-4 text-gray-500" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="max-h-96 overflow-y-auto">
-                      {notifications.length === 0 ? (
-                        <div className="p-8 text-center text-gray-500">
-                          <Bell className="w-8 h-8 mx-auto mb-2 opacity-20" />
-                          <p>No notifications</p>
-                        </div>
-                      ) : (
-                        notifications.map(notification => (
-                          <motion.div
-                            key={notification.id}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className={`p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors ${
-                              !notification.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                            }`}
-                            onClick={() => {
-                              handleNotificationClick(notification);
-                              setShowNotifications(false);
-                            }}
-                          >
-                            <div className="flex items-start gap-3">
-                              <div className={`w-2 h-2 rounded-full mt-2 ${
-                                notification.type === 'assignment' ? 'bg-blue-500' :
-                                notification.type === 'grade' ? 'bg-green-500' :
-                                notification.type === 'update' ? 'bg-yellow-500' : 'bg-gray-500'
-                              }`} />
-                              <div className="flex-1">
-                                <h4 className="font-medium text-gray-900 dark:text-white text-sm">
-                                  {notification.title}
-                                </h4>
-                                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                                  {notification.message}
-                                </p>
-                                <p className="text-xs text-gray-500 mt-2">{notification.time}</p>
-                              </div>
-                              {!notification.read && (
-                                <div className="w-2 h-2 bg-blue-500 rounded-full" />
-                              )}
-                            </div>
-                          </motion.div>
-                        ))
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Profile */}
-            <div className="relative">
-              <button
-                onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                {profilePic ? (
-                  <img src={profilePic} alt="Profile" className="w-8 h-8 rounded-full object-cover" />
-                ) : (
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-white" />
-                  </div>
-                )}
-              </button>
-
-              <AnimatePresence>
-                {showProfileDropdown && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                    className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2"
-                  >
-                    <button className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                      Profile Settings
-                    </button>
-                    <button className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                      Account Settings
-                    </button>
-                    <hr className="my-2 border-gray-200 dark:border-gray-700" />
-                    <button 
-                      onClick={handleLogout}
-                      className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Sign Out
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
 
   // ===== PREMIUM FUNCTIONS =====
   const handleCourseClick = (course) => {
@@ -3434,702 +2206,449 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
 
   // --- MAIN APP ---
   return (
-    // ROOT: Dito nakalagay ang background color para selyado ang ilalim (Void Fix)
     <div className="h-screen w-full flex flex-col antialiased transition-colors duration-500 overflow-hidden bg-[#f8fafc] text-[#1e293b]">
-      
-      {/* PREMIUM NAVBAR */}
-      <nav className="glass-header h-16 px-6 flex justify-between items-center border-b sticky top-0 z-[100]">
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg">
-            <Zap size={20} className="text-white"/>
-          </div>
-          <h1 className="font-bold text-2xl tracking-wider text-gray-900">EduPulse</h1>
-        </div>
-
-        {/* RIGHT SIDE: Notifications + Profile */}
-        <div className="flex items-center gap-4">
-          {/* Notifications */}
-          <div className="relative">
-            <button 
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-3 rounded-xl hover:bg-gray-100 transition-colors"
-            >
-              <Bell size={20} className="text-gray-600" />
-              {getUnreadCount() > 0 && (
-                <div className="absolute top-1 right-1 w-3 h-3 bg-red-500 rounded-full"></div>
-              )}
-            </button>
-            
-            <NotificationDropdown
-              show={showNotifications}
-              onClose={() => setShowNotifications(false)}
-              notifications={notifications}
-              onNotificationClick={handleNotificationClick}
-              onMarkAllRead={markAllNotificationsRead}
-            />
-          </div>
-
-          {/* Profile */}
-          <button 
-            onClick={() => setShowProfileDropdown(!showProfileDropdown)} 
-            className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-lg hover:scale-105 transition-all"
-          >
-            {currentUser ? currentUser.charAt(0).toUpperCase() : 'ST'}
-          </button>
-        </div>
-      </nav>
-
-      <div className="flex-1 flex overflow-hidden">
-        {/* SIDEBAR NAVIGATION */}
-        <aside className="w-[260px] border-r hidden xl:flex flex-col p-3 overflow-y-auto transition-colors z-40 flex-shrink-0 bg-[#f1f3f5] border-slate-200">
-          <nav className="flex-1 px-2 space-y-1">
-              {/* HOME DASHBOARD LINK */}
-              <a
-                href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Home'); setActiveSubject(null); }}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
-                  activeNav === 'Home'
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                }`}
+      { !isLoggedIn ? (
+        /* PASTE ALL MY EXISTING LOGIN UI HERE */
+        <LoginScreen />
+      ) : (
+        /* SHOW THE ACTUAL SYSTEM/DASHBOARD HERE */
+        <div className="h-screen w-full flex flex-col bg-gray-50">
+          {/* GOOGLE CLASSROOM STYLE HEADER */}
+          <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+            <div className="flex items-center gap-4">
+              {/* Menu Button */}
+              <button 
+                onClick={() => setSidebarOpen(!isSidebarOpen)}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors lg:hidden"
               >
-                <Home
-                  className={`mr-3 h-5 w-5 ${activeNav === 'Home' ? 'text-blue-700' : 'text-gray-500'}`}
-                  size={20}
-                />
-                <span className="sidebar-link-text">Home Dashboard</span>
-              </a>
-
-              {/* CALENDAR LINK */}
-              <a
-                href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Calendar'); setActiveSubject(null); }}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
-                  activeNav === 'Calendar'
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-              >
-                <CalendarIcon
-                  className={`mr-3 h-5 w-5 ${activeNav === 'Calendar' ? 'text-blue-700' : 'text-gray-500'}`}
-                  size={20}
-                />
-                <span className="sidebar-link-text">Calendar</span>
-              </a>
-
-              {/* TO-DO LINK */}
-              <a
-                href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Tasks'); setActiveSubject(null); }}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
-                  activeNav === 'Tasks'
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-              >
-                <ClipboardList
-                  className={`mr-3 h-5 w-5 ${activeNav === 'Tasks' ? 'text-blue-700' : 'text-gray-500'}`}
-                  size={20}
-                />
-                <span className="sidebar-link-text">To-Do</span>
-              </a>
-
-                          </nav>
-
-          <div className="mt-6 pt-4 border-t border-slate-500/10">
-            <div className="flex justify-between items-center px-3 mb-4">
-               <p className="sidebar-section-heading">{t("activeCourses")}</p>
-               <PlusCircle size={14} className="text-emerald-500 cursor-pointer hover:rotate-90 transition-transform"/>
-            </div>
-            <div className="space-y-2">
-              {subjects.map(sub => (
-                <div key={sub.id} onClick={() => handleSubjectClick(sub)} className={`group px-3 py-2.5 text-[9px] font-black uppercase tracking-tight cursor-pointer truncate rounded-[1rem] transition-all flex items-center gap-3 ${activeSubject?.id === sub.id ? `${sub.color} text-white shadow-lg` : (darkMode ? 'hover:bg-white/5 text-slate-400' : 'hover:bg-white text-slate-600 shadow-sm')}`}>
-                  <div className={`w-2.5 h-2.5 rounded-full border-2 ${activeSubject?.id === sub.id ? 'bg-white border-white' : `${sub.color} border-transparent`}`}></div>
-                  <div className="flex-1 truncate">{sub.code}</div>
-                  <ChevronRight size={14} className={`opacity-0 group-hover:opacity-100 transition-opacity ${activeSubject?.id === sub.id ? 'opacity-100' : ''}`}/>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-auto pt-4 border-t border-slate-500/10 space-y-1">
-              {/* ARCHIVED LINK */}
-              <a
-                href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Archived'); setView('archived'); setActiveSubject(null); }}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors ${
-                  activeNav === 'Archived'
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-              >
-                <Archive
-                  className={`mr-3 h-5 w-5 ${activeNav === 'Archived' ? 'text-blue-700' : 'text-gray-500'}`}
-                  size={20}
-                />
-                {t("navArc")}
-              </a>
-
-              {/* SETTINGS LINK */}
-              <a
-                href="#"
-                onClick={(e) => { e.preventDefault(); setActiveNav('Settings'); setView('settings'); setActiveSubject(null); }}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-full transition-colors tracking-wider uppercase ${
-                  activeNav === 'Settings'
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-              >
-                <Settings
-                  className={`mr-3 h-5 w-5 ${activeNav === 'Settings' ? 'text-blue-700' : 'text-gray-500'}`}
-                  size={20}
-                />
-                <span className={`${activeNav === 'Settings' ? 'sidebar-settings-active' : 'sidebar-link-text'}`}>{t("navSet")}</span>
-              </a>
-          </div>
-        </aside>
-
-        {/* MAIN CONTENT AREA */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar relative">
-          {/* TOP HEADER BAR */}
-          <header className="glass-header sticky top-0 z-40 px-6 py-4 border-b border-gray-200 bg-white">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                {view !== "dashboard" && activeSubject && (
-                  <button 
-                    onClick={() => { setView("dashboard"); setActiveSubject(null); }}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <ArrowLeft size={16} />
-                    Back to Dashboard
-                  </button>
-                )}
-                {selectedCourse && (
-                  <button 
-                    onClick={() => setSelectedCourse(null)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
-                  >
-                    <ArrowLeft size={16} />
-                    Back to Dashboard
-                  </button>
-                )}
-              </div>
+                <Menu size={20} className="text-gray-600" />
+              </button>
+              
+              {/* Logo and Title */}
               <div className="flex items-center gap-3">
-                <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-                  <Search size={20} />
-                </button>
-                <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors relative">
-                  <Bell size={20} />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
-                  S
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <BookOpen size={18} className="text-white" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-semibold text-gray-900">EduPulse Classroom</h1>
+                  <p className="text-xs text-gray-500">BSIT 3J • {currentYear}</p>
                 </div>
               </div>
+            </div>
+
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-3">
+              {/* Search */}
+              <div className="hidden md:flex items-center bg-gray-100 rounded-lg px-3 py-2">
+                <Search size={16} className="text-gray-500 mr-2" />
+                <input 
+                  type="text" 
+                  placeholder="Search classes" 
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="bg-transparent outline-none text-sm w-48"
+                />
+              </div>
+              
+              {/* Notifications */}
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <Bell size={20} className="text-gray-600" />
+                {getUnreadCount() > 0 && (
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                )}
+              </button>
+              
+              {/* Profile */}
+              <button 
+                onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-medium hover:bg-purple-700 transition-colors"
+              >
+                {currentUser ? currentUser.charAt(0).toUpperCase() : 'S'}
+              </button>
             </div>
           </header>
 
           {/* MAIN CONTENT */}
-          <main className="min-h-screen bg-gray-50">
-            
-            {/* Navigation Switch with activeNav state handling */}
-            {activeNav === 'Home' && <DashboardView />}
-            {activeNav === 'Courses' && <CoursesView />}
-            {activeNav === 'Calendar' && <CalendarView />}
-            {activeNav === 'Tasks' && <TasksView />}
-            {activeNav === 'Settings' && <SettingsView />}
-            {view === "subjects" && <SubjectsView />}
-
-          {/* VIEW: CALENDAR HUB */}
-          {view === "calendar" && <CalendarViewComponent />}
-
-          {/* VIEW: GAME */}
-          {view === "game" && (
-            <div className="flex-1 overflow-y-auto custom-scrollbar relative flex flex-col">
-              <CyberReflexGame />
-            </div>
-          )}
-
-
-          {/* VIEW: CLASS STREAM MODULE */}
-          {view === "stream" && <StreamView />}
-
-          
-          {/* VIEW: TO-DO SYSTEM */}
-          {view === "todo" && (
-             <div className="p-6 max-w-5xl mx-auto animate-in slide-in-from-bottom-10 duration-700">
-                <SectionHeader icon={ClipboardList} title={t("navTodo")} subtitle="Task Management Matrix" />
-                <div className="flex gap-4 mb-6 border-b border-slate-500/10">
-                   {['assigned', 'missing', 'done'].map(tab => (
-                      <button key={tab} onClick={() => setTodoTab(tab)} className={`pb-5 text-[11px] font-black uppercase tracking-[0.2em] px-4 transition-all relative ${todoTab === tab ? 'text-emerald-500' : 'text-slate-500 hover:text-emerald-400'}`}>
-                         {tab}
-                         {todoTab === tab && <span className="absolute bottom-0 left-0 w-full h-1 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981]"></span>}
-                      </button>
-                   ))}
+          <div className="flex-1 flex overflow-hidden">
+            {/* Sidebar */}
+            <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transition-transform duration-300 mt-16 lg:mt-0`}>
+              <nav className="p-4 space-y-1">
+                <button
+                  onClick={() => setActiveNav('Home')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    activeNav === 'Home' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Home size={20} />
+                  <span className="font-medium">Classes</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveNav('Calendar')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    activeNav === 'Calendar' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <CalendarIcon size={20} />
+                  <span className="font-medium">Calendar</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveNav('Tasks')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    activeNav === 'Tasks' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <ClipboardList size={20} />
+                  <span className="font-medium">To-do</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveNav('Grades')}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    activeNav === 'Grades' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Award size={20} />
+                  <span className="font-medium">Grades</span>
+                </button>
+              </nav>
+              
+              {/* Profile Section */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-medium">
+                    {currentUser ? currentUser.charAt(0).toUpperCase() : 'S'}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900">{currentUser || 'Student'}</p>
+                    <p className="text-sm text-gray-500">{studentID}</p>
+                  </div>
+                  <button onClick={handleLogout} className="text-gray-400 hover:text-gray-600">
+                    <LogOut size={18} />
+                  </button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                   <div className={`p-5 rounded-[2rem] border border-dashed flex flex-col items-center justify-center ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-slate-50 border-slate-200'}`}>
-                      <div className="p-3 bg-emerald-500/10 rounded-full text-emerald-500 mb-3"><PlusCircle size={24}/></div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 italic">Add Private Task</p>
-                      <button className="px-8 py-3 bg-emerald-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl">Create New</button>
-                   </div>
-                   <div className="flex flex-col items-center justify-center p-5 opacity-30">
-                      <HardDrive size={60} className="text-slate-500 mb-4 opacity-20"/>
-                      <p className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-500">Task Log Empty</p>
-                   </div>
-                </div>
-                <EmptyState type="todo" />
-             </div>
-          )}
-          
-          {/* VIEW: ARCHIVE HUB */}
-          {view === "archived" && (
-             <div className="p-12 max-w-5xl mx-auto">
-                <SectionHeader icon={Archive} title={t("navArc")} subtitle="Historical Scholastic Records" />
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                   {[2023, 2024, 2025].map(year => (
-                      <div key={year} className={`p-10 rounded-[3rem] border transition-all hover:scale-[1.05] cursor-pointer text-left relative overflow-hidden group ${darkMode ? 'bg-[#121212] border-[#222222] hover:border-emerald-500/30' : 'bg-white border-slate-200 shadow-lg'}`}>
-                         <div className="absolute -top-4 -right-4 p-8 opacity-5 group-hover:opacity-10 transition-opacity"><Folder size={100}/></div>
-                         <h4 className="text-2xl font-black italic text-emerald-500 mb-2">{year}</h4>
-                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Archive Folder</p>
-                         <div className="space-y-2">
-                            <p className="text-[9px] font-bold uppercase opacity-60">8 Subjects</p>
-                            <p className="text-[9px] font-bold uppercase opacity-60">24 Resources</p>
-                         </div>
+              </div>
+            </aside>
+
+            {/* Main Content Area */}
+            <main className="flex-1 overflow-y-auto bg-gray-50">
+              <div className="max-w-7xl mx-auto p-6">
+                {activeNav === 'Home' && (
+                  <div>
+                    {/* Welcome Header */}
+                    <div className="mb-8">
+                      <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back, {currentUser || 'Student'}!</h2>
+                      <p className="text-gray-600">You have {getPendingTasksCount()} assignments due this week.</p>
+                    </div>
+
+                    {/* Class Grid */}
+                    <div className="mb-8">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900">Your Classes</h3>
+                        <button 
+                          onClick={() => alert('Add Class functionality coming soon!')}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                        >
+                          + Join Class
+                        </button>
                       </div>
-                   ))}
-                </div>
-                <EmptyState type="archived" />
-             </div>
-          )}
-
-         {/* VIEW: SETTINGS & GLOBAL CONFIG (HYPER-INTERACTIVE VERSION) */}
-          {view === "settings" && (
-            <div className="p-12 max-w-7xl mx-auto animate-in slide-in-from-right-10 duration-700 text-left">
-              <h2 className="text-5xl font-black italic uppercase tracking-tighter mb-12 text-emerald-500">{t("ctrlCenter")}</h2>
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-                <div className="space-y-3">
-                  {[
-                    { id: 'profile', name: t("identity"), icon: <User size={20}/> },
-                    { id: 'security', name: t("security"), icon: <Shield size={20}/> },
-                    { id: 'notifications', name: t("alerts"), icon: <Bell size={20}/> },
-                    { id: 'preferences', name: t("interface"), icon: <Languages size={20}/> },
-                    { id: 'data', name: t("cloud"), icon: <Database size={20}/> },
-                    { id: 'support', name: "Support & Help", icon: <LifeBuoy size={20}/> },
-                  ].map(tab => (
-                    <button key={tab.id} onClick={() => {
-                        setSettingsTab(tab.id);
-                        setIsRequestChangeActive(false); // Reset chain on switch
-                        setShowMetadataAdvanced(false);
-                      }} 
-                      className={`w-full flex items-center gap-5 px-8 py-5 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.15em] transition-all relative overflow-hidden group ${settingsTab === tab.id ? 'bg-emerald-600 text-white shadow-2xl shadow-emerald-900/40 translate-x-3' : (darkMode ? 'text-slate-500 hover:bg-white/5' : 'text-slate-600 hover:bg-slate-100')}`}>
-                      {tab.icon} {tab.name}
-                      {settingsTab === tab.id && <div className="absolute right-0 top-0 h-full w-1.5 bg-white opacity-50"></div>}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="lg:col-span-3">
-                  {settingsTab === 'profile' && (
-                    <div className="space-y-6">
-                      <div className={`p-12 rounded-[3.5rem] border animate-in fade-in slide-in-from-bottom-5 duration-500 relative overflow-hidden ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-2xl'}`}>
-                        <div className="absolute top-0 right-0 p-12 opacity-5"><User size={250}/></div>
-                        <div className="flex flex-col md:flex-row items-center gap-12 mb-16 relative z-10">
-                          <div className="relative group">
-                            <div className="w-40 h-40 rounded-[3rem] bg-slate-800 border-4 border-emerald-500 flex items-center justify-center overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-all group-hover:scale-105 group-hover:rotate-3">
-                                {profilePic ? <img src={profilePic} className="w-full h-full object-cover" /> : <User size={80} className="text-white opacity-10"/>}
+                      
+                      {filteredCourses.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {filteredCourses.map((course) => (
+                            <div 
+                              key={course.id}
+                              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+                              onClick={() => {
+                                setSelectedCourseDetail(course);
+                                setShowCourseModal(true);
+                              }}
+                            >
+                              {/* Header with color */}
+                              <div className={`h-24 ${course.color} relative`}>
+                                <div className="absolute inset-0 bg-black bg-opacity-10"></div>
+                                <div className="absolute bottom-3 left-4 text-white">
+                                  <h4 className="font-bold text-lg">{course.code}</h4>
+                                  <p className="text-sm opacity-90">{course.section}</p>
+                                </div>
+                              </div>
+                              
+                              {/* Content */}
+                              <div className="p-4">
+                                <h5 className="font-semibold text-gray-900 mb-1">{course.title}</h5>
+                                <p className="text-sm text-gray-600 mb-3">{course.professor}</p>
+                                
+                                <div className="flex items-center justify-between mb-3">
+                                  <span className="text-xs text-gray-500">{course.room}</span>
+                                  <span className="text-xs text-gray-500">{course.sched}</span>
+                                </div>
+                                
+                                {/* Progress Bar */}
+                                <div className="mb-3">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="text-xs text-gray-600">Progress</span>
+                                    <span className="text-xs font-medium text-gray-900">{course.progress}%</span>
+                                  </div>
+                                  <div className="w-full bg-gray-200 rounded-full h-2">
+                                    <div 
+                                      className={`${course.color} h-2 rounded-full`}
+                                      style={{ width: `${course.progress}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                                
+                                {/* Actions */}
+                                <div className="flex gap-2">
+                                  <button 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      alert(`Opening assignments for ${course.code}`);
+                                    }}
+                                    className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm font-medium"
+                                  >
+                                    View Assignments
+                                  </button>
+                                  <button 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      window.open(course.meetLink, '_blank');
+                                    }}
+                                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm font-medium"
+                                  >
+                                    Join Meet
+                                  </button>
+                                </div>
+                              </div>
                             </div>
-                            <button onClick={() => setShowPicOptions(true)} className="absolute -bottom-3 -right-3 p-4 bg-emerald-500 rounded-2xl text-white shadow-2xl hover:scale-110 active:scale-90 transition-all border-4 border-[#121212]"><Camera size={24}/></button>
-                          </div>
-                          <div className="text-center md:text-left">
-                            <h3 className="text-4xl font-black uppercase tracking-tighter mb-3 italic">{currentUser.split('@')[0] || "Authenticated_User"}</h3>
-                            <div className="flex flex-wrap justify-center md:justify-start gap-3">
-                               <span className="px-4 py-1.5 bg-emerald-500 text-white text-[10px] font-black uppercase rounded-xl shadow-lg shadow-emerald-500/20 tracking-widest">Global Account</span>
-                               <span className="px-4 py-1.5 bg-blue-500 text-white text-[10px] font-black uppercase rounded-xl shadow-lg shadow-blue-500/20 tracking-widest">{currentYear} Student</span>
-                               <span className="px-4 py-1.5 bg-slate-700 text-white text-[10px] font-black uppercase rounded-xl tracking-widest">Verified ID</span>
-                            </div>
-                            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-6 italic">Member since August 2022 • UID: {studentID}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12 border-t border-slate-500/10 relative z-10 text-left">
-                          <div className="space-y-2">
-                             <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Academic Primary Email</p>
-                             <p className="text-lg font-black italic text-emerald-500 truncate">{currentUser}</p>
-                          </div>
-                          <div className="space-y-2">
-                             <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Institutional Identifier</p>
-                             <p className="text-lg font-black italic uppercase tracking-tighter">{studentID}</p>
-                          </div>
-                        </div>
-
-                        <div className="mt-12 flex flex-wrap gap-4 relative z-20">
-                           <button onClick={() => setShowMetadataAdvanced(!showMetadataAdvanced)} className="px-8 py-4 bg-emerald-600 text-white rounded-[1.5rem] font-black uppercase text-[10px] tracking-widest shadow-xl hover:bg-emerald-500 hover:scale-105 active:scale-95 transition-all">
-                             {showMetadataAdvanced ? "Hide System Metadata" : "Update System Metadata"}
-                           </button>
-                           <button onClick={() => setIsRequestChangeActive(!isRequestChangeActive)} className={`px-8 py-4 rounded-[1.5rem] border font-black uppercase text-[10px] tracking-widest transition-all hover:scale-105 active:scale-95 ${isRequestChangeActive ? 'bg-red-500 border-red-500 text-white shadow-lg shadow-red-500/20' : (darkMode ? 'border-white/10 text-white hover:bg-white/5' : 'border-slate-200 text-slate-600 hover:bg-slate-50')}`}>
-                             {isRequestChangeActive ? "Abort Request" : "Request Change"}
-                           </button>
-                        </div>
-                      </div>
-
-                      {/* CHAIN REACTION 1: Metadata Advanced Registry Panels */}
-                      {showMetadataAdvanced && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in zoom-in-95 duration-500">
-                          {['System Logs', 'Registry Edit', 'API Access'].map((item) => (
-                            <button key={item} onClick={() => alert(`Accessing ${item} Core...`)} className={`p-8 rounded-[2.5rem] border text-left group transition-all hover:border-emerald-500 ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-lg'}`}>
-                              <Cpu size={24} className="text-emerald-500 mb-4 group-hover:rotate-12 transition-transform"/>
-                              <p className="text-[10px] font-black uppercase tracking-widest">{item}</p>
-                              <p className="text-[9px] text-slate-500 font-bold mt-2 uppercase">Status: <span className="text-emerald-500">Encrypted</span></p>
-                            </button>
                           ))}
                         </div>
-                      )}
-
-                     
-
-                  {/* SUPPORT & HELP HUB */}
-                  {settingsTab === 'support' && (
-                    <div className="space-y-8 animate-in slide-in-from-bottom-6">
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <button onClick={() => setSupportTicket(true)} className="p-10 rounded-[3rem] bg-emerald-600 text-white shadow-2xl shadow-emerald-500/30 hover:scale-[1.02] transition-all text-left group">
-                             <LifeBuoy size={40} className="mb-6 group-hover:rotate-45 transition-transform"/>
-                             <p className="text-xl font-black uppercase italic tracking-tighter">Open Support Ticket</p>
-                             <p className="text-[10px] font-bold uppercase opacity-80 mt-2">Direct Link to IT Admin Hub</p>
+                      ) : (
+                        /* Empty State */
+                        <div className="text-center py-12">
+                          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <BookOpen size={32} className="text-gray-400" />
+                          </div>
+                          <h3 className="text-lg font-medium text-gray-900 mb-2">No Classes Found</h3>
+                          <p className="text-gray-600 mb-4">You haven't joined any classes yet.</p>
+                          <button 
+                            onClick={() => alert('Join Class functionality coming soon!')}
+                            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                          >
+                            + Join Your First Class
                           </button>
-                          <button onClick={() => setAiDiagnostic(!aiDiagnostic)} className={`p-10 rounded-[3rem] border text-left hover:scale-[1.02] transition-all ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'}`}>
-                             <Zap size={40} className="mb-6 text-yellow-500 animate-pulse"/>
-                             <p className="text-xl font-black uppercase italic tracking-tighter">AI Diagnostics</p>
-                             <p className="text-[10px] font-bold text-slate-500 uppercase mt-2">Run system-wide integrity check</p>
-                          </button>
-                          {settingsTab === 'alerts' && (
-  <div className="space-y-6 animate-in slide-in-from-bottom-6">
-    <h2 className="text-2xl font-black uppercase italic tracking-tighter text-emerald-500">Alert Configurations</h2>
-    <div className={`p-8 rounded-[3rem] border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-100 shadow-2xl'}`}>
-      <div className="space-y-4">
-        {['Email Alerts', 'System Push', 'Activity Notification'].map((notif) => (
-          <div key={notif} className="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-transparent hover:border-emerald-500/30 transition-all">
-            <span className="font-bold uppercase text-xs italic tracking-widest">{notif}</span>
-            <input type="checkbox" defaultChecked className="w-6 h-6 accent-emerald-500 cursor-pointer" />
-          </div>
-        ))}
-        <button className="w-full mt-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase italic tracking-widest rounded-2xl transition-all">
-          Update Preferences
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-                       </div>
-
-                       <div className={`p-10 rounded-[3.5rem] border ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
-                          <div className="relative mb-10">
-                             <Search className="absolute left-6 top-5 text-slate-500" size={20}/>
-                             <input 
-                                type="text" 
-                                placeholder="Search system documentation..." 
-                                value={faqSearch}
-                                onChange={(e) => setFaqSearch(e.target.value)}
-                                className={`w-full py-5 pl-16 pr-8 rounded-[2rem] text-xs font-bold uppercase tracking-widest outline-none border ${darkMode ? 'bg-white/5 border-white/5 text-white' : 'bg-slate-50 border-slate-200 text-slate-800'}`}
-                             />
-                          </div>
-                          <div className="grid grid-cols-1 gap-4">
-                             {['Network Protocols', 'Biometric Resets', 'Cloud Recovery', 'API Integration'].map((faq) => (
-                                <button key={faq} className={`flex justify-between items-center p-6 rounded-2xl border transition-all ${darkMode ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-slate-50 border-slate-100 hover:bg-slate-100'}`}>
-                                   <span className="text-[10px] font-black uppercase tracking-widest">{faq}</span>
-                                   <ExternalLink size={16} className="text-emerald-500"/>
-                                </button>
-                              
-                             ))}
-                          </div>
-                       </div>
-
-                       {/* CHAIN REACTION: AI Diagnostic Panel */}
-                       {aiDiagnostic && (
-                         <div className={`p-8 rounded-[3rem] border border-yellow-500/30 bg-yellow-500/5 animate-in zoom-in-95 duration-500`}>
-                            <div className="flex items-center gap-4 mb-6">
-                               <RefreshCw size={20} className="animate-spin text-yellow-500"/>
-                               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-yellow-500">Scanning System Kernel...</p>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                               {['UI Engine', 'Socket.io', 'Database', 'Auth Hub'].map(sys => (
-                                 <div key={sys} className="p-4 bg-black/20 rounded-xl border border-white/5 text-center">
-                                    <p className="text-[8px] font-black text-slate-500 uppercase">{sys}</p>
-                                    <p className="text-[10px] font-black text-emerald-500 uppercase">Stable</p>
-                                 </div>
-                               ))}
-                            </div>
-                         </div>
-                       )}
-
-                       {/* CHAIN REACTION: Support Ticket Modal-style */}
-                       {supportTicket && (
-                         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[500] flex items-center justify-center p-6 animate-in fade-in">
-                            <div className={`w-full max-w-lg p-12 rounded-[4rem] border ${darkMode ? 'bg-[#0a0a0a] border-white/10' : 'bg-white border-slate-200 shadow-2xl'}`}>
-                               <div className="flex justify-between items-center mb-8">
-                                  <h3 className="text-3xl font-black italic uppercase tracking-tighter text-emerald-500">Ticket Hub</h3>
-                                  <button onClick={() => setSupportTicket(false)} className="p-3 hover:bg-white/10 rounded-2xl transition-all"><X size={32}/></button>
-                                </div>
-                                <div className="space-y-6">
-                                   <input type="text" placeholder="Issue Subject" className="w-full p-6 bg-white/5 rounded-[1.5rem] border border-white/10 outline-none text-xs font-bold uppercase tracking-widest"/>
-                                   <textarea placeholder="Describe the system anomaly..." className="w-full h-40 p-6 bg-white/5 rounded-[1.5rem] border border-white/10 outline-none text-xs font-bold uppercase tracking-widest resize-none"></textarea>
-                                   <button className="w-full py-6 bg-emerald-600 text-white rounded-[2rem] font-black uppercase text-[11px] tracking-[0.2em] shadow-2xl hover:bg-emerald-500 transition-all">Dispatch Ticket</button>
-                                </div>
-                            </div>
-                         </div>
-                       )}
-                    </div>
-                  )}
-
-                      {/* CHAIN REACTION 2: Request Change Interactive Flow */}
-                      {isRequestChangeActive && (
-                        <div className={`p-10 rounded-[3rem] border border-dashed animate-in slide-in-from-top-4 duration-500 ${darkMode ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-emerald-200 bg-emerald-50'}`}>
-                          <div className="flex items-center gap-4 mb-8">
-                             <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 italic">Modification Matrix Protocol</h4>
-                          </div>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {['Legal Name', 'Course/Year', 'Biometrics', 'Institutional ID'].map(attr => (
-                              <button key={attr} onClick={() => setChangeType(attr)} className={`p-5 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border ${changeType === attr ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/30' : (darkMode ? 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10' : 'bg-white border-slate-200 text-slate-600')}`}>
-                                {attr}
-                              </button>
-                            ))}
-                          </div>
-                          {changeType && (
-                            <div className="mt-8 pt-8 border-t border-emerald-500/20 animate-in fade-in slide-in-from-bottom-2">
-                               <p className="text-[10px] font-bold uppercase mb-6 text-slate-500 italic">System requires valid proof for: <span className="text-emerald-500 underline">{changeType}</span></p>
-                               <div className="flex gap-4">
-                                  <button onClick={() => alert("Opening secure upload portal...")} className="flex-1 py-5 bg-emerald-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-2xl shadow-emerald-500/20 hover:bg-emerald-500 transition-all">Submit Document</button>
-                                  <button onClick={() => setChangeType(null)} className="px-8 py-5 bg-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10">Reset</button>
-                               </div>
-                            </div>
-                          )}
                         </div>
                       )}
                     </div>
-                  )}
 
-                  {settingsTab === 'security' && (
-                    <div className="space-y-8 animate-in slide-in-from-bottom-6">
-                       <div className={`p-10 rounded-[3rem] border ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
-                          <div className="flex justify-between items-center mb-10">
-                             <div className="flex items-center gap-6">
-                                <div className="p-4 bg-blue-500/10 text-blue-500 rounded-[1.5rem] shadow-inner"><Shield size={32}/></div>
-                                <div>
-                                   <p className="text-lg font-black uppercase tracking-tighter italic mb-1">Two-Factor Authentication</p>
-                                   <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Global Security Level: <span className={twoFactorEnabled ? "text-emerald-500" : "text-red-500"}>{twoFactorEnabled ? "MAXIMUM PROTECTED" : "VULNERABLE"}</span></p>
-                                </div>
-                             </div>
-                             <div onClick={() => setTwoFactorEnabled(!twoFactorEnabled)} className={`w-16 h-9 rounded-full p-1.5 cursor-pointer transition-all duration-500 ${twoFactorEnabled ? 'bg-emerald-500 shadow-[0_0_15px_#10b981]' : 'bg-slate-700'}`}>
-                                <div className={`w-6 h-6 rounded-full bg-white shadow-lg transition-all duration-500 transform ${twoFactorEnabled ? 'translate-x-7' : 'translate-x-0'}`}></div>
-                             </div>
-                          </div>
-                          
-                          <div className="flex flex-wrap gap-4 pt-10 border-t border-slate-500/10">
-                             <button onClick={() => {
-                               setIsKeyRotating(true);
-                               setTimeout(() => setIsKeyRotating(false), 3000);
-                             }} className="flex items-center gap-3 px-6 py-4 bg-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all group">
-                               <Key size={16} className={isKeyRotating ? "animate-spin text-emerald-500" : "group-hover:text-emerald-500"}/> 
-                               {isKeyRotating ? "Generating New Hash..." : "Rotate Encryption Keys"}
-                             </button>
-                             
-                             <button onClick={() => setShowSessionLogs(!showSessionLogs)} className={`flex items-center gap-3 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${showSessionLogs ? 'bg-emerald-600 text-white' : 'bg-white/5 hover:bg-white/10'}`}>
-                               <Activity size={16}/> {showSessionLogs ? "Kill Monitor" : "Monitor Sessions"}
-                             </button>
-                          </div>
-                       </div>
-
-                       {/* CHAIN REACTION 3: Real-time Session Monitoring Logs */}
-                       {showSessionLogs && (
-                         <div className={`p-8 rounded-[3rem] border animate-in slide-in-from-right-4 duration-500 ${darkMode ? 'bg-black/40 border-white/5' : 'bg-slate-50 border-slate-200 shadow-inner'}`}>
-                            <div className="flex justify-between items-center mb-6">
-                               <h5 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-50 italic">Active System Nodes</h5>
-                               <span className="text-[9px] font-bold text-emerald-500 animate-pulse">LIVE STREAMING</span>
-                            </div>
-                            <div className="space-y-4">
-                              {[
-                                { node: 'MNL-DATA-SRV-01', status: 'Authorized', ip: '192.168.1.45', time: 'Active Now' },
-                                { node: 'QC-MOBILE-ST-04', status: 'Authenticated', ip: '10.0.4.12', time: '2m ago' }
-                              ].map((node, i) => (
-                                <div key={i} className="flex justify-between items-center p-5 bg-white/5 rounded-2xl border border-white/5 group hover:bg-white/10 transition-all cursor-crosshair">
-                                  <div className="flex items-center gap-4">
-                                    <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
-                                    <div>
-                                       <p className="text-[10px] font-black uppercase tracking-widest">{node.node}</p>
-                                       <p className="text-[8px] font-bold text-slate-500">{node.ip}</p>
-                                    </div>
-                                  </div>
-                                  <div className="text-right">
-                                     <p className="text-[9px] font-black text-emerald-500 uppercase">{node.status}</p>
-                                     <p className="text-[8px] font-bold text-slate-500 uppercase">{node.time}</p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                         </div>
-                       )}
-                    </div>
-                  )}
-
-                  {/* PREFERENCES TAB - Chain Reactions */}
-                  {settingsTab === 'preferences' && (
-                    <div className="space-y-6 animate-in slide-in-from-bottom-6 duration-500">
-                      <div onClick={() => setShowLanguageModal(true)} className={`p-10 rounded-[3rem] border cursor-pointer group hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center gap-6 text-left">
-                            <div className="p-4 bg-emerald-500/10 text-emerald-500 rounded-[1.5rem] shadow-inner group-hover:scale-110 transition-transform"><Globe size={32}/></div>
-                            <div>
-                              <p className="text-lg font-black uppercase tracking-tighter italic mb-1">System Language Hub</p>
-                              <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em]">Active Localization: <span className="text-emerald-500 underline">{selectedLanguage}</span></p>
-                            </div>
-                          </div>
-                          <button className="p-4 bg-emerald-500 rounded-2xl text-white shadow-xl shadow-emerald-500/20 group-hover:rotate-12 transition-all"><ChevronRight size={20}/></button>
-                        </div>
-                      </div>
-
-                      <div className={`p-12 rounded-[3.5rem] border ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200 shadow-xl'}`}>
-                          <div className="flex justify-between items-center mb-8 text-left">
-                              <div>
-                                 <p className="text-sm font-black uppercase tracking-widest italic mb-1">UI Animation Fidelity</p>
-                                 <p className="text-[10px] font-bold text-slate-500 uppercase">Current Performance Impact: 12% CPU</p>
+                    {/* Recent Announcements */}
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Announcements</h3>
+                      <div className="space-y-3">
+                        {filteredCourses.slice(0, 3).map((course) => (
+                          <div key={course.id} className="bg-white rounded-lg border border-gray-200 p-4">
+                            <div className="flex items-start gap-3">
+                              <div className={`w-10 h-10 ${course.color} rounded-lg flex items-center justify-center text-white font-bold`}>
+                                {course.code.charAt(0)}
                               </div>
-                              <span className="text-emerald-500 font-black text-xs uppercase italic tracking-widest">High Fluidity</span>
+                              <div className="flex-1">
+                                <h4 className="font-medium text-gray-900">{course.code}</h4>
+                                <p className="text-sm text-gray-600 mt-1">{course.announcement}</p>
+                                <p className="text-xs text-gray-500 mt-2">2 hours ago</p>
+                              </div>
+                            </div>
                           </div>
-                          <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden p-1 border border-white/5">
-                            <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-300 w-[90%] rounded-full shadow-[0_0_15px_#10b981]"></div>
-                          </div>
-                          <div className="flex justify-between mt-4">
-                             <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Eco Mode</span>
-                             <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest italic">Ultra Performance</span>
-                          </div>
+                        ))}
                       </div>
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* DATA TAB - Remains consistent with Part 9 but with chain enhancements if needed */}
-                  {settingsTab === 'data' && (
-                     <div className="space-y-8 animate-in slide-in-from-bottom-6">
-                        <div className={`p-12 rounded-[3.5rem] border ${darkMode ? 'bg-[#121212] border-[#222222]' : 'bg-white border-slate-200'}`}>
-                            <div className="flex justify-between items-center mb-10">
-                               <div className="text-left">
-                                  <h4 className="text-lg font-black uppercase italic tracking-tighter text-emerald-500 mb-1">Cloud Synchronization Module</h4>
-                                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Real-time backup to global edu-servers</p>
-                               </div>
-                               <div className="text-right">
-                                  <p className="text-2xl font-black italic">{storageUsage}%</p>
-                                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Allocated Storage Full</p>
-                               </div>
+                {activeNav === 'Calendar' && (
+                  <div className="text-center py-12">
+                    <CalendarIcon size={48} className="text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Calendar Coming Soon</h3>
+                    <p className="text-gray-600">Your academic calendar will appear here.</p>
+                  </div>
+                )}
+
+                {activeNav === 'Tasks' && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Tasks</h3>
+                    {tasks.length > 0 ? (
+                      <div className="space-y-3">
+                        {tasks.map((task) => (
+                          <div key={task.id} className="bg-white rounded-lg border border-gray-200 p-4">
+                            <div className="flex items-center gap-3">
+                              <input
+                                type="checkbox"
+                                checked={task.completed}
+                                onChange={() => toggleTask(task.id)}
+                                className="w-5 h-5 text-blue-600 rounded"
+                              />
+                              <div className="flex-1">
+                                <h4 className={`font-medium ${task.completed ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
+                                  {task.title}
+                                </h4>
+                                <p className="text-sm text-gray-600">Due: {task.dueDate}</p>
+                              </div>
+                              <span className={`px-2 py-1 text-xs rounded-full ${
+                                task.priority === 'high' ? 'bg-red-100 text-red-700' :
+                                task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-green-100 text-green-700'
+                              }`}>
+                                {task.priority}
+                              </span>
                             </div>
-                            <div className="h-6 w-full bg-slate-800 rounded-[1.5rem] overflow-hidden mb-10 p-1 border border-white/5">
-                               <div className="h-full bg-gradient-to-r from-emerald-600 to-blue-600 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all duration-1000" style={{ width: `${storageUsage}%` }}></div>
-                            </div>
-                            <div className="flex justify-between items-center">
-                               <button onClick={runSync} className="flex items-center gap-4 px-8 py-5 bg-emerald-600 text-white rounded-[2rem] font-black uppercase text-[11px] tracking-[0.2em] shadow-2xl hover:scale-105 transition-all disabled:opacity-50" disabled={isSyncing}>
-                                  <RefreshCw size={18} className={isSyncing ? 'animate-spin' : ''}/> {isSyncing ? 'Accessing Satellite...' : t("syncBtn")}
-                               </button>
-                               <div className="flex gap-4">
-                                  <button onClick={() => alert("Decrypting local archive...")} className="p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all text-slate-500 hover:text-emerald-500"><Download size={20}/></button>
-                                  <button onClick={() => alert("Redirecting to Global Edu-Hub...")} className="p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all text-slate-500 hover:text-blue-500"><ExternalLink size={20}/></button>
-                               </div>
-                            </div>
-                        </div>
-                     </div>
-                  )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <ClipboardList size={48} className="text-gray-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No Tasks</h3>
+                        <p className="text-gray-600">You don't have any tasks yet.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeNav === 'Grades' && (
+                  <div className="text-center py-12">
+                    <Award size={48} className="text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Grades Coming Soon</h3>
+                    <p className="text-gray-600">Your academic performance will appear here.</p>
+                  </div>
+                )}
+              </div>
+            </main>
+          </div>
+
+          {/* Notification Dropdown */}
+          {showNotifications && (
+            <div className="absolute top-16 right-4 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="font-semibold text-gray-900">Notifications</h3>
+              </div>
+              <div className="max-h-96 overflow-y-auto">
+                {notifications.length > 0 ? (
+                  notifications.map((notification) => (
+                    <div key={notification.id} className="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                      <h4 className="font-medium text-gray-900 text-sm">{notification.title}</h4>
+                      <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                      <p className="text-xs text-gray-500 mt-2">{notification.time}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-8 text-center">
+                    <Bell size={32} className="text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-600">No notifications</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Profile Dropdown */}
+          {showProfileDropdown && (
+            <div className="absolute top-16 right-4 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+              <div className="p-4 border-b border-gray-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-medium">
+                    {currentUser ? currentUser.charAt(0).toUpperCase() : 'S'}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">{currentUser || 'Student'}</p>
+                    <p className="text-sm text-gray-500">{studentID}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="py-2">
+                <button className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 transition-colors">
+                  Account Settings
+                </button>
+                <button className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 transition-colors">
+                  Help & Support
+                </button>
+                <button 
+                  onClick={handleLogout}
+                  className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Course Modal */}
+          {showCourseModal && selectedCourseDetail && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-hidden">
+                <div className={`${selectedCourseDetail.color} p-6 text-white`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold">{selectedCourseDetail.code}</h2>
+                      <p className="opacity-90">{selectedCourseDetail.title}</p>
+                    </div>
+                    <button 
+                      onClick={() => setShowCourseModal(false)}
+                      className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <p className="text-sm text-gray-600">Instructor</p>
+                      <p className="font-medium">{selectedCourseDetail.professor}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Section</p>
+                      <p className="font-medium">{selectedCourseDetail.section}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Schedule</p>
+                      <p className="font-medium">{selectedCourseDetail.sched}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Room</p>
+                      <p className="font-medium">{selectedCourseDetail.room}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mb-6">
+                    <h3 className="font-semibold text-gray-900 mb-2">Latest Announcement</h3>
+                    <p className="text-gray-600">{selectedCourseDetail.announcement}</p>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={() => alert(`Opening assignments for ${selectedCourseDetail.code}`)}
+                      className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                    >
+                      View Assignments
+                    </button>
+                    <button 
+                      onClick={() => window.open(selectedCourseDetail.meetLink, '_blank')}
+                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    >
+                      Join Google Meet
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           )}
-            </main>
-          </div>
-        </div>
-
-      {/* LANGUAGE MODAL */}
-      {showLanguageModal && (
-        <div className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[300] flex items-center justify-center p-8 animate-in zoom-in duration-500">
-            <div className={`w-full max-w-4xl rounded-[4rem] border shadow-[0_60px_150px_rgba(0,0,0,0.8)] overflow-hidden ${darkMode ? 'bg-[#121212] border-[#252525]' : 'bg-white border-slate-200'}`}>
-               <div className="p-12 border-b border-slate-500/10 flex justify-between items-center bg-emerald-600 text-white relative">
-                 <div className="absolute top-0 right-0 p-12 opacity-10"><Globe size={150}/></div>
-                 <div className="text-left relative z-10">
-                    <h3 className="text-4xl font-black uppercase tracking-tighter italic leading-none mb-2">{t("langHub")}</h3>
-                    <p className="text-[11px] font-bold uppercase opacity-80 tracking-[0.3em]">Select system-wide localization matrix</p>
-                 </div>
-                 <button onClick={() => setShowLanguageModal(false)} className="p-4 hover:bg-white/20 rounded-[1.5rem] transition-all relative z-10"><X size={36}/></button>
-               </div>
-               <div className="p-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[550px] overflow-y-auto custom-scrollbar-emerald">
-                  {languages.map(lang => (
-                    <button key={lang} onClick={() => { setSelectedLanguage(lang); setShowLanguageModal(false); }} className={`flex items-center justify-between p-6 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all ${selectedLanguage === lang ? 'bg-emerald-500 text-white shadow-2xl shadow-emerald-500/40 scale-[1.03] rotate-1' : (darkMode ? 'hover:bg-white/5 text-slate-400 border border-white/5' : 'hover:bg-slate-50 text-slate-600 border border-slate-100')}`}>
-                      {lang} {selectedLanguage === lang && <Check size={18} className="animate-in zoom-in"/>}
-                    </button>
-                  ))}
-               </div>
-            </div>
         </div>
       )}
-
-      {/* Control Center Dropdown */}
-      {showProfileDropdown && (
-        <div className="fixed top-14 right-6 z-50 w-80 bg-white shadow-xl rounded-2xl border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
-          {/* Control Center Dropdown / Modal Content */}
-          <div className="flex flex-col h-full p-4 bg-white shadow-xl rounded-2xl border border-gray-100">
-            
-            {/* Top Part: User Info (Gaya ng dati) */}
-            <div className="flex flex-col items-center p-6 border-b border-gray-50">
-              <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-3xl font-bold mb-3 shadow-inner">
-                ST
-              </div>
-              <p className="font-extrabold tracking-widest text-sm uppercase">JUAN DELA CRUZ</p>
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider">STUDENT | BSIT 3J</p>
-            </div>
-
-            {/* Middle Part: Quick Actions (Kung meron man) */}
-            <div className="flex-1 py-4">
-              {/* Dito yung mga dati mong buttons sa control center */}
-            </div>
-
-            {/* BOTTOM PART: Eto yung pinapababa mo tol */}
-            <div className="mt-auto pt-4 border-t border-gray-100 space-y-2">
-              <button className="w-full text-left px-4 py-3 hover:bg-gray-50 rounded-xl transition-colors group">
-                <p className="font-bold text-[11px] tracking-[0.1em] text-gray-700 group-hover:text-blue-600 uppercase">ACCOUNT SETTINGS</p>
-                <p className="text-[9px] text-gray-400 leading-tight uppercase tracking-wider">MANAGE PASSWORD AND SECURITY</p>
-              </button>
-              
-              <button className="w-full text-left px-4 py-3 hover:bg-gray-50 rounded-xl transition-colors group">
-                <p className="font-bold text-[11px] tracking-[0.1em] text-gray-700 group-hover:text-blue-600 uppercase">CHANGE NAME</p>
-                <p className="text-[9px] text-gray-400 leading-tight uppercase tracking-wider">CONTACT ADMIN TO MODIFY NAME</p>
-              </button>
-
-              <button onClick={() => { setIsLoggedIn(false); setShowProfileDropdown(false); }} className="w-full mt-4 py-3 bg-red-50 text-red-600 rounded-xl font-black text-[11px] tracking-[0.2em] hover:bg-red-100 transition-all uppercase">
-                SIGN OUT
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* PREMIUM FLOATING COMPONENTS */}
-      <FloatingChat
-        show={showChat}
-        onToggle={() => setShowChat(!showChat)}
-        chatTab={chatTab}
-        onTabChange={setChatTab}
-        aiMessage={aiMessage}
-        onAiMessageChange={setAiMessage}
-        onSendAiMessage={sendAiMessage}
-        aiResponse={aiResponse}
-        isAiLoading={isAiLoading}
-      />
-
-      <CourseModal
-        show={showCourseModal}
-        onClose={() => setShowCourseModal(false)}
-        course={selectedCourseDetail}
-        courseTab={courseTab}
-        onTabChange={setCourseTab}
-        courseDetails={courseDetails}
-      />
     </div>
   );
 };
 
-export default App;
+export default App;   
