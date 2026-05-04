@@ -17,77 +17,238 @@ import {
 const injectProfessionalStyles = () => {
   const style = document.createElement('style');
   style.textContent = `
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-    
     :root {
-      --bg-main: #ffffff;
-      --bg-secondary: #f8fafc;
-      --bg-tertiary: #f1f5f9;
-      --google-blue: #1a73e8;
-      --text-main: #0f172a;
-      --text-sub: #475569;
-      --text-muted: #94a3b8;
-      --border: #e2e8f0;
-      --border-light: #f1f5f9;
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-      --radius-sm: 0.5rem;
-      --radius-md: 0.75rem;
-      --radius-lg: 1rem;
-      --radius-xl: 1.5rem;
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-weight-heading: 700;
+      --font-weight-body: 400;
+      --letter-spacing-tight: -0.5px;
+      --letter-spacing-normal: 0px;
+      --line-height-body: 1.6;
+      --line-height-heading: 1.2;
+      
+      /* Light Mode Colors */
+      --bg-main-light: #ffffff;
+      --bg-secondary-light: #f8fafc;
+      --bg-tertiary-light: #f1f5f9;
+      --card-bg-light: #ffffff;
+      --sidebar-bg-light: #ffffff;
+      --color-primary-light: #0f172a;
+      --color-secondary-light: #64748b;
+      --color-muted-light: #94a3b8;
+      --border-light-light: #e2e8f0;
+      --border-dark-light: #e2e8f0;
+      --highlight-light: #e8f0fe;
+      --highlight-border-light: #c2e7ff;
+      
+      /* Dark Mode Colors */
+      --bg-main-dark: #121212;
+      --bg-secondary-dark: #1e1e1e;
+      --bg-tertiary-dark: #2d2d2d;
+      --card-bg-dark: #1e1e1e;
+      --sidebar-bg-dark: #1e1e1e;
+      --color-primary-dark: #e8eaed;
+      --color-secondary-dark: #9aa0a6;
+      --color-muted-dark: #5f6368;
+      --border-light-dark: #333333;
+      --border-dark-dark: #424242;
+      --highlight-dark: #2d3748;
+      --highlight-border-dark: #4a5568;
+      --accent-dark: #bb86fc;
+      
+      /* Default to light mode */
+      --bg-main: var(--bg-main-light);
+      --bg-secondary: var(--bg-secondary-light);
+      --bg-tertiary: var(--bg-tertiary-light);
+      --card-bg: var(--card-bg-light);
+      --sidebar-bg: var(--sidebar-bg-light);
+      --color-primary: var(--color-primary-light);
+      --color-secondary: var(--color-secondary-light);
+      --color-muted: var(--color-muted-light);
+      --border-light: var(--border-light-light);
+      --border-dark: var(--border-dark-light);
+      --highlight: var(--highlight-light);
+      --highlight-border: var(--highlight-border-light);
+      --accent: var(--accent-dark);
     }
-
-    /* Dark Mode Variables */
+    
+    /* Dark mode styles */
     body.dark-mode {
-      --bg-main: #020617;
-      --bg-secondary: #0f172a;
-      --bg-tertiary: #1e293b;
-      --text-main: #f8fafc;
-      --text-sub: #e2e8f0;
-      --text-muted: #94a3b8;
-      --border: #334155;
-      --border-light: #475569;
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
-      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6);
-    }
+      --bg-main: var(--bg-main-dark);
+      --bg-secondary: var(--bg-secondary-dark);
+      --bg-tertiary: var(--bg-tertiary-dark);
+      --card-bg: var(--card-bg-dark);
+      --sidebar-bg: var(--sidebar-bg-dark);
+      --color-primary: var(--color-primary-dark);
+      --color-secondary: var(--color-secondary-dark);
+      --color-muted: var(--color-muted-dark);
+      --border-light: var(--border-light-dark);
+      --border-dark: var(--border-dark-dark);
+      --highlight: var(--highlight-dark);
+      --highlight-border: var(--highlight-border-dark);
+      --accent: var(--accent-dark);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }  
 
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: var(--font-family);
+      font-weight: var(--font-weight-body);
       background-color: var(--bg-main);
-      color: var(--text-main);
-      line-height: 1.6;
+      color: var(--color-primary);
+      line-height: var(--line-height-body);
+      letter-spacing: var(--letter-spacing-normal);
       margin: 0;
       padding: 0;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     h1, h2, h3, h4, h5, h6 {
-      line-height: 1.25;
-      font-weight: 700;
+      font-family: var(--font-family);
+      font-weight: var(--font-weight-heading);
+      line-height: var(--line-height-heading);
+      letter-spacing: var(--letter-spacing-tight);
       margin: 0;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--color-primary);
     }
 
-    h1 { font-size: 2.25rem; }
-    h2 { font-size: 1.875rem; }
-    h3 { font-size: 1.5rem; }
-    h4 { font-size: 1.25rem; }
-    h5 { font-size: 1.125rem; }
-    h6 { font-size: 1rem; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 26px; }
+    h3 { font-size: 24px; }
+    h4 { font-size: 22px; }
+    h5 { font-size: 20px; }
+    h6 { font-size: 18px; }
 
     p {
-      line-height: 1.6;
+      font-family: var(--font-family);
+      font-weight: var(--font-weight-body);
+      line-height: var(--line-height-body);
+      letter-spacing: var(--letter-spacing-normal);
       margin: 0;
       margin-bottom: 1rem;
+      color: var(--color-primary);
+    }
+
+    .text-secondary {
+      color: var(--color-secondary);
+    }
+
+    .text-muted {
+      color: var(--color-muted);
+    }
+
+    .heading-large {
+      font-size: 28px;
+      font-weight: var(--font-weight-heading);
+      letter-spacing: var(--letter-spacing-tight);
+      line-height: var(--line-height-heading);
+      color: var(--color-primary);
+    }
+
+    .heading-medium {
+      font-size: 24px;
+      font-weight: var(--font-weight-heading);
+      letter-spacing: var(--letter-spacing-tight);
+      line-height: var(--line-height-heading);
+      color: var(--color-primary);
+    }
+
+    .body-text {
+      font-size: 16px;
+      font-weight: var(--font-weight-body);
+      line-height: var(--line-height-body);
+      letter-spacing: var(--letter-spacing-normal);
+      color: var(--color-primary);
+    }
+
+    .caption-text {
+      font-size: 14px;
+      font-weight: var(--font-weight-body);
+      line-height: var(--line-height-body);
+      letter-spacing: var(--letter-spacing-normal);
+      color: var(--color-secondary);
+    }
+
+    /* Google Classroom Sidebar Styles */
+    .sidebar-item {
+      minHeight: 60px;
+      padding: 12px 16px;
+      margin: 2px 8px;
+      border-radius: 25px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .sidebar-item:hover {
+      background-color: #f1f3f4;
+    }
+
+    .sidebar-item.active {
+      background-color: #e8f0fe;
+      border: 1px solid #c2e7ff;
+      font-weight: 500;
+      margin: 2px 4px;
+    }
+
+    .sidebar-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #202124;
+      font-family: var(--font-family);
+    }
+
+    .sidebar-sublabel {
+      font-size: 12px;
+      font-weight: 400;
+      color: #5f6368;
+      font-family: var(--font-family);
+      margin-top: 2px;
+    }
+
+    .sidebar-icon {
+      width: 20px;
+      height: 20px;
+      color: #5f6368;
+      flex-shrink: 0;
+    }
+
+    .sidebar-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      color: white;
+      font-size: 14px;
+      font-family: var(--font-family);
+      flex-shrink: 0;
+    }
+
+    .sidebar-separator {
+      height: 1px;
+      background-color: #e0e0e0;
+      margin: 8px 16px;
+    }
+
+    .sidebar-section-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: #5f6368;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 16px;
+      font-family: var(--font-family);
     }
 
     .glass {
@@ -297,6 +458,12 @@ const injectProfessionalStyles = () => {
 
 // --- MAIN APP COMPONENT ---
 const App = () => {
+  // Active item state
+  const [activeItem, setActiveItem] = useState(null);
+  
+  // Dark mode state
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
   // Basic Auth State
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeSubject, setActiveSubject] = useState(null);
@@ -380,14 +547,15 @@ const App = () => {
   
   // Enhanced Course data with Google Meet links
   const courses = [
-    { id: 1, code: 'SP 101', title: 'Social Issues', section: 'BSIT 3J', color: 'bg-green-600', professor: 'Cynthia B. Dulagan', progress: 70, meetLink: 'https://meet.google.com/soc-issues-prof', room: 'RM 401', sched: 'Tue/Thu 1:00-2:30PM', announcement: 'I have already recorded your midterm grades and attendance.' },
-    { id: 2, code: 'Capstone 1', title: 'Project Management', section: 'BSIT 3J', color: 'bg-blue-600', professor: 'LMS Admin2', progress: 45, meetLink: 'https://meet.google.com/cap-stone-one', room: 'Lab 302', sched: 'Mon/Wed 8:00-10:00AM', announcement: 'Please submit your Chapter 2 drafts by Saturday.' },
-    { id: 3, code: 'SIA 101', title: 'System Integration', section: 'BSIT 3J', color: 'bg-slate-600', professor: 'Toni D. Granado', progress: 30, meetLink: 'https://meet.google.com/sia-sys-integ', room: 'Lab 305', sched: 'Fri 9:00-12:00PM', announcement: 'Prepare for the hands-on lab next week.' },
-    { id: 4, code: 'TECH 32', title: 'Technopreneurship', section: 'BSIT 3J', color: 'bg-cyan-700', professor: 'Katherine C. Baggay', progress: 85, meetLink: 'https://meet.google.com/tech-nopre-neur', room: 'RM 202', sched: 'Mon 1:00-4:00PM', announcement: 'Pitch deck presentations start on Monday.' },
-    { id: 5, code: 'MRC 22', title: 'Methods of Research', section: 'BSIT 3J', color: 'bg-sky-800', professor: 'Toni D. Granado', progress: 10, meetLink: 'https://meet.google.com/mrc-research-met', room: 'RM 405', sched: 'Wed 2:00-5:00PM', announcement: 'Finalize your research titles for approval.' },
-    { id: 6, code: 'WS 102', title: 'Web Programming', section: 'BSIT 3J', color: 'bg-teal-700', professor: 'Roclyn Yamson', progress: 60, meetLink: 'https://meet.google.com/web-prog-react', room: 'Lab 301', sched: 'Tue 8:00-11:00AM', announcement: 'Don\'t forget to push your React projects to GitHub.' }
-  ];
-  
+    { id: 1, code: 'SP 101', title: 'SOCIAL ISSUES AND PROFESSIONAL PRACTICES', section: 'BSIT 3J', color: 'bg-green-600', professor: 'Cynthia B. Dulagan', progress: 70, meetLink: 'https://meet.google.com/soc-issues-prof', room: 'RM 401', sched: 'Tue/Thu 1:00-2:30PM', announcement: 'I have already recorded your midterm grades and attendance.' },
+    { id: 2, code: 'CAPSTONE 1', title: 'PROJECT MANAGEMENT', section: 'BSIT 3J', color: 'bg-blue-600', professor: 'SHERYL ANN RICAFORT', progress: 45, meetLink: 'https://meet.google.com/cap-stone-one', room: 'Lab 302', sched: 'Mon/Wed 8:00-10:00AM', announcement: 'Please submit your Chapter 2 drafts by Saturday.' },
+    { id: 3, code: 'SIA 101', title: 'SYSTEM INTEGRATION AND ARCHITECTURE', section: 'BSIT 3J', color: 'bg-slate-600', professor: 'Toni D. Granado', progress: 30, meetLink: 'https://meet.google.com/sia-sys-integ', room: 'Lab 305', sched: 'Fri 9:00-12:00PM', announcement: 'Prepare for the hands-on lab next week.' },
+    { id: 4, code: 'TECH 32', title: 'TECHNOPRENEURSHIP', section: 'BSIT 3J', color: 'bg-cyan-700', professor: 'Katherine C. Baggay', progress: 85, meetLink: 'https://meet.google.com/tech-nopre-neur', room: 'RM 202', sched: 'Mon 1:00-4:00PM', announcement: 'Pitch deck presentations start on Monday.' },
+    { id: 5, code: 'MRC 22', title: 'METHODS OF RESEARCH IN COMPUTING', section: 'BSIT 3J', color: 'bg-sky-800', professor: 'Toni D. Granado', progress: 10, meetLink: 'https://meet.google.com/mrc-research-met', room: 'RM 405', sched: 'Wed 2:00-5:00PM', announcement: 'Finalize your research titles for approval.' },
+    { id: 6, code: 'WS 102', title: 'WEB PROGRAMMING', section: 'BSIT 3J', color: 'bg-teal-700', professor: 'Roclyn Yamson', progress: 60, meetLink: 'https://meet.google.com/web-prog-react', room: 'Lab 301', sched: 'Tue 8:00-11:00AM', announcement: "Don't forget to push your React projects to GitHub." },
+    { id: 7, code: 'ED 101', title: 'EMBEDDED SYSTEMS/ROBOTICS', section: 'BSIT 3J', color: 'bg-blue-500', professor: 'Edmar Tan', progress: 50, meetLink: 'https://meet.google.com/ed-robotics-sys', room: 'Lab 402', sched: 'Thu 9:00-12:00PM', announcement: 'Bring your Arduino kits on our face-to-face class.' },
+    { id: 8, code: 'NET 102', title: 'NETWORK ADMINISTRATION AND MAINTENANCE', section: 'BSIT 3J', color: 'bg-blue-700', professor: 'Harvey Rey B. Del Rosario', progress: 20, meetLink: 'https://meet.google.com/et-net-admin-mnt', room: 'Lab 306', sched: 'Sat 8:00-11:00AM', announcement: 'Server configuration quiz is scheduled for Tuesday.' }
+  ];  
   const studentID = "2022-5089";
   const currentYear = "3rd Year";
   
@@ -449,29 +617,41 @@ const App = () => {
   // --- LOGIN SCREEN COMPONENT ---
   const LoginScreen = () => (
     <form onSubmit={handleLogin} className="h-screen flex items-center justify-center bg-slate-50 p-6">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-12 rounded-[3rem] shadow-2xl w-full max-w-lg border border-gray-100 text-center">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-12 rounded-[3rem] shadow-2xl w-full max-w-lg border text-center transition-all duration-300"
+                style={{
+                  backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+                  borderColor: isDarkMode ? '#333333' : '#F3F4F6'
+                }}>
         <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-blue-100">
           <Sparkles size={40} className="text-white" />
         </div>
-        <h1 className="text-4xl font-black mb-3 tracking-tight">EduPulse</h1>
-        <p className="text-gray-400 font-medium mb-10 leading-relaxed">The next generation of classroom management.<br/>Enter your credentials to begin.</p>
+        <h1 className="heading-large mb-3">EduPulse</h1>
+        <p className="body-text text-secondary mb-10">The next generation of classroom management.<br/>Enter your credentials to begin.</p>
         <div className="space-y-4 mb-8">
           <input 
             type="text" 
             placeholder="Student ID" 
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold" 
+            className="w-full px-6 py-5 border-2 border-transparent rounded-2xl outline-none transition-all body-text"
+            style={{
+              backgroundColor: isDarkMode ? '#374151' : '#F9FAFB',
+              color: isDarkMode ? '#E8EAED' : '#111827'
+            }}
           />
           <input 
             type="password" 
             placeholder="Password" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold" 
+            className="w-full px-6 py-5 border-2 border-transparent rounded-2xl outline-none transition-all body-text"
+            style={{
+              backgroundColor: isDarkMode ? '#374151' : '#F9FAFB',
+              color: isDarkMode ? '#E8EAED' : '#111827'
+            }}
           />
         </div>
-        <button type="button" onClick={handleSignIn} className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-[0.98]">
+        <button type="button" onClick={handleSignIn} className="w-full py-5 bg-blue-600 text-white rounded-2xl heading-medium hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-[0.98]">
           Sign In to Portal
         </button>
       </motion.div>
@@ -485,7 +665,28 @@ const App = () => {
     setPassword("");
   };
 
+  // Apply dark mode class to body
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [isDarkMode]);
+
   if (!isLoggedIn) return <LoginScreen />;
+
+  // Handle subject selection
+  const handleSubjectSelect = (course) => {
+    setActiveItem(course.id);
+    setActiveSubject(course);
+    setView("stream");
+  };
+
+  // Dark mode toggle
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   // Used Functions for Google Classroom Layout
   const toggleTask = (id) => {
@@ -1135,8 +1336,9 @@ const App = () => {
           className="fixed left-0 top-0 h-full w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 z-50 lg:translate-x-0 lg:static lg:z-auto"
         >
           <div className="flex flex-col h-full">
-            {/* Header */}
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            {/* HEADER */}
+            <header className="sticky top-0 z-30 border-b transition-all duration-300"
+                    style={{ backgroundColor: 'var(--sidebar-bg)', borderColor: 'var(--border-light)' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -1154,7 +1356,7 @@ const App = () => {
                   ×
                 </button>
               </div>
-            </div>
+            </header>
 
             {/* Navigation */}
             <nav className="flex-1 p-4 space-y-1">
@@ -1169,18 +1371,25 @@ const App = () => {
                       setActiveNav(item.id);
                       setSidebarOpen(false);
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                      isActive
-                        ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-medium'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
+                    style={{
+                      backgroundColor: isActive 
+                        ? (isDarkMode ? 'rgba(26, 115, 232, 0.2)' : '#E8F0FE')
+                        : 'transparent',
+                      color: isActive
+                        ? (isDarkMode ? '#FFFFFF' : '#1A73E8')
+                        : (isDarkMode ? '#E8EAED' : '#3C4043'),
+                      marginHorizontal: isActive ? 10 : 0,
+                      borderRadius: 25
+                    }}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-5 h-5" style={{ color: isActive ? (isDarkMode ? '#FFFFFF' : '#1A73E8') : (isDarkMode ? '#E8EAED' : '#3C4043') }} />
                     <span className="text-sm font-medium">{item.name}</span>
                     {isActive && (
                       <motion.div
                         layoutId="activeTab"
-                        className="ml-auto w-1 h-6 bg-blue-600 rounded-full"
+                        className="ml-auto w-1 h-6 rounded-full"
+                        style={{ backgroundColor: isActive ? (isDarkMode ? '#1A73E8' : '#2563EB') : 'transparent' }}
                       />
                     )}
                   </button>
@@ -2206,47 +2415,65 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
 
   // --- MAIN APP ---
   return (
-    <div className="h-screen w-full flex flex-col antialiased transition-colors duration-500 overflow-hidden bg-[#f8fafc] text-[#1e293b]">
+    <div className="h-screen w-full flex flex-col antialiased transition-colors duration-500 overflow-hidden"
+         style={{ backgroundColor: 'var(--bg-main)', color: 'var(--color-primary)' }}>
       { !isLoggedIn ? (
         /* PASTE ALL MY EXISTING LOGIN UI HERE */
         <LoginScreen />
       ) : (
         /* SHOW THE ACTUAL SYSTEM/DASHBOARD HERE */
-        <div className="h-screen w-full flex flex-col bg-gray-50">
+        <div className="h-screen w-full flex flex-col transition-all duration-300"
+             style={{ backgroundColor: 'var(--bg-main)' }}>
           {/* GOOGLE CLASSROOM STYLE HEADER */}
-          <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-50 shadow-sm">
-            <div className="flex items-center gap-4">
-              {/* Menu Button */}
-              <button 
-                onClick={() => setSidebarOpen(!isSidebarOpen)}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors lg:hidden"
-              >
-                <Menu size={20} className="text-gray-600" />
-              </button>
-              
-              {/* Logo and Title */}
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <BookOpen size={18} className="text-white" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold text-gray-900">EduPulse Classroom</h1>
-                  <p className="text-xs text-gray-500">BSIT 3J • {currentYear}</p>
+          <header className="sticky top-0 z-30 border-b transition-all duration-300"
+                  style={{ backgroundColor: 'var(--sidebar-bg)', borderColor: 'var(--border-light)' }}>
+            <div className="flex items-center justify-between px-6 py-4">
+              {/* Left Side */}
+              <div className="flex items-center gap-4">
+                {/* Menu Toggle */}
+                <button 
+                  onClick={() => setSidebarOpen(!isSidebarOpen)}
+                  className="lg:hidden p-2 rounded-lg transition-all duration-300"
+                  style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--color-primary)' }}
+                >
+                  <Menu size={20} />
+                </button>
+                
+                {/* Logo and Title */}
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <BookOpen size={18} className="text-white" />
+                  </div>
+                  <div>
+                    <h1 className="heading-medium" style={{ color: 'var(--color-primary)' }}>EduPulse Classroom</h1>
+                    <p className="caption-text text-muted" style={{ color: 'var(--color-muted)' }}>BSIT 3J • {currentYear}</p>
+                  </div>
                 </div>
               </div>
-            </div>
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-3">
+              {/* Dark Mode Toggle */}
+              <button 
+                onClick={toggleDarkMode}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                style={{ backgroundColor: 'var(--bg-secondary)' }}
+              >
+                {isDarkMode ? (
+                  <Sun size={20} style={{ color: 'var(--color-primary)' }} />
+                ) : (
+                  <Moon size={20} style={{ color: 'var(--color-primary)' }} />
+                )}
+              </button>
+              
               {/* Search */}
-              <div className="hidden md:flex items-center bg-gray-100 rounded-lg px-3 py-2">
-                <Search size={16} className="text-gray-500 mr-2" />
+              <div className="hidden md:flex items-center bg-gray-100 rounded-lg px-3 py-2" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+                <Search size={16} style={{ color: 'var(--color-muted)' }} />
                 <input 
                   type="text" 
-                  placeholder="Search classes" 
-                  value={searchQuery}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  className="bg-transparent outline-none text-sm w-48"
+                  placeholder="Search classes..." 
+                  className="ml-2 bg-transparent outline-none text-sm w-48"
+                  style={{ color: 'var(--color-primary)' }}
                 />
               </div>
               
@@ -2269,65 +2496,125 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                 {currentUser ? currentUser.charAt(0).toUpperCase() : 'S'}
               </button>
             </div>
-          </header>
+          </div>
+        </header>
 
           {/* MAIN CONTENT */}
-          <div className="flex-1 flex overflow-hidden">
+          <div className="flex-1 flex overflow-hidden transition-all duration-300"
+               style={{ backgroundColor: 'var(--bg-main)' }}>
             {/* Sidebar */}
-            <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transition-transform duration-300 mt-16 lg:mt-0`}>
-              <nav className="p-4 space-y-1">
+            <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 border-r transition-transform duration-300 mt-16 lg:mt-0`}
+                  style={{ backgroundColor: 'var(--sidebar-bg)', borderColor: 'var(--border-light)' }}>
+              {/* Header */}
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <BookOpen size={18} className="text-white" />
+                  </div>
+                  <div>
+                    <h1 className="heading-medium">EduPulse</h1>
+                    <p className="sidebar-sublabel">Learning Platform</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Navigation */}
+              <nav className="px-2">
                 <button
                   onClick={() => setActiveNav('Home')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    activeNav === 'Home' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                  className={`sidebar-item ${activeNav === 'Home' ? 'active' : ''}`}
                 >
-                  <Home size={20} />
-                  <span className="font-medium">Classes</span>
+                  <Home size={20} className="sidebar-icon" style={{ color: activeNav === 'Home' ? (isDarkMode ? '#202124' : '#1A73E8') : (isDarkMode ? '#FFFFFF' : '#3C4043') }} />
+                  <span className="sidebar-label" style={{ color: activeNav === 'Home' ? (isDarkMode ? '#202124' : '#1A73E8') : (isDarkMode ? '#FFFFFF' : '#3C4043') }}>Home</span>
                 </button>
                 
                 <button
                   onClick={() => setActiveNav('Calendar')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    activeNav === 'Calendar' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                  className={`sidebar-item ${activeNav === 'Calendar' ? 'active' : ''}`}
                 >
-                  <CalendarIcon size={20} />
-                  <span className="font-medium">Calendar</span>
+                  <CalendarIcon size={20} className="sidebar-icon" style={{ color: activeNav === 'Calendar' ? (isDarkMode ? '#202124' : '#1A73E8') : (isDarkMode ? '#FFFFFF' : '#3C4043') }} />
+                  <span className="sidebar-label" style={{ color: activeNav === 'Calendar' ? (isDarkMode ? '#202124' : '#1A73E8') : (isDarkMode ? '#FFFFFF' : '#3C4043') }}>Calendar</span>
                 </button>
                 
                 <button
                   onClick={() => setActiveNav('Tasks')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    activeNav === 'Tasks' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                  className={`sidebar-item ${activeNav === 'Tasks' ? 'active' : ''}`}
                 >
-                  <ClipboardList size={20} />
-                  <span className="font-medium">To-do</span>
+                  <ClipboardList size={20} className="sidebar-icon" style={{ color: activeNav === 'Tasks' ? (isDarkMode ? '#202124' : '#1A73E8') : (isDarkMode ? '#FFFFFF' : '#3C4043') }} />
+                  <span className="sidebar-label" style={{ color: activeNav === 'Tasks' ? (isDarkMode ? '#202124' : '#1A73E8') : (isDarkMode ? '#FFFFFF' : '#3C4043') }}>To-do</span>
                 </button>
                 
                 <button
                   onClick={() => setActiveNav('Grades')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    activeNav === 'Grades' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                  className={`sidebar-item ${activeNav === 'Grades' ? 'active' : ''}`}
                 >
-                  <Award size={20} />
-                  <span className="font-medium">Grades</span>
+                  <Award size={20} className="sidebar-icon" style={{ color: activeNav === 'Grades' ? (isDarkMode ? '#202124' : '#1A73E8') : (isDarkMode ? '#FFFFFF' : '#3C4043') }} />
+                  <span className="sidebar-label" style={{ color: activeNav === 'Grades' ? (isDarkMode ? '#202124' : '#1A73E8') : (isDarkMode ? '#FFFFFF' : '#3C4043') }}>Grades</span>
                 </button>
               </nav>
               
+              {/* Separator */}
+              <div className="sidebar-separator"></div>
+              
+              {/* Enrolled Section */}
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="sidebar-section-title">Enrolled</h3>
+                  <ChevronRight size={16} className="sidebar-icon" />
+                </div>
+                
+                {/* Class List with Avatars */}
+                <div className="max-h-96 overflow-y-auto space-y-2" style={{ scrollbarWidth: 'none' }}>
+                  {courses.map((course, index) => (
+                    <div 
+                      key={course.id} 
+                      className="sidebar-item"
+                      onClick={() => handleSubjectSelect(course)}
+                      style={{
+                        backgroundColor: activeItem === course.id 
+                          ? (isDarkMode ? 'rgba(26, 115, 232, 0.2)' : 'rgb(239, 246, 255)')
+                          : 'transparent'
+                      }}
+                    >
+                      <div className={`sidebar-avatar ${course.color}`}>
+                        {course.code.charAt(0)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="sidebar-label" style={{ 
+                          maxWidth: '120px', 
+                          overflow: 'hidden', 
+                          textOverflow: 'ellipsis', 
+                          whiteSpace: 'nowrap',
+                          color: activeItem === course.id 
+                            ? (isDarkMode ? '#202124' : '#000000')
+                            : (isDarkMode ? '#FFFFFF' : '#000000')
+                        }}>{course.code}</div>
+                        <div className="sidebar-sublabel" style={{ 
+                          overflow: 'hidden', 
+                          textOverflow: 'ellipsis', 
+                          whiteSpace: 'nowrap',
+                          color: activeItem === course.id 
+                            ? (isDarkMode ? '#202124' : '#000000')
+                            : (isDarkMode ? '#FFFFFF' : '#6B7280')
+                        }}>{course.title}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
               {/* Profile Section */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+              <div className="absolute bottom-0 left-0 right-0 p-4 border-t transition-all duration-300"
+                   style={{ borderColor: 'var(--border-light)', backgroundColor: 'var(--sidebar-bg)' }}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-medium">
                     {currentUser ? currentUser.charAt(0).toUpperCase() : 'S'}
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">{currentUser || 'Student'}</p>
-                    <p className="text-sm text-gray-500">{studentID}</p>
+                    <p className="sidebar-label" style={{ color: 'var(--color-primary)' }}>{currentUser || 'Student'}</p>
+                    <p className="sidebar-sublabel" style={{ color: 'var(--color-muted)' }}>{studentID}</p>
                   </div>
-                  <button onClick={handleLogout} className="text-gray-400 hover:text-gray-600">
+                  <button onClick={handleLogout} className="sidebar-icon" style={{ color: 'var(--color-muted)' }}>
                     <LogOut size={18} />
                   </button>
                 </div>
@@ -2335,153 +2622,280 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
             </aside>
 
             {/* Main Content Area */}
-            <main className="flex-1 overflow-y-auto bg-gray-50">
+            <main className="flex-1 overflow-y-auto transition-colors duration-300" style={{ backgroundColor: 'var(--bg-main)', scrollbarWidth: 'none' }}>
               <div className="max-w-7xl mx-auto p-6">
-                {activeNav === 'Home' && (
-                  <div>
+                {activeNav === 'Home' && !activeSubject && (
+                  <div className="animate-in fade-in duration-500" style={{ scrollbarWidth: 'none' }}>
                     {/* Welcome Header */}
                     <div className="mb-8">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back, {currentUser || 'Student'}!</h2>
-                      <p className="text-gray-600">You have {getPendingTasksCount()} assignments due this week.</p>
+                      <h2 className="heading-large mb-2">Welcome back, {currentUser || 'Student'}!</h2>
+                      <p className="body-text text-secondary">You have {getPendingTasksCount()} assignments due this week.</p>
                     </div>
 
-                    {/* Class Grid */}
-                    <div className="mb-8">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-gray-900">Your Classes</h3>
-                        <button 
-                          onClick={() => alert('Add Class functionality coming soon!')}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                    {/* Subject Cards Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ scrollbarWidth: 'none' }}>
+                      {courses.map((course) => (
+                        <div 
+                          key={course.id}
+                          className="cursor-pointer transition-all duration-200 hover:scale-105"
+                          onClick={() => handleSubjectSelect(course)}
                         >
-                          + Join Class
-                        </button>
-                      </div>
-                      
-                      {filteredCourses.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {filteredCourses.map((course) => (
-                            <div 
-                              key={course.id}
-                              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
-                              onClick={() => {
-                                setSelectedCourseDetail(course);
-                                setShowCourseModal(true);
-                              }}
-                            >
-                              {/* Header with color */}
-                              <div className={`h-24 ${course.color} relative`}>
-                                <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-                                <div className="absolute bottom-3 left-4 text-white">
-                                  <h4 className="font-bold text-lg">{course.code}</h4>
-                                  <p className="text-sm opacity-90">{course.section}</p>
-                                </div>
+                          <div className="rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden border transition-all duration-300"
+                               style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                            {/* Colored Header */}
+                            <div className={`${course.color} h-32 relative`}>
+                              <div className="absolute inset-0 bg-black bg-opacity-10"></div>
+                              <div className="absolute bottom-3 left-4 text-white">
+                                <h3 className="text-lg font-black uppercase tracking-tight mb-1">{course.code}</h3>
+                                <p className="text-sm font-bold uppercase tracking-wider opacity-90 mb-1">{course.section}</p>
+                                <p className="text-xs font-medium uppercase tracking-wide opacity-80 leading-tight">{course.title}</p>
+                              </div>
+                              {/* Circular Avatar */}
+                              <div className="absolute bottom-3 right-3 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                                <span className="text-lg font-black text-gray-800">{course.code.charAt(0)}</span>
+                              </div>
+                            </div>
+                            
+                            {/* White/Dark Body */}
+                            <div className="p-4 relative" style={{ backgroundColor: 'var(--card-bg)' }}>
+                              <div className="mb-8">
+                                <h4 className="text-sm font-medium uppercase mb-2" style={{ color: 'var(--color-primary)' }}>PROFESSOR</h4>
+                                <p className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>{course.professor}</p>
                               </div>
                               
-                              {/* Content */}
-                              <div className="p-4">
-                                <h5 className="font-semibold text-gray-900 mb-1">{course.title}</h5>
-                                <p className="text-sm text-gray-600 mb-3">{course.professor}</p>
-                                
-                                <div className="flex items-center justify-between mb-3">
-                                  <span className="text-xs text-gray-500">{course.room}</span>
-                                  <span className="text-xs text-gray-500">{course.sched}</span>
-                                </div>
-                                
-                                {/* Progress Bar */}
-                                <div className="mb-3">
-                                  <div className="flex items-center justify-between mb-1">
-                                    <span className="text-xs text-gray-600">Progress</span>
-                                    <span className="text-xs font-medium text-gray-900">{course.progress}%</span>
-                                  </div>
-                                  <div className="w-full bg-gray-200 rounded-full h-2">
-                                    <div 
-                                      className={`${course.color} h-2 rounded-full`}
-                                      style={{ width: `${course.progress}%` }}
-                                    ></div>
-                                  </div>
-                                </div>
-                                
-                                {/* Actions */}
-                                <div className="flex gap-2">
-                                  <button 
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      alert(`Opening assignments for ${course.code}`);
-                                    }}
-                                    className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm font-medium"
-                                  >
-                                    View Assignments
-                                  </button>
-                                  <button 
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      window.open(course.meetLink, '_blank');
-                                    }}
-                                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm font-medium"
-                                  >
-                                    Join Meet
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        /* Empty State */
-                        <div className="text-center py-12">
-                          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <BookOpen size={32} className="text-gray-400" />
-                          </div>
-                          <h3 className="text-lg font-medium text-gray-900 mb-2">No Classes Found</h3>
-                          <p className="text-gray-600 mb-4">You haven't joined any classes yet.</p>
-                          <button 
-                            onClick={() => alert('Join Class functionality coming soon!')}
-                            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                          >
-                            + Join Your First Class
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Recent Announcements */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Announcements</h3>
-                      <div className="space-y-3">
-                        {filteredCourses.slice(0, 3).map((course) => (
-                          <div key={course.id} className="bg-white rounded-lg border border-gray-200 p-4">
-                            <div className="flex items-start gap-3">
-                              <div className={`w-10 h-10 ${course.color} rounded-lg flex items-center justify-center text-white font-bold`}>
-                                {course.code.charAt(0)}
-                              </div>
-                              <div className="flex-1">
-                                <h4 className="font-medium text-gray-900">{course.code}</h4>
-                                <p className="text-sm text-gray-600 mt-1">{course.announcement}</p>
-                                <p className="text-xs text-gray-500 mt-2">2 hours ago</p>
+                              {/* Folder/Assignment Icons at Bottom-Right */}
+                              <div className="absolute bottom-4 right-4 flex gap-2" style={{ color: 'var(--color-muted)' }}>
+                                <Folder size={16} />
+                                <FileText size={16} />
                               </div>
                             </div>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
+                {activeNav === 'Home' && activeSubject && (
+                  <div className="animate-in slide-in-from-right-12 duration-700">
+                    {/* Green Banner */}
+                    <div className={`${activeSubject.color} h-60 p-8 flex flex-col justify-end text-left relative overflow-hidden`}>
+                      <div className="absolute top-0 right-0 p-5 opacity-10 rotate-12 scale-[2]">
+                        <Layers size={100} className="text-white" />
+                      </div>
+                      <div className="max-w-7xl">
+                        <h2 className="text-5xl lg:text-6xl font-black italic uppercase tracking-tighter text-white mb-2 drop-shadow-2xl" 
+                            style={{ 
+                              flexWrap: 'wrap',
+                              paddingRight: '60px',
+                              lineHeight: 1.1
+                            }}>
+                          {activeSubject.code} - {activeSubject.title}
+                        </h2>
+                        <div className="flex items-center gap-6">
+                          <p className="text-white font-black text-sm uppercase tracking-[0.4em] opacity-90">{activeSubject.section} • Prof. {activeSubject.professor}</p>
+                          <div className="h-6 w-px bg-white/20"></div>
+                          <p className="text-white font-black text-[10px] uppercase tracking-widest opacity-70 italic">{activeSubject.room} • {activeSubject.sched}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto p-6 grid grid-cols-12 gap-5">
+                      {/* Left Sidebar */}
+                      <div className="col-span-12 lg:col-span-4 space-y-6">
+                        {/* Top Tabs */}
+                        <div className="rounded-2xl border shadow-xl p-4 mb-6 transition-all duration-300"
+                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                          <div className="flex space-x-1 mb-6">
+                            <button className="flex-1 py-3 px-4 text-center font-black text-[10px] uppercase tracking-widest border-b-2 pb-2"
+                                    style={{ borderBottomColor: 'var(--accent)', color: 'var(--color-primary)' }}>
+                              STREAM
+                            </button>
+                            <button className="flex-1 py-3 px-4 text-center font-medium text-[10px] uppercase tracking-widest border-b-2 pb-2"
+                                    style={{ borderBottomColor: 'transparent', color: 'var(--color-secondary)' }}>
+                              CLASSWORK
+                            </button>
+                            <button className="flex-1 py-3 px-4 text-center font-medium text-[10px] uppercase tracking-widest border-b-2 pb-2"
+                                    style={{ borderBottomColor: 'transparent', color: 'var(--color-secondary)' }}>
+                              PEOPLE
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Meet Card */}
+                        <div className="rounded-2xl border shadow-xl p-6 transition-all duration-300"
+                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                          <h4 className="text-[12px] font-black uppercase mb-6 tracking-[0.2em] flex items-center gap-3"
+                              style={{ color: 'var(--accent)' }}>
+                            <Video size={18} className="mr-2" />
+                            MEET
+                          </h4>
+                          <div className="space-y-4">
+                            <div className="border-l-4 pl-5 group cursor-pointer transition-all duration-300"
+                                 style={{ borderColor: 'var(--accent)' }}>
+                              <p className="text-[10px] font-black uppercase mb-1 tracking-tight" style={{ color: 'var(--color-primary)' }}>Upcoming Deadline</p>
+                              <p className="text-sm font-black uppercase tracking-tight group-hover:underline" style={{ color: 'var(--color-primary)' }}>Laboratory Activity 05</p>
+                              <p className="text-[9px] font-bold uppercase mt-2" style={{ color: 'var(--color-muted)' }}>Due in 14 Hours</p>
+                            </div>
+                            <div className="border-l-4 pl-5 opacity-60 transition-all duration-300"
+                                 style={{ borderColor: 'var(--border-light)' }}>
+                              <p className="text-[10px] font-black uppercase mb-1 tracking-tight" style={{ color: 'var(--color-muted)' }}>Completed</p>
+                              <p className="text-sm font-black uppercase tracking-tight line-through" style={{ color: 'var(--color-muted)' }}>Preliminary Exam</p>
+                              <p className="text-[9px] font-bold uppercase mt-2" style={{ color: 'var(--color-muted)' }}>Graded: 96/100</p>
+                            </div>
+                          </div>
+                          <button className="w-full mt-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-3"
+                                  style={{ 
+                                    backgroundColor: 'var(--accent)', 
+                                    color: 'white',
+                                    boxShadow: '0 10px 15px -3px rgba(187, 134, 252, 0.3)'
+                                  }}>
+                            <PlusCircle size={18} className="mr-2" />
+                            Submit Work
+                          </button>
+                        </div>
+
+                        {/* Instructor Info */}
+                        <div className="rounded-3xl border p-8 transition-all duration-300"
+                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                          <h4 className="text-[12px] font-black uppercase mb-6 tracking-widest" style={{ color: 'var(--color-muted)' }}>Instructor Info</h4>
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-lg italic shadow-inner transition-all duration-300"
+                                 style={{ backgroundColor: 'rgba(187, 134, 252, 0.2)', color: 'var(--accent)' }}>
+                              {activeSubject.code.charAt(0)}
+                            </div>
+                            <div>
+                              <p className="text-sm font-black uppercase" style={{ color: 'var(--color-primary)' }}>{activeSubject.professor}</p>
+                              <p className="text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-muted)' }}>Lead Researcher</p>
+                            </div>
+                          </div>
+                          <button className="w-full py-4 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all hover:opacity-80"
+                                  style={{ borderColor: 'var(--border-light)', color: 'var(--color-primary)' }}>
+                            Contact Instructor
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Main Feed */}
+                      <div className="col-span-12 lg:col-span-8 space-y-8">
+                        {/* New Announcement Bar */}
+                        <div className="rounded-2xl border shadow-xl p-4 mb-8 transition-all duration-300"
+                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                          <div className="flex items-center gap-5 mb-8">
+                            <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black shadow-lg transition-all duration-300"
+                                 style={{ backgroundColor: 'var(--accent)' }}>
+                              <MessageSquare size={24} className="mr-2" />
+                            </div>
+                            <input 
+                              type="text" 
+                              placeholder="Share something with your classmates..." 
+                              className="flex-1 bg-transparent outline-none text-base font-bold transition-all duration-300"
+                              style={{ color: 'var(--color-primary)', placeholderColor: 'var(--color-muted)' }}
+                            />
+                            <div className="flex items-center gap-2">
+                              <button className="p-4 rounded-2xl hover:opacity-80 transition-all"
+                                      style={{ color: 'var(--color-muted)' }}>
+                                <Paperclip size={20} />
+                              </button>
+                              <button className="p-4 rounded-2xl text-white shadow-xl transition-all"
+                                      style={{ backgroundColor: 'var(--accent)' }}>
+                                <Send size={22} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Announcement Post */}
+                        <div className="rounded-2xl border shadow-xl p-8 relative overflow-hidden transition-all duration-300"
+                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                          <div className="absolute top-0 right-0 p-4 opacity-5">
+                            <MessageSquare size={80} />
+                          </div>
+                          <div className="flex items-start gap-5 mb-8">
+                            <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black shadow-lg transition-all duration-300"
+                                 style={{ backgroundColor: 'var(--accent)' }}>
+                              {activeSubject.code.charAt(0)}
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm font-black uppercase tracking-tight italic" style={{ color: 'var(--color-primary)' }}>Prof. {activeSubject.professor}</p>
+                              <p className="text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-muted)' }}>Posted 2 Days Ago • Global Announcement</p>
+                            </div>
+                          </div>
+                          <div className="p-8 rounded-2xl mb-8 border-l-4 transition-all duration-300"
+                               style={{ 
+                                 borderColor: 'var(--accent)',
+                                 backgroundColor: isDarkMode ? 'rgba(187, 134, 252, 0.1)' : 'var(--bg-tertiary)'
+                               }}>
+                            <p className="text-base font-black leading-relaxed italic" style={{ color: 'var(--accent)' }}>
+                              "{activeSubject.announcement}"
+                            </p>
+                          </div>
+                          <div className="pt-8 border-t flex justify-between items-center transition-all duration-300"
+                               style={{ borderColor: 'var(--border-light)' }}>
+                            <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest cursor-pointer hover:opacity-80 group transition-all duration-300"
+                                 style={{ color: 'var(--color-muted)' }}>
+                              <MessageSquare size={16} className="group-hover:rotate-12 transition-transform" />
+                              24 Class Comments
+                            </div>
+                            <div className="flex gap-2">
+                              <button className="p-3 rounded-xl hover:opacity-80 transition-all"
+                                      style={{ color: 'var(--color-muted)' }}>
+                                <Share2 size={18} />
+                              </button>
+                              <button className="p-3 rounded-xl hover:opacity-80 transition-all"
+                                      style={{ color: 'var(--color-muted)' }}>
+                                <MoreVertical size={18} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Additional Posts */}
+                        <div className="space-y-8">
+                          <div className="rounded-2xl border shadow-xl p-8 transition-all duration-300"
+                               style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                            <div className="flex items-center gap-5 mb-8">
+                              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black shadow-lg transition-all duration-300"
+                                   style={{ backgroundColor: 'var(--accent)' }}>
+                                {activeSubject.code.charAt(0)}
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-sm font-black uppercase tracking-tight italic" style={{ color: 'var(--color-primary)' }}>Prof. {activeSubject.professor}</p>
+                                <p className="text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-muted)' }}>Posted 1 Week Ago • Assignment Reminder</p>
+                              </div>
+                            </div>
+                            <div className="p-8 rounded-2xl border-l-4 transition-all duration-300"
+                                 style={{ 
+                                   borderColor: 'var(--accent)',
+                                   backgroundColor: isDarkMode ? 'rgba(187, 134, 252, 0.1)' : 'var(--bg-tertiary)'
+                                 }}>
+                              <p className="text-base font-black leading-relaxed" style={{ color: 'var(--color-primary)' }}>Please submit your Chapter 3 exercises by Friday for peer review.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}  
 
                 {activeNav === 'Calendar' && (
                   <div className="text-center py-12">
                     <CalendarIcon size={48} className="text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">Calendar Coming Soon</h3>
-                    <p className="text-gray-600">Your academic calendar will appear here.</p>
+                    <h3 className="heading-medium mb-2">Calendar Coming Soon</h3>
+                    <p className="body-text text-secondary">Your academic calendar will appear here.</p>
                   </div>
                 )}
 
                 {activeNav === 'Tasks' && (
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Tasks</h3>
+                    <h3 className="heading-medium mb-4">Your Tasks</h3>
                     {tasks.length > 0 ? (
                       <div className="space-y-3">
                         {tasks.map((task) => (
-                          <div key={task.id} className="bg-white rounded-lg border border-gray-200 p-4">
+                          <div key={task.id} className="rounded-lg border p-4 transition-all duration-300"
+                               style={{
+                                 backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+                                 borderColor: isDarkMode ? '#333333' : '#E5E7EB'
+                               }}>
                             <div className="flex items-center gap-3">
                               <input
                                 type="checkbox"
@@ -2490,16 +2904,22 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                                 className="w-5 h-5 text-blue-600 rounded"
                               />
                               <div className="flex-1">
-                                <h4 className={`font-medium ${task.completed ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
-                                  {task.title}
-                                </h4>
-                                <p className="text-sm text-gray-600">Due: {task.dueDate}</p>
+                                <h4 className={`body-text ${task.completed ? 'text-muted line-through' : ''}`}>{task.title}</h4>
+                                <p className="caption-text text-secondary">Due: {task.dueDate}</p>
                               </div>
-                              <span className={`px-2 py-1 text-xs rounded-full ${
-                                task.priority === 'high' ? 'bg-red-100 text-red-700' :
-                                task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                                'bg-green-100 text-green-700'
-                              }`}>
+                              <span className="px-2 py-1 text-xs rounded-full transition-all duration-300"
+                                    style={{
+                                      backgroundColor: task.priority === 'high' 
+                                        ? (isDarkMode ? '#7F1D1D' : '#FEE2E2')
+                                        : task.priority === 'medium' 
+                                          ? (isDarkMode ? '#78350F' : '#FEF3C7')
+                                          : (isDarkMode ? '#14532D' : '#D1FAE5'),
+                                      color: task.priority === 'high'
+                                        ? (isDarkMode ? '#FCA5A5' : '#991B1B')
+                                        : task.priority === 'medium'
+                                          ? (isDarkMode ? '#FCD34D' : '#92400E')
+                                          : (isDarkMode ? '#6EE7B7' : '#065F46')
+                                    }}>
                                 {task.priority}
                               </span>
                             </div>
@@ -2509,8 +2929,8 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                     ) : (
                       <div className="text-center py-12">
                         <ClipboardList size={48} className="text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">No Tasks</h3>
-                        <p className="text-gray-600">You don't have any tasks yet.</p>
+                        <h3 className="heading-medium mb-2">No Tasks</h3>
+                        <p className="body-text text-secondary">You don't have any tasks yet.</p>
                       </div>
                     )}
                   </div>
@@ -2519,8 +2939,8 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                 {activeNav === 'Grades' && (
                   <div className="text-center py-12">
                     <Award size={48} className="text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">Grades Coming Soon</h3>
-                    <p className="text-gray-600">Your academic performance will appear here.</p>
+                    <h3 className="heading-medium mb-2">Grades Coming Soon</h3>
+                    <p className="body-text text-secondary">Your academic performance will appear here.</p>
                   </div>
                 )}
               </div>
@@ -2531,15 +2951,15 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
           {showNotifications && (
             <div className="absolute top-16 right-4 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
               <div className="p-4 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-900">Notifications</h3>
+                <h3 className="heading-medium">Notifications</h3>
               </div>
               <div className="max-h-96 overflow-y-auto">
                 {notifications.length > 0 ? (
                   notifications.map((notification) => (
                     <div key={notification.id} className="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-                      <h4 className="font-medium text-gray-900 text-sm">{notification.title}</h4>
-                      <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-                      <p className="text-xs text-gray-500 mt-2">{notification.time}</p>
+                      <h4 className="body-text">{notification.title}</h4>
+                      <p className="body-text text-secondary mt-1">{notification.message}</p>
+                      <p className="caption-text text-muted mt-2">{notification.time}</p>
                     </div>
                   ))
                 ) : (
@@ -2605,32 +3025,36 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                 <div className="p-6">
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div>
-                      <p className="text-sm text-gray-600">Instructor</p>
-                      <p className="font-medium">{selectedCourseDetail.professor}</p>
+                      <p style={{ color: 'var(--color-secondary)' }}>Instructor</p>
+                      <p style={{ color: 'var(--color-primary)' }}>{selectedCourseDetail.professor}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Section</p>
-                      <p className="font-medium">{selectedCourseDetail.section}</p>
+                      <p style={{ color: 'var(--color-secondary)' }}>Section</p>
+                      <p style={{ color: 'var(--color-primary)' }}>{selectedCourseDetail.section}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Schedule</p>
-                      <p className="font-medium">{selectedCourseDetail.sched}</p>
+                      <p style={{ color: 'var(--color-secondary)' }}>Schedule</p>
+                      <p style={{ color: 'var(--color-primary)' }}>{selectedCourseDetail.sched}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Room</p>
-                      <p className="font-medium">{selectedCourseDetail.room}</p>
+                      <p style={{ color: 'var(--color-secondary)' }}>Room</p>
+                      <p style={{ color: 'var(--color-primary)' }}>{selectedCourseDetail.room}</p>
                     </div>
                   </div>
                   
                   <div className="mb-6">
-                    <h3 className="font-semibold text-gray-900 mb-2">Latest Announcement</h3>
-                    <p className="text-gray-600">{selectedCourseDetail.announcement}</p>
+                    <h3 className="font-semibold mb-2" style={{ color: 'var(--color-primary)' }}>Latest Announcement</h3>
+                    <p style={{ color: 'var(--color-secondary)' }}>{selectedCourseDetail.announcement}</p>
                   </div>
                   
                   <div className="flex gap-3">
                     <button 
                       onClick={() => alert(`Opening assignments for ${selectedCourseDetail.code}`)}
-                      className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                      className="flex-1 px-4 py-2 rounded-lg transition-colors font-medium"
+                      style={{
+                        backgroundColor: isDarkMode ? '#374151' : '#F3F4F6',
+                        color: isDarkMode ? '#E8EAED' : '#374151'
+                      }}
                     >
                       View Assignments
                     </button>
