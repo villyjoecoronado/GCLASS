@@ -2,15 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, BookOpen, Calendar, ClipboardList, Settings, Bell, 
-  Search, Menu, X, Plus, Sparkles, LogOut, MoreVertical,
-  ChevronRight, LayoutGrid, UserCircle, Award, AlertCircle, Cpu, Zap, Filter,
-  CalendarIcon, PlusCircle, Archive, User, Shield,
-  Languages, Database, LifeBuoy, ChevronLeft,
-  CheckSquare, Layers, ArrowLeft, Paperclip,
-  Send, MessageSquare, FileText, ImageIcon,
-  Share2, Clock, ExternalLink, HardDrive,
-  Folder, Camera, RefreshCw, Download,
-  Globe, Check, Activity, Key, Moon, Sun, TrendingUp, Users, CheckCircle, Circle, Video
+  Search, Menu, X, Plus, Sparkles, LogOut, ChevronRight,
+  UserCircle, CheckSquare, Send, MessageSquare, FileText, Camera,
+  Video, Moon, Sun, TrendingUp, Users, CheckCircle, Activity, Zap
 } from 'lucide-react';
 
 // --- PREMIUM UI CSS-IN-JS ---
@@ -18,13 +12,13 @@ const injectProfessionalStyles = () => {
   const style = document.createElement('style');
   style.textContent = `
     :root {
-      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      --font-weight-heading: 700;
-      --font-weight-body: 400;
-      --letter-spacing-tight: -0.5px;
-      --letter-spacing-normal: 0px;
-      --line-height-body: 1.6;
-      --line-height-heading: 1.2;
+      --font-family: 'SF Pro Display', 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-weight-heading: 600;
+      --font-weight-body: 500;
+      --letter-spacing-tight: -0.02em;
+      --letter-spacing-normal: 0em;
+      --line-height-body: 1.5;
+      --line-height-heading: 1.3;
       
       /* Light Mode Colors */
       --bg-main-light: #ffffff;
@@ -123,6 +117,33 @@ const injectProfessionalStyles = () => {
     h4 { font-size: 22px; }
     h5 { font-size: 20px; }
     h6 { font-size: 18px; }
+
+    /* Subject banner font fixes */
+    .course-card .course-title {
+      font-size: 14px !important;
+      line-height: 1.2 !important;
+      font-weight: 600 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .course-card .course-code {
+      font-size: 12px !important;
+      line-height: 1.1 !important;
+      font-weight: 500 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* Mobile optimization */
+    @media (max-width: 768px) {
+      .course-card .course-title {
+        font-size: 12px !important;
+      }
+      .course-card .course-code {
+        font-size: 10px !important;
+      }
+    }
 
     p {
       font-family: var(--font-family);
@@ -474,39 +495,35 @@ const injectProfessionalStyles = () => {
 
 // --- MAIN APP COMPONENT ---
 const App = () => {
-  // Active item state
-  const [activeItem, setActiveItem] = useState(null);
-  
-  // Dark mode state
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Basic Auth State
+  // Auth State
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [activeSubject, setActiveSubject] = useState(null);
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
   
   // Navigation State
   const [activeNav, setActiveNav] = useState('Home');
   const [view, setView] = useState("dashboard");
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   
-  // Dark mode
-  const [darkMode, setDarkMode] = useState(() => {
+  // Dark mode state
+  const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode');
     return saved ? JSON.parse(saved) : false;
   });
   
-  // Used State Variables for Google Classroom Layout
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  // UI State
   const [showNotifications, setShowNotifications] = useState(false);
-  const [isClosingNotifications, setIsClosingNotifications] = useState(false);
   const [showCourseModal, setShowCourseModal] = useState(false);
   const [selectedCourseDetail, setSelectedCourseDetail] = useState(null);
   const [courseTab, setCourseTab] = useState('overview');
-  const [password, setPassword] = useState("");
-  const [currentUser, setCurrentUser] = useState("");
-  const [username, setUsername] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [aiMessage, setAiMessage] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
-  // Data States - Used in the current layout
+  // Data States
   const [tasks, setTasks] = useState([
     { id: 1, title: "Complete Chapter 5 Quiz", completed: false, dueDate: "2026-04-25", priority: 'high' },
     { id: 2, title: "Submit Lab Report", completed: true, dueDate: "2026-04-23", priority: 'medium' },
@@ -519,50 +536,7 @@ const App = () => {
     { id: 3, title: "Class Update", message: "Schedule change for tomorrow", time: "3 hours ago", read: true, type: "update" }
   ]);
 
-  // Search States
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredCourses, setFilteredCourses] = useState([]);
-  
-  // Additional Missing States
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatLog, setChatLog] = useState([]);
-  const [message, setMessage] = useState('');
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [systemAlerts, setSystemAlerts] = useState([]);
-  const [profilePic, setProfilePic] = useState('');
-  const [showPicOptions, setShowPicOptions] = useState(false);
-  const [activeCCTab, setActiveCCTab] = useState('overview');
-  const [showMetadataAdvanced, setShowMetadataAdvanced] = useState(false);
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-  const [showKillSessionsModal, setShowKillSessionsModal] = useState(false);
-  const [storageUsage, setStorageUsage] = useState(0);
-  const [dashboardView, setDashboardView] = useState('overview');
-  const [dynamicGreeting, setDynamicGreeting] = useState('Welcome');
-  const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
-  const [selectedDate, setSelectedDate] = useState(new Date().getDate());
-  const [showAddEventModal, setShowAddEventModal] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [selectedTaskDate, setSelectedTaskDate] = useState('');
-  const [showEventModal, setShowEventModal] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState('English (US)');
-  
-  // Missing Functions
-  const addTask = () => {
-    if (newTaskTitle.trim()) {
-      const newTask = {
-        id: tasks.length + 1,
-        title: newTaskTitle,
-        completed: false,
-        dueDate: selectedTaskDate || new Date().toISOString().split('T')[0],
-        priority: 'medium'
-      };
-      setTasks([...tasks, newTask]);
-      setNewTaskTitle('');
-      setSelectedTaskDate('');
-    }
-  };
-  
-  // Enhanced Course data with Google Meet links
+  // Enhanced Course data
   const courses = [
     { id: 1, code: 'SP 101', title: 'SOCIAL ISSUES AND PROFESSIONAL PRACTICES', section: 'BSIT 3J', color: 'bg-green-600', professor: 'Cynthia B. Dulagan', progress: 70, meetLink: 'https://meet.google.com/soc-issues-prof', room: 'RM 401', sched: 'Tue/Thu 1:00-2:30PM', announcement: 'I have already recorded your midterm grades and attendance.' },
     { id: 2, code: 'CAPSTONE 1', title: 'PROJECT MANAGEMENT', section: 'BSIT 3J', color: 'bg-blue-600', professor: 'SHERYL ANN RICAFORT', progress: 45, meetLink: 'https://meet.google.com/cap-stone-one', room: 'Lab 302', sched: 'Mon/Wed 8:00-10:00AM', announcement: 'Please submit your Chapter 2 drafts by Saturday.' },
@@ -572,118 +546,15 @@ const App = () => {
     { id: 6, code: 'WS 102', title: 'WEB PROGRAMMING', section: 'BSIT 3J', color: 'bg-teal-700', professor: 'Roclyn Yamson', progress: 60, meetLink: 'https://meet.google.com/web-prog-react', room: 'Lab 301', sched: 'Tue 8:00-11:00AM', announcement: "Don't forget to push your React projects to GitHub." },
     { id: 7, code: 'ED 101', title: 'EMBEDDED SYSTEMS/ROBOTICS', section: 'BSIT 3J', color: 'bg-blue-500', professor: 'Edmar Tan', progress: 50, meetLink: 'https://meet.google.com/ed-robotics-sys', room: 'Lab 402', sched: 'Thu 9:00-12:00PM', announcement: 'Bring your Arduino kits on our face-to-face class.' },
     { id: 8, code: 'NET 102', title: 'NETWORK ADMINISTRATION AND MAINTENANCE', section: 'BSIT 3J', color: 'bg-blue-700', professor: 'Harvey Rey B. Del Rosario', progress: 20, meetLink: 'https://meet.google.com/et-net-admin-mnt', room: 'Lab 306', sched: 'Sat 8:00-11:00AM', announcement: 'Server configuration quiz is scheduled for Tuesday.' }
-  ];  
-  const studentID = "2022-5089";
-  const currentYear = "3rd Year";
+  ];
   
-  // =============================
-  
-  // Refs
-  const fileInputRef = useRef(null);
-  
-  // Socket mock
-  const socket = {
-    on: () => {},
-    emit: () => {},
-    off: () => {}
-  };
+  const [filteredCourses, setFilteredCourses] = useState(courses);
   
   // Effects
   useEffect(() => injectProfessionalStyles(), []);
   
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-  }, [darkMode]);
-  
-  useEffect(() => {
-    socket.on('receive_private_message', (data) => { setChatLog((prev) => [...prev, data]); });
-    return () => socket.off('receive_private_message');
-  }, []);
-
-  // Initialize filtered courses
-  useEffect(() => {
-    setFilteredCourses(courses);
-  }, []);
-
-  // =================================
-
-  // Utility functions
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log('Logging in...');
-    
-    if (!username || !password) return;
-    
-    // Simple login validation - you can modify this as needed
-    if (username === "admin" && password === "admin") {
-      setIsLoggedIn(true);
-      setCurrentUser(username);
-    }
-  };
-
-  const handleSignIn = () => {
-    console.log('Logging in...');
-    setIsLoggedIn(true);
-  };
-
-  // --- LOGIN SCREEN COMPONENT ---
-  const LoginScreen = () => (
-    <form onSubmit={handleLogin} className="h-screen flex items-center justify-center bg-slate-50 p-6">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-12 rounded-[3rem] shadow-2xl w-full max-w-lg border text-center transition-all duration-300"
-                style={{
-                  backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF',
-                  borderColor: isDarkMode ? '#333333' : '#F3F4F6'
-                }}>
-        <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-blue-100">
-          <Sparkles size={40} className="text-white" />
-        </div>
-        <h1 className="heading-large mb-3">EduPulse</h1>
-        <p className="body-text text-secondary mb-10">The next generation of classroom management.<br/>Enter your credentials to begin.</p>
-        <div className="space-y-4 mb-8">
-          <input 
-            type="text" 
-            placeholder="Student ID" 
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-6 py-5 border-2 border-transparent rounded-2xl outline-none transition-all body-text"
-            style={{
-              backgroundColor: isDarkMode ? '#374151' : '#F9FAFB',
-              color: isDarkMode ? '#E8EAED' : '#111827'
-            }}
-          />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-6 py-5 border-2 border-transparent rounded-2xl outline-none transition-all body-text"
-            style={{
-              backgroundColor: isDarkMode ? '#374151' : '#F9FAFB',
-              color: isDarkMode ? '#E8EAED' : '#111827'
-            }}
-          />
-        </div>
-        <button type="button" onClick={handleSignIn} className="w-full py-5 bg-blue-600 text-white rounded-2xl heading-medium hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-[0.98]">
-          Sign In to Portal
-        </button>
-      </motion.div>
-    </form>
-  );
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setShowProfileDropdown(false);
-    setUsername("");
-    setPassword("");
-  };
-
-  // Apply dark mode class to body
-  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
     if (isDarkMode) {
       document.body.classList.add('dark-mode');
     } else {
@@ -691,51 +562,42 @@ const App = () => {
     }
   }, [isDarkMode]);
 
-  if (!isLoggedIn) return <LoginScreen />;
+  useEffect(() => {
+    setFilteredCourses(courses);
+  }, []);
 
-  // Handle subject selection
-  const handleSubjectSelect = (course) => {
-    setActiveItem(course.id);
-    setActiveSubject(course);
-    setView("stream");
+  // Essential Functions
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (!username || !password) return;
+    
+    if (username === "admin" && password === "admin") {
+      setIsLoggedIn(true);
+      setCurrentUser(username);
+    }
   };
 
-  // Dark mode toggle
+  const handleSignIn = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUsername("");
+    setPassword("");
+    setCurrentUser("");
+  };
+
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
 
-  // Used Functions for Google Classroom Layout
-  const toggleTask = (id) => {
-    setTasks(tasks.map(task => 
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+  const handleCourseClick = (course) => {
+    setSelectedCourseDetail(course);
+    setShowCourseModal(true);
+    setCourseTab('overview');
   };
 
-  const handleNotificationClick = (notification) => {
-    setNotifications(notifications.map(n => 
-      n.id === notification.id ? { ...n, read: true } : n
-    ));
-  };
-
-  const getUnreadCount = () => {
-    return notifications.filter(n => !n.read).length;
-  };
-
-  const getPendingTasksCount = () => {
-    return tasks.filter(task => !task.completed).length;
-  };
-
-  // Smooth close notifications function
-  const handleCloseNotifications = () => {
-    setIsClosingNotifications(true);
-    setTimeout(() => {
-      setShowNotifications(false);
-      setIsClosingNotifications(false);
-    }, 300);
-  };
-
-  // Search Functions
   const handleSearch = (query) => {
     setSearchQuery(query);
     
@@ -751,162 +613,650 @@ const App = () => {
     }
   };
 
+  const getUnreadCount = () => {
+    return notifications.filter(n => !n.read).length;
+  };
+
+  const handleNotificationClick = (notification) => {
+    setNotifications(notifications.map(n => 
+      n.id === notification.id ? { ...n, read: true } : n
+    ));
+  };
+
+  const sendAiMessage = () => {
+    if (!aiMessage.trim()) return;
+    
+    setIsAiLoading(true);
+    setTimeout(() => {
+      setAiResponse("I understand you're asking about: " + aiMessage + ". I'm here to help you with your studies, assignments, and course navigation!");
+      setIsAiLoading(false);
+    }, 1500);
+  };
   
-  // --- ADVANCED REUSABLE UI COMPONENTS ---
-  
-  // Stat Card Component
-  const StatCard = ({ title, value, subtitle, icon: Icon, color, trend }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'} hover:shadow-lg transition-all`}
-    >
-      <div className="flex items-center justify-between mb-4">
-        <div className={`p-3 rounded-lg ${color}`}>
-          <Icon size={24} className="text-white" />
+  // --- LOGIN SCREEN COMPONENT ---
+  const LoginScreen = () => (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        className="p-8 rounded-3xl shadow-2xl w-full max-w-md border text-center transition-all duration-300"
+        style={{
+          backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+          borderColor: isDarkMode ? '#333333' : '#F3F4F6'
+        }}
+      >
+        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <Sparkles size={32} className="text-white" />
         </div>
-        {trend && (
-          <div className={`flex items-center gap-1 text-sm font-medium ${
-            trend > 0 ? 'text-green-600' : 'text-red-600'
-          }`}>
-            <TrendingUp size={16} />
-            {Math.abs(trend)}%
-          </div>
+        <h1 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-family)' }}>EduPulse</h1>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-8">Next generation learning platform</p>
+        
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input 
+            type="text" 
+            placeholder="Student ID" 
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-4 py-3 border-2 border-transparent rounded-xl outline-none transition-all"
+            style={{
+              backgroundColor: isDarkMode ? '#374151' : '#F9FAFB',
+              color: isDarkMode ? '#E8EAED' : '#111827',
+              fontFamily: 'var(--font-family)'
+            }}
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 border-2 border-transparent rounded-xl outline-none transition-all"
+            style={{
+              backgroundColor: isDarkMode ? '#374151' : '#F9FAFB',
+              color: isDarkMode ? '#E8EAED' : '#111827',
+              fontFamily: 'var(--font-family)'
+            }}
+          />
+          <button 
+            type="submit" 
+            className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg active:scale-[0.98]"
+            style={{ fontFamily: 'var(--font-family)' }}
+          >
+            Sign In
+          </button>
+        </form>
+        
+        <p className="text-xs text-gray-500 mt-6">Demo: admin / admin</p>
+      </motion.div>
+    </div>
+  );
+
+  if (!isLoggedIn) return <LoginScreen />;
+
+  // --- SIDEBAR COMPONENT ---
+  const Sidebar = () => {
+    const navigationItems = [
+      { id: 'Home', name: 'Dashboard', icon: Home },
+      { id: 'Courses', name: 'Courses', icon: BookOpen },
+      { id: 'Calendar', name: 'Calendar', icon: Calendar },
+      { id: 'Tasks', name: 'Tasks', icon: ClipboardList },
+      { id: 'Settings', name: 'Settings', icon: Settings },
+    ];
+
+    return (
+      <>
+        {/* Mobile overlay */}
+        {isSidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
         )}
-      </div>
-      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{value}</div>
-      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</div>
-      <div className="text-xs text-gray-500 dark:text-gray-500">{subtitle}</div>
-    </motion.div>
-  );
+        
+        {/* Sidebar */}
+        <motion.aside
+          initial={false}
+          animate={{ x: isSidebarOpen ? 0 : -280 }}
+          className="fixed left-0 top-0 h-full w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 z-50 lg:translate-x-0 lg:static lg:z-auto"
+        >
+          <div className="flex flex-col h-full">
+            {/* HEADER */}
+            <header className="sticky top-0 z-30 border-b transition-all duration-300"
+                    style={{ backgroundColor: 'var(--sidebar-bg)', borderColor: 'var(--border-light)' }}>
+              <div className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <span className="text-white font-bold">EP</span>
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>EduPulse</h2>
+                    <p className="text-xs text-gray-500">Learning Platform</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                >
+                  ×
+                </button>
+              </div>
+            </header>
 
-  // Progress Card Component
-  const ProgressCard = ({ title, progress, color, icon: Icon, description }) => (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}
-    >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${color}`}>
-            <Icon size={20} className="text-white" />
+            {/* Navigation */}
+            <nav className="flex-1 p-4 space-y-1">
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeNav === item.id;
+                
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActiveNav(item.id);
+                      setSidebarOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
+                    style={{
+                      backgroundColor: isActive 
+                        ? (isDarkMode ? 'rgba(26, 115, 232, 0.2)' : '#E8F0FE')
+                        : 'transparent',
+                      color: isActive
+                        ? (isDarkMode ? '#FFFFFF' : '#1A73E8')
+                        : (isDarkMode ? '#E8EAED' : '#3C4043'),
+                      marginHorizontal: isActive ? 10 : 0,
+                      borderRadius: 25
+                    }}
+                  >
+                    <Icon className="w-5 h-5" style={{ color: isActive ? (isDarkMode ? '#FFFFFF' : '#1A73E8') : (isDarkMode ? '#E8EAED' : '#3C4043') }} />
+                    <span className="text-sm font-medium" style={{ fontFamily: 'var(--font-family)' }}>{item.name}</span>
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Footer */}
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition-all"
+              >
+                <LogOut className="w-5 h-5" />
+                <span className="text-sm font-medium" style={{ fontFamily: 'var(--font-family)' }}>Sign Out</span>
+              </button>
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">{title}</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
+        </motion.aside>
+      </>
+    );
+  };
+
+  
+  // --- DASHBOARD COMPONENT ---
+  const Dashboard = () => (
+    <div className="flex-1 overflow-auto">
+      {/* Header */}
+      <header className="sticky top-0 z-30 border-b bg-white dark:bg-gray-900 transition-all duration-300"
+              style={{ borderColor: 'var(--border-light)' }}>
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+            >
+              <Menu size={20} />
+            </button>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>
+                Welcome back, {currentUser || 'Student'}
+              </h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">BSIT 3J • 3rd Year</p>
+            </div>
           </div>
-        </div>
-        <span className="text-2xl font-bold text-gray-900 dark:text-white">{progress}%</span>
-      </div>
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-        <div 
-          className={`${color.replace('bg-', 'bg-')} h-2 rounded-full transition-all duration-500`}
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </motion.div>
-  );
-
-  // Activity Item Component
-  const ActivityItem = ({ icon, title, description, time, type }) => (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      className={`flex items-start gap-3 p-4 rounded-lg ${
-        darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
-      } border hover:shadow-md transition-all`}
-    >
-      <div className={`p-2 rounded-lg ${
-        type === 'achievement' ? 'bg-yellow-100 text-yellow-600' :
-        type === 'xp' ? 'bg-purple-100 text-purple-600' :
-        type === 'collaboration' ? 'bg-blue-100 text-blue-600' :
-        type === 'file' ? 'bg-green-100 text-green-600' :
-        'bg-gray-100 text-gray-600'
-      }`}>
-        {icon}
-      </div>
-      <div className="flex-1">
-        <h4 className="font-medium text-gray-900 dark:text-white text-sm">{title}</h4>
-        <p className="text-xs text-gray-600 dark:text-gray-400">{description}</p>
-        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{time}</p>
-      </div>
-    </motion.div>
-  );
-
-  // File Upload Item Component
-  const FileUploadItem = ({ file, summary, isProcessing }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`p-4 rounded-lg border ${
-        darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
-      }`}
-    >
-      <div className="flex items-start gap-3">
-        <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
-          <FileText size={16} />
-        </div>
-        <div className="flex-1">
-          <h4 className="font-medium text-gray-900 dark:text-white text-sm">{file.name}</h4>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
-            {(file.size / 1024).toFixed(1)} KB • {new Date(file.uploadDate).toLocaleDateString()}
-          </p>
           
-          {isProcessing ? (
-            <div className="mt-2 flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" />
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-              <span className="text-xs text-blue-600">Processing...</span>
+          <div className="flex items-center gap-3">
+            {/* Search */}
+            <div className="hidden md:flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+              <Search size={16} className="text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search courses..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="bg-transparent outline-none text-sm w-48"
+                style={{ fontFamily: 'var(--font-family)' }}
+              />
             </div>
-          ) : summary ? (
-            <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-xs text-blue-800 dark:text-blue-200">
-              {summary}
-            </div>
-          ) : null}
+            
+            {/* Notifications */}
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+            >
+              <Bell size={20} />
+              {getUnreadCount() > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  {getUnreadCount()}
+                </span>
+              )}
+            </button>
+            
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+            >
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </header>
+
+      {/* Main Content */}
+      <main className="p-6">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <BookOpen size={20} className="text-blue-600" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">{courses.length}</span>
+            </div>
+            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Courses</div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <CheckCircle size={20} className="text-green-600" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">{tasks.filter(t => t.completed).length}</span>
+            </div>
+            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Completed Tasks</div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-yellow-100 rounded-lg">
+                <Activity size={20} className="text-yellow-600" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">{getUnreadCount()}</span>
+            </div>
+            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Unread Notifications</div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <TrendingUp size={20} className="text-purple-600" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">85%</span>
+            </div>
+            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Average Progress</div>
+          </motion.div>
+        </div>
+
+        {/* Course Grid */}
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4" style={{ fontFamily: 'var(--font-family)' }}>
+            Your Courses
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredCourses.map((course) => (
+              <motion.div
+                key={course.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ y: -4 }}
+                onClick={() => handleCourseClick(course)}
+                className="course-card bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden cursor-pointer hover:shadow-lg transition-all"
+              >
+                <div className={`h-2 ${course.color}`}></div>
+                <div className="p-4">
+                  <div className="course-code text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    {course.code}
+                  </div>
+                  <div className="course-title text-sm font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                    {course.title}
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                    {course.professor}
+                  </div>
+                  
+                  <div className="mb-3">
+                    <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+                      <span>Progress</span>
+                      <span>{course.progress}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                      <div 
+                        className={`${course.color} h-1.5 rounded-full transition-all duration-500`}
+                        style={{ width: `${course.progress}%` }}
+                      />
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(course.meetLink, '_blank');
+                    }}
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg text-xs font-medium hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all"
+                  >
+                    <Video size={12} />
+                    Join Meet
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </main>
+    </div>
   );
 
-  // Notification Dropdown Component
-  const NotificationDropdown = ({ show, onClose, notifications, onNotificationClick, onMarkAllRead }) => {
-    const unreadCount = notifications.filter(n => !n.read).length;
+  // --- NOTIFICATION DROPDOWN ---
+  const NotificationDropdown = () => (
+    <AnimatePresence>
+      {showNotifications && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: -10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: -10 }}
+          className="absolute right-4 top-16 w-80 rounded-2xl shadow-2xl border z-50 overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+        >
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>Notifications</h3>
+              <button onClick={() => setShowNotifications(false)} className="text-gray-400 hover:text-gray-600">
+                <X size={16} />
+              </button>
+            </div>
+          </div>
+          
+          <div className="max-h-96 overflow-y-auto">
+            {notifications.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                <Bell size={32} className="mx-auto mb-2 opacity-20" />
+                <p>No notifications</p>
+              </div>
+            ) : (
+              notifications.map(notification => (
+                <motion.div
+                  key={notification.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  onClick={() => handleNotificationClick(notification)}
+                  className={`p-4 border-b cursor-pointer transition-colors border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${!notification.read ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''}`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`p-2 rounded-lg ${
+                      notification.type === 'assignment' ? 'bg-blue-100 text-blue-600' :
+                      notification.type === 'grade' ? 'bg-green-100 text-green-600' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>
+                      {notification.type === 'assignment' ? <FileText size={16} /> :
+                       notification.type === 'grade' ? <CheckSquare size={16} /> :
+                       <Bell size={16} />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 dark:text-white text-sm" style={{ fontFamily: 'var(--font-family)' }}>{notification.title}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{notification.message}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">{notification.time}</p>
+                    </div>
+                    {!notification.read && (
+                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                    )}
+                  </div>
+                </motion.div>
+              ))
+            )}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  // --- COURSE MODAL ---
+  const CourseModal = () => {
+    if (!showCourseModal || !selectedCourseDetail) return null;
     
     return (
       <AnimatePresence>
-        {show && (
+        {showCourseModal && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            className={`absolute right-4 top-16 w-80 rounded-2xl shadow-2xl border z-50 overflow-hidden ${
-              darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-100'
-            }`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowCourseModal(false)}
           >
-            <div className={`p-4 border-b ${darkMode ? 'border-slate-700' : 'border-gray-100'}`}>
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Notifications</h3>
-                <div className="flex items-center gap-2">
-                  {unreadCount > 0 && (
-                    <button
-                      onClick={onMarkAllRead}
-                      className="text-xs text-blue-600 hover:text-blue-700 font-medium"
-                    >
-                      Mark all read
-                    </button>
-                  )}
-                  <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-                    <X size={16} />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>{selectedCourseDetail.title}</h2>
+                    <p className="text-gray-600 dark:text-gray-400">{selectedCourseDetail.code} • {selectedCourseDetail.section}</p>
+                  </div>
+                  <button onClick={() => setShowCourseModal(false)} className="text-gray-400 hover:text-gray-600">
+                    <X size={24} />
                   </button>
                 </div>
               </div>
+              
+              {/* Content */}
+              <div className="p-6 overflow-y-auto max-h-96">
+                <div className="space-y-6">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Instructor</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{selectedCourseDetail.professor}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Schedule</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{selectedCourseDetail.sched}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Room</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{selectedCourseDetail.room}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Progress</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{selectedCourseDetail.progress}%</p>
+                    </div>
+                  </div>
+                  
+                  {/* Google Meet Integration */}
+                  <div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 bg-blue-600 rounded-lg">
+                        <Video size={20} className="text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>Google Meet Integration</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Join your virtual classroom instantly</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => window.open(selectedCourseDetail.meetLink, '_blank')}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all"
+                    >
+                      <Camera size={20} />
+                      Join Google Meet Class
+                    </button>
+                  </div>
+                  
+                  {/* Announcement */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2" style={{ fontFamily: 'var(--font-family)' }}>Latest Announcement</h4>
+                    <p className="text-gray-600 dark:text-gray-300">{selectedCourseDetail.announcement}</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    );
+  };
+
+  // --- FLOATING CHAT ---
+  const FloatingChat = () => (
+    <div className="fixed bottom-6 right-6 z-40">
+      <AnimatePresence>
+        {isChatOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            className="mb-4 w-96 rounded-2xl shadow-2xl border overflow-hidden bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+          >
+            {/* Header */}
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <Zap size={16} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold" style={{ fontFamily: 'var(--font-family)' }}>AI Assistant</h3>
+                    <p className="text-xs text-white/80">Always here to help</p>
+                  </div>
+                </div>
+                <button onClick={() => setIsChatOpen(false)} className="text-white/80 hover:text-white">
+                  <X size={16} />
+                </button>
+              </div>
             </div>
             
-            <div className="max-h-96 overflow-y-auto">
-              {notifications.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">
+            {/* Messages */}
+            <div className="h-96 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                    <Zap size={16} className="text-white" />
+                  </div>
+                  <div className="max-w-[80%] bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm">
+                    <p className="text-sm" style={{ fontFamily: 'var(--font-family)' }}>Hey! 👋 I'm your AI assistant. How can I help you today?</p>
+                  </div>
+                </div>
+                
+                {aiResponse && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-start gap-3"
+                  >
+                    <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                      <Zap size={16} className="text-white" />
+                    </div>
+                    <div className="max-w-[80%] bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-purple-200 dark:border-purple-800">
+                      <p className="text-sm" style={{ fontFamily: 'var(--font-family)' }}>{aiResponse}</p>
+                    </div>
+                  </motion.div>
+                )}
+                
+                {isAiLoading && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-start gap-3"
+                  >
+                    <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                      <Zap size={16} className="text-white" />
+                    </div>
+                    <div className="max-w-[80%] bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            </div>
+            
+            {/* Input */}
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={aiMessage}
+                  onChange={(e) => setAiMessage(e.target.value)}
+                  placeholder="Ask anything..."
+                  className="flex-1 px-4 py-3 rounded-2xl bg-gray-100 dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  style={{ fontFamily: 'var(--font-family)' }}
+                  onKeyPress={(e) => e.key === 'Enter' && sendAiMessage()}
+                />
+                <button
+                  onClick={sendAiMessage}
+                  disabled={isAiLoading || !aiMessage.trim()}
+                  className="p-3 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-white disabled:opacity-50 hover:from-purple-700 hover:to-blue-700 transition-all"
+                >
+                  <Send size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Floating Button */}
+      <motion.button
+        onClick={() => setIsChatOpen(!isChatOpen)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className="w-14 h-14 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full shadow-lg flex items-center justify-center text-white hover:shadow-xl transition-all"
+      >
+        <MessageSquare size={24} />
+        {getUnreadCount() > 0 && (
+          <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold">
+            {getUnreadCount()}
+          </div>
+        )}
+      </motion.button>
+    </div>
+  );
+
+  // --- MAIN RETURN ---
+  return (
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900" style={{ fontFamily: 'var(--font-family)' }}>
+      <Sidebar />
+      <Dashboard />
+      <NotificationDropdown />
+      <CourseModal />
+      <FloatingChat />
+    </div>
+  );
+};
+
+export default App;
                   <Bell size={32} className="mx-auto mb-2 opacity-20" />
                   <p>No notifications</p>
                 </div>
