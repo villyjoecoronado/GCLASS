@@ -335,6 +335,22 @@ const injectProfessionalStyles = () => {
     }
 
     /* Animations */
+    @keyframes slideDownFadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(-20px) scale(0.95); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(-10px) scale(0.95); }
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -482,6 +498,7 @@ const App = () => {
   // Used State Variables for Google Classroom Layout
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isClosingNotifications, setIsClosingNotifications] = useState(false);
   const [showCourseModal, setShowCourseModal] = useState(false);
   const [selectedCourseDetail, setSelectedCourseDetail] = useState(null);
   const [courseTab, setCourseTab] = useState('overview');
@@ -707,6 +724,15 @@ const App = () => {
 
   const getPendingTasksCount = () => {
     return tasks.filter(task => !task.completed).length;
+  };
+
+  // Smooth close notifications function
+  const handleCloseNotifications = () => {
+    setIsClosingNotifications(true);
+    setTimeout(() => {
+      setShowNotifications(false);
+      setIsClosingNotifications(false);
+    }, 300);
   };
 
   // Search Functions
@@ -2445,8 +2471,17 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                     <BookOpen size={18} className="text-white" />
                   </div>
                   <div>
-                    <h1 className="heading-medium" style={{ color: 'var(--color-primary)' }}>EduPulse Classroom</h1>
-                    <p className="caption-text text-muted" style={{ color: 'var(--color-muted)' }}>BSIT 3J • {currentYear}</p>
+                    {activeSubject ? (
+                      <>
+                        <h1 className="heading-medium" style={{ color: 'var(--color-primary)' }}>Classroom</h1>
+                        <p className="caption-text text-muted" style={{ color: 'var(--color-muted)' }}>{activeSubject.code} • {activeSubject.section}</p>
+                      </>
+                    ) : (
+                      <>
+                        <h1 className="heading-medium" style={{ color: 'var(--color-primary)' }}>EduPulse Classroom</h1>
+                        <p className="caption-text text-muted" style={{ color: 'var(--color-muted)' }}>BSIT 3J • {currentYear}</p>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -2479,7 +2514,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
               
               {/* Notifications */}
               <button 
-                onClick={() => setShowNotifications(!showNotifications)}
+                onClick={() => showNotifications ? handleCloseNotifications() : setShowNotifications(true)}
                 className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
               >
                 <Bell size={20} className="text-gray-600" />
@@ -2499,9 +2534,50 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
           </div>
         </header>
 
+        {/* Sub-Navigation Tabs - Only show when subject is active */}
+        {activeSubject && (
+          <div className="border-b transition-all duration-300" 
+               style={{ backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff', borderColor: isDarkMode ? '#333333' : '#e0e0e0' }}>
+            <div className="flex justify-center items-center h-14 px-6">
+              <div className="flex gap-8 items-center">
+                <button 
+                  className={`px-4 py-2 text-sm font-medium transition-all duration-200 border-b-2 ${
+                    view === 'stream' 
+                      ? 'text-blue-600 border-blue-600' 
+                      : 'text-gray-500 border-transparent hover:text-gray-700'
+                  }`}
+                  onClick={() => setView('stream')}
+                >
+                  Stream
+                </button>
+                <button 
+                  className={`px-4 py-2 text-sm font-medium transition-all duration-200 border-b-2 ${
+                    view === 'classwork' 
+                      ? 'text-blue-600 border-blue-600' 
+                      : 'text-gray-500 border-transparent hover:text-gray-700'
+                  }`}
+                  onClick={() => setView('classwork')}
+                >
+                  Classwork
+                </button>
+                <button 
+                  className={`px-4 py-2 text-sm font-medium transition-all duration-200 border-b-2 ${
+                    view === 'people' 
+                      ? 'text-blue-600 border-blue-600' 
+                      : 'text-gray-500 border-transparent hover:text-gray-700'
+                  }`}
+                  onClick={() => setView('people')}
+                >
+                  People
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
           {/* MAIN CONTENT */}
           <div className="flex-1 flex overflow-hidden transition-all duration-300"
-               style={{ backgroundColor: 'var(--bg-main)' }}>
+               style={{ backgroundColor: activeSubject ? '#f8f9fa' : 'var(--bg-main)' }}>
             {/* Sidebar */}
             <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 border-r transition-transform duration-300 mt-16 lg:mt-0`}
                   style={{ backgroundColor: 'var(--sidebar-bg)', borderColor: 'var(--border-light)' }}>
@@ -2678,52 +2754,37 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                 {activeNav === 'Home' && activeSubject && (
                   <div className="animate-in slide-in-from-right-12 duration-700">
                     {/* Green Banner */}
-                    <div className={`${activeSubject.color} h-60 p-8 flex flex-col justify-end text-left relative overflow-hidden`}>
-                      <div className="absolute top-0 right-0 p-5 opacity-10 rotate-12 scale-[2]">
-                        <Layers size={100} className="text-white" />
-                      </div>
-                      <div className="max-w-7xl">
-                        <h2 className="text-5xl lg:text-6xl font-black italic uppercase tracking-tighter text-white mb-2 drop-shadow-2xl" 
-                            style={{ 
-                              flexWrap: 'wrap',
-                              paddingRight: '60px',
-                              lineHeight: 1.1
-                            }}>
-                          {activeSubject.code} - {activeSubject.title}
-                        </h2>
-                        <div className="flex items-center gap-6">
-                          <p className="text-white font-black text-sm uppercase tracking-[0.4em] opacity-90">{activeSubject.section} • Prof. {activeSubject.professor}</p>
-                          <div className="h-6 w-px bg-white/20"></div>
-                          <p className="text-white font-black text-[10px] uppercase tracking-widest opacity-70 italic">{activeSubject.room} • {activeSubject.sched}</p>
+                    <div className="mx-6 mt-6">
+                      <div className={`${activeSubject.color} rounded-2xl p-8 flex flex-col justify-end text-left relative overflow-hidden h-60`}>
+                        <div className="absolute top-0 right-0 p-5 opacity-10 rotate-12 scale-[2]">
+                          <Layers size={100} className="text-white" />
+                        </div>
+                        <div className="max-w-7xl">
+                          <h2 className="text-5xl lg:text-6xl font-black italic uppercase tracking-tighter text-white mb-2 drop-shadow-2xl flex-shrink-0" 
+                              style={{ 
+                                flexWrap: 'wrap',
+                                wordBreak: 'break-word',
+                                maxWidth: '100%',
+                                paddingRight: '60px',
+                                lineHeight: 1.1
+                              }}>
+                            {activeSubject.code} - {activeSubject.title}
+                          </h2>
+                          <div className="flex items-center gap-6">
+                            <p className="text-white font-black text-sm uppercase tracking-[0.4em] opacity-90">{activeSubject.section} • Prof. {activeSubject.professor}</p>
+                            <div className="h-6 w-px bg-white/20"></div>
+                            <p className="text-white font-black text-[10px] uppercase tracking-widest opacity-70 italic">{activeSubject.room} • {activeSubject.sched}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="max-w-7xl mx-auto p-6 grid grid-cols-12 gap-5">
+                    <div className="max-w-7xl mx-auto px-6 grid grid-cols-12 gap-5">
                       {/* Left Sidebar */}
                       <div className="col-span-12 lg:col-span-4 space-y-6">
-                        {/* Top Tabs */}
-                        <div className="rounded-2xl border shadow-xl p-4 mb-6 transition-all duration-300"
-                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
-                          <div className="flex space-x-1 mb-6">
-                            <button className="flex-1 py-3 px-4 text-center font-black text-[10px] uppercase tracking-widest border-b-2 pb-2"
-                                    style={{ borderBottomColor: 'var(--accent)', color: 'var(--color-primary)' }}>
-                              STREAM
-                            </button>
-                            <button className="flex-1 py-3 px-4 text-center font-medium text-[10px] uppercase tracking-widest border-b-2 pb-2"
-                                    style={{ borderBottomColor: 'transparent', color: 'var(--color-secondary)' }}>
-                              CLASSWORK
-                            </button>
-                            <button className="flex-1 py-3 px-4 text-center font-medium text-[10px] uppercase tracking-widest border-b-2 pb-2"
-                                    style={{ borderBottomColor: 'transparent', color: 'var(--color-secondary)' }}>
-                              PEOPLE
-                            </button>
-                          </div>
-                        </div>
-
                         {/* Meet Card */}
-                        <div className="rounded-2xl border shadow-xl p-6 transition-all duration-300"
-                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                        <div className="bg-white rounded-2xl border shadow-xl p-6 transition-all duration-300"
+                             style={{ borderColor: isDarkMode ? '#333333' : '#e0e0e0' }}>
                           <h4 className="text-[12px] font-black uppercase mb-6 tracking-[0.2em] flex items-center gap-3"
                               style={{ color: 'var(--accent)' }}>
                             <Video size={18} className="mr-2" />
@@ -2755,8 +2816,8 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                         </div>
 
                         {/* Instructor Info */}
-                        <div className="rounded-3xl border p-8 transition-all duration-300"
-                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                        <div className="bg-white rounded-3xl border p-8 transition-all duration-300"
+                             style={{ borderColor: isDarkMode ? '#333333' : '#e0e0e0' }}>
                           <h4 className="text-[12px] font-black uppercase mb-6 tracking-widest" style={{ color: 'var(--color-muted)' }}>Instructor Info</h4>
                           <div className="flex items-center gap-4 mb-6">
                             <div className="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-lg italic shadow-inner transition-all duration-300"
@@ -2778,8 +2839,8 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                       {/* Main Feed */}
                       <div className="col-span-12 lg:col-span-8 space-y-8">
                         {/* New Announcement Bar */}
-                        <div className="rounded-2xl border shadow-xl p-4 mb-8 transition-all duration-300"
-                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                        <div className="bg-white rounded-2xl border shadow-xl p-4 mb-8 transition-all duration-300"
+                             style={{ borderColor: isDarkMode ? '#333333' : '#e0e0e0' }}>
                           <div className="flex items-center gap-5 mb-8">
                             <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black shadow-lg transition-all duration-300"
                                  style={{ backgroundColor: 'var(--accent)' }}>
@@ -2805,8 +2866,8 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                         </div>
 
                         {/* Announcement Post */}
-                        <div className="rounded-2xl border shadow-xl p-8 relative overflow-hidden transition-all duration-300"
-                             style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}>
+                        <div className="bg-white rounded-2xl border shadow-xl p-8 relative overflow-hidden transition-all duration-300"
+                             style={{ borderColor: isDarkMode ? '#333333' : '#e0e0e0' }}>
                           <div className="absolute top-0 right-0 p-4 opacity-5">
                             <MessageSquare size={80} />
                           </div>
@@ -2825,7 +2886,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
                                  borderColor: 'var(--accent)',
                                  backgroundColor: isDarkMode ? 'rgba(187, 134, 252, 0.1)' : 'var(--bg-tertiary)'
                                }}>
-                            <p className="text-base font-black leading-relaxed italic" style={{ color: 'var(--accent)' }}>
+                            <p className="text-base font-black leading-relaxed italic break-words" style={{ color: 'var(--accent)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                               "{activeSubject.announcement}"
                             </p>
                           </div>
@@ -2948,18 +3009,34 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
           </div>
 
           {/* Notification Dropdown */}
-          {showNotifications && (
-            <div className="absolute top-16 right-4 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="heading-medium">Notifications</h3>
+          {(showNotifications || isClosingNotifications) && (
+            <div 
+              className="absolute top-16 right-4 w-80 rounded-lg shadow-lg border z-50 transition-all duration-300"
+              style={{ 
+                backgroundColor: isDarkMode ? '#1f1f1f' : '#FFFFFF',
+                borderColor: isDarkMode ? '#374151' : '#E5E7EB',
+                animation: isClosingNotifications 
+                  ? 'fadeOut 0.3s ease-out forwards' 
+                  : 'slideDownFadeIn 0.3s ease-out',
+                opacity: isClosingNotifications ? 0 : 1,
+                transform: isClosingNotifications 
+                  ? 'translateY(-10px) scale(0.95)' 
+                  : 'translateY(0) scale(1)'
+              }}>
+              <div className="p-4 border-b transition-colors duration-300"
+                   style={{ borderColor: isDarkMode ? '#374151' : '#E5E7EB' }}>
+                <h3 className="heading-medium" style={{ color: isDarkMode ? '#FFFFFF' : '#111827' }}>Notifications</h3>
               </div>
               <div className="max-h-96 overflow-y-auto">
                 {notifications.length > 0 ? (
                   notifications.map((notification) => (
-                    <div key={notification.id} className="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-                      <h4 className="body-text">{notification.title}</h4>
-                      <p className="body-text text-secondary mt-1">{notification.message}</p>
-                      <p className="caption-text text-muted mt-2">{notification.time}</p>
+                    <div key={notification.id} className="p-4 cursor-pointer transition-colors duration-300"
+                         style={{ 
+                           borderBottomColor: isDarkMode ? '#374151' : '#E5E7EB'
+                         }}>
+                      <h4 className="body-text" style={{ color: isDarkMode ? '#FFFFFF' : '#111827' }}>{notification.title}</h4>
+                      <p className="body-text text-secondary mt-1" style={{ color: isDarkMode ? '#E5E7EB' : '#6B7280' }}>{notification.message}</p>
+                      <p className="caption-text text-muted mt-2" style={{ color: isDarkMode ? '#B0B0B0' : '#9CA3AF' }}>{notification.time}</p>
                     </div>
                   ))
                 ) : (
