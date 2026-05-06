@@ -1256,50 +1256,6 @@ const App = () => {
   );
 };
 
-export default App;
-                  <Bell size={32} className="mx-auto mb-2 opacity-20" />
-                  <p>No notifications</p>
-                </div>
-              ) : (
-                notifications.map(notification => (
-                  <motion.div
-                    key={notification.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    onClick={() => onNotificationClick(notification)}
-                    className={`p-4 border-b cursor-pointer transition-colors ${
-                      darkMode ? 'border-slate-700 hover:bg-slate-700' : 'border-gray-50 hover:bg-gray-50'
-                    } ${!notification.read ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''}`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg ${
-                        notification.type === 'assignment' ? 'bg-blue-100 text-blue-600' :
-                        notification.type === 'grade' ? 'bg-green-100 text-green-600' :
-                        'bg-gray-100 text-gray-600'
-                      }`}>
-                        {notification.type === 'assignment' ? <FileText size={16} /> :
-                         notification.type === 'grade' ? <CheckSquare size={16} /> :
-                         <Bell size={16} />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 dark:text-white text-sm">{notification.title}</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{notification.message}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">{notification.time}</p>
-                      </div>
-                      {!notification.read && (
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    );
-  };
-
   // Floating Chat Component (Meta AI-style)
   const FloatingChat = ({ show, onToggle, chatTab, onTabChange, aiMessage, onAiMessageChange, onSendAiMessage, aiResponse, isAiLoading }) => {
     return (
@@ -3499,7 +3455,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
         </div>
       )}
     </div>
-  );
-};
+  )
 
-export default App;   
+
+export default App;
