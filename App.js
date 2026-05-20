@@ -8,7 +8,7 @@ import {
   MessageSquare, FileText, Camera, Video, Moon, Sun, TrendingUp, 
   Users, CheckCircle, Activity, Zap, Plus, Award, Layers, 
   ChevronRight, User, Filter, ChevronLeft, PlusCircle, Paperclip,
-  Share2, MoreVertical, Folder, ImageIcon, AlertCircle, Cpu
+  Share2, MoreVertical, Folder, ImageIcon, AlertCircle, Cpu, Zap as ZapIcon
 } from 'lucide-react';
 
 // --- PREMIUM UI CSS-IN-JS (Bubbly Typography + Perfect Dark Mode Background Fix) ---
@@ -136,33 +136,6 @@ const injectProfessionalStyles = () => {
       font-family: var(--font-family) !important;
     }
 
-    /* Subject banner font fixes */
-    .course-card .course-title {
-      font-size: 14px !important;
-      line-height: 1.2 !important;
-      font-weight: 600 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    .course-card .course-code {
-      font-size: 12px !important;
-      line-height: 1.1 !important;
-      font-weight: 500 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    /* Mobile optimization */
-    @media (max-width: 768px) {
-      .course-card .course-title {
-        font-size: 12px !important;
-      }
-      .course-card .course-code {
-        font-size: 10px !important;
-      }
-    }
-
     p {
       font-family: var(--font-family) !important;
       font-weight: var(--font-weight-body);
@@ -181,154 +154,129 @@ const injectProfessionalStyles = () => {
       color: var(--color-muted) !important;
     }
 
-    .heading-large {
-      font-size: 28px;
-      font-weight: var(--font-weight-heading);
-      letter-spacing: var(--letter-spacing-tight);
-      line-height: var(--line-height-heading);
-      color: var(--color-primary) !important;
+    /* Google Classroom Sidebar Styles - TASK 1 REFACTORED */
+    .sidebar-pill-active {
+      background-color: #e0f2fe;
+      color: #0369a1;
+      font-weight: 600;
     }
 
-    .heading-medium {
-      font-size: 24px;
-      font-weight: var(--font-weight-heading);
-      letter-spacing: var(--letter-spacing-tight);
-      line-height: var(--line-height-heading);
-      color: var(--color-primary) !important;
+    body.dark-mode .sidebar-pill-active {
+      background-color: #082f49;
+      color: #06b6d4;
     }
 
-    .body-text {
-      font-size: 16px;
-      font-weight: var(--font-weight-body);
-      line-height: var(--line-height-body);
-      letter-spacing: var(--letter-spacing-normal);
-      color: var(--color-primary) !important;
-    }
-
-    .caption-text {
-      font-size: 14px;
-      font-weight: var(--font-weight-body);
-      line-height: var(--line-height-body);
-      letter-spacing: var(--letter-spacing-normal);
-      color: var(--color-secondary) !important;
-    }
-
-    /* Google Classroom Sidebar Styles */
-    .sidebar-item {
-      minHeight: 60px;
-      padding: 12px 16px;
-      margin: 2px 8px;
-      border-radius: 25px;
-      transition: all 0.2s ease;
+    .sidebar-menu-item {
+      padding: 10px 16px;
+      margin: 4px 8px;
+      border-radius: 20px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 12px;
-      position: relative;
-    }
-
-    .sidebar-item:hover {
-      background-color: rgba(0,0,0,0.05);
-    }
-    
-    body.dark-mode .sidebar-item:hover {
-      background-color: rgba(255,255,255,0.05);
-    }
-
-    .sidebar-item.active {
-      background-color: #e8f0fe;
-      border: 1px solid #c2e7ff;
-      font-weight: 600;
-      margin: 2px 4px;
-    }
-
-    .sidebar-label {
       font-size: 14px;
-      font-weight: 600;
-      color: var(--color-primary);
-    }
-
-    .sidebar-sublabel {
-      font-size: 12px;
       font-weight: 500;
       color: var(--color-secondary);
-      margin-top: 2px;
     }
 
-    .sidebar-icon {
-      width: 20px;
-      height: 20px;
-      color: var(--color-secondary);
-      flex-shrink: 0;
+    .sidebar-menu-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
-    .sidebar-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 20px;
+    .sidebar-menu-item.active {
+      background-color: #e0f2fe;
+      color: #0369a1;
+      font-weight: 600;
+    }
+
+    body.dark-mode .sidebar-menu-item.active {
+      background-color: #082f49;
+      color: #06b6d4;
+    }
+
+    .subject-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 600;
-      color: white;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    .sidebar-separator {
-      height: 1px;
-      background-color: var(--border-light);
-      margin: 8px 16px;
-    }
-
-    .sidebar-section-title {
       font-size: 12px;
-      font-weight: 600;
-      color: var(--color-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: bold;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Stream Tab Navigation - TASK 2 */
+    .stream-nav-tab {
       padding: 8px 16px;
-    }
-
-    .glass {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .glass-header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .premium-card {
-      background: var(--card-bg);
-      border-radius: 1rem;
-      border: 1px solid var(--border-light);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-    }
-
-    /* Course cards */
-    .course-card {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-bottom: 3px solid transparent;
       cursor: pointer;
-      position: relative;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      color: var(--color-secondary);
+    }
+
+    .stream-nav-tab.active {
+      background: var(--gradient-electric);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      border-bottom-color: #0ea5e9;
+      color: #0ea5e9;
+    }
+
+    body.dark-mode .stream-nav-tab.active {
+      color: #0ea5e9;
+    }
+
+    .stream-nav-tab:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Stream Announcement Card */
+    .stream-post-card {
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      background-color: var(--card-bg);
       overflow: hidden;
+      transition: all 0.3s ease;
     }
 
-    .course-card:hover {
-      transform: translateY(-4px);
+    .stream-post-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
     }
 
-    /* Sidebar activation animation fixes */
-    .sidebar-item {
+    body.dark-mode .stream-post-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Micro-interactions - TASK 3 */
+    .bouncy-button {
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .bouncy-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .bouncy-button:active {
+      transform: scale(0.98);
+    }
+
+    .rounded-premium {
+      border-radius: 20px;
+    }
+
+    .rounded-premium-lg {
+      border-radius: 24px;
     }
 
     /* Custom Scrollbar */
@@ -344,13 +292,6 @@ const injectProfessionalStyles = () => {
     ::-webkit-scrollbar-thumb {
       background: var(--border-light);
       border-radius: 4px;
-    }
-
-    /* Text truncation */
-    .truncate {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .line-clamp-2 {
@@ -372,17 +313,8 @@ const injectProfessionalStyles = () => {
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes slideInFromRight {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
     .animate-fade-in {
       animation: fadeIn 0.3s ease-out;
-    }
-
-    .animate-slide-in-from-right {
-      animation: slideInFromRight 0.5s ease-out;
     }
   `;
   document.head.appendChild(style);
@@ -399,6 +331,7 @@ const App = () => {
   // Navigation State
   const [activeNav, setActiveNav] = useState('Home');
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [activeStreamTab, setActiveStreamTab] = useState('Stream');
   
   // Dark mode state
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -413,16 +346,12 @@ const App = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showCourseModal, setShowCourseModal] = useState(false);
   const [selectedCourseDetail, setSelectedCourseDetail] = useState(null);
-  const [courseTab, setCourseTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [aiMessage, setAiMessage] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(19);
-  const [calendarMonth, setCalendarMonth] = useState("May 2026");
-  const [currentYear] = useState(new Date().getFullYear());
   
   // Data States
   const [tasks, setTasks] = useState([
@@ -499,7 +428,6 @@ const App = () => {
   const handleCourseClick = (course) => {
     setSelectedCourseDetail(course);
     setShowCourseModal(true);
-    setCourseTab('overview');
   };
 
   const handleSubjectSelect = (course) => {
@@ -597,19 +525,25 @@ const App = () => {
   };
 
   // =========================================================================
-  // --- SIDEBAR COMPONENT: HIGH CONTRAST ACTIVE LINK FIXED ---
+  // --- TASK 1: REFACTORED SIDEBAR (GOOGLE CLASSROOM STYLE) ---
   // =========================================================================
   const Sidebar = () => {
     const navigationItems = [
-      { id: 'Home', name: 'Dashboard', icon: Home },
-      { id: 'Courses', name: 'Courses', icon: BookOpen },
-      { id: 'Calendar', name: 'Calendar', icon: Calendar },
-      { id: 'Tasks', name: 'To-do Tasks', icon: ClipboardList },
-      { id: 'Settings', name: 'Settings', icon: Settings },
+      { id: 'Home', name: 'Home', icon: Home, label: 'Home' },
+      { id: 'Calendar', name: 'Calendar', icon: Calendar, label: 'Calendar' },
+      { id: 'Chat', name: 'Gemini', icon: ZapIcon, label: 'Gemini' },
     ];
 
-    // Separate courses to list them under "Enrolled"
-    const activeEnrolledCourses = courses || [];
+    const colorMap = {
+      'bg-green-600': '#16a34a',
+      'bg-blue-600': '#2563eb',
+      'bg-slate-600': '#475569',
+      'bg-cyan-700': '#0891b2',
+      'bg-sky-800': '#0c4a6e',
+      'bg-teal-700': '#0f766e',
+      'bg-blue-500': '#3b82f6',
+      'bg-blue-700': '#1d4ed8',
+    };
 
     return (
       <>
@@ -623,108 +557,144 @@ const App = () => {
         <motion.aside
           initial={false}
           animate={{ x: isSidebarOpen ? 0 : -280 }}
-          className="fixed left-0 top-0 h-full w-72 border-r z-50 lg:translate-x-0 lg:static lg:z-auto transition-colors duration-300"
+          className="fixed left-0 top-0 h-full w-72 border-r z-50 lg:translate-x-0 lg:static lg:z-auto transition-colors duration-300 flex flex-col"
           style={{ backgroundColor: 'var(--sidebar-bg)', borderColor: 'var(--border-light)' }}
         >
-          <div className="flex flex-col h-full">
-            {/* Nav links rendering loop */}
-            <nav className="flex-1 p-4 space-y-1">
-              {navigationItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeNav === item.id;
-                
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
+          {/* Main Navigation */}
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+            {/* Top Menu Items */}
+            {navigationItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = (item.id === 'Chat' && isChatOpen) || activeNav === item.id;
+              
+              return (
+                <motion.button
+                  key={item.id}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    if (item.id === 'Chat') {
+                      setIsChatOpen(!isChatOpen);
+                    } else {
                       setActiveNav(item.id);
+                    }
+                    setSidebarOpen(false);
+                  }}
+                  className={`sidebar-menu-item w-full border-none ${isActive ? 'active' : ''}`}
+                  style={{
+                    backgroundColor: isActive ? '#e0f2fe' : 'transparent',
+                    color: isActive ? '#0369a1' : 'var(--color-secondary)',
+                  }}
+                >
+                  <Icon size={20} />
+                  <span className="font-medium text-sm">{item.label}</span>
+                </motion.button>
+              );
+            })}
+
+            {/* Enrolled Courses Section Header */}
+            <div className="pt-4 pb-2">
+              <p className="px-4 text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+                Enrolled
+              </p>
+            </div>
+
+            {/* Enrolled Courses List */}
+            <div className="space-y-1">
+              {courses.map((course) => {
+                const bgCircleColor = colorMap[course.color] || '#4b5563';
+                const isActive = activeItem === course.id;
+
+                return (
+                  <motion.button
+                    key={course.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      handleSubjectSelect(course);
                       setSidebarOpen(false);
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-3 transition-all border-none cursor-pointer text-left font-semibold text-sm hover:scale-[1.02] hover:shadow-lg"
+                    className={`sidebar-menu-item w-full border-none group`}
                     style={{
-                      backgroundColor: isActive 
-                        ? 'var(--gradient-electric)' 
-                        : 'transparent',
-                      color: isActive 
-                        ? '#ffffff' 
-                        : 'var(--color-primary)',
-                      borderRadius: '16px',
-                      transform: isActive ? 'scale(1.02)' : 'scale(1)',
+                      backgroundColor: isActive ? '#e0f2fe' : 'transparent',
+                      color: isActive ? '#0369a1' : 'var(--color-secondary)',
                     }}
                   >
-                    <Icon className="w-5 h-5" style={{ color: isActive ? '#ffffff' : 'var(--color-secondary)' }} />
-                    <span>{item.name}</span>
-                  </button>
+                    {/* Circular Badge */}
+                    <motion.div 
+                      whileHover={{ scale: 1.1 }}
+                      className="subject-badge"
+                      style={{ backgroundColor: bgCircleColor }}
+                    >
+                      {course.code.charAt(0)}
+                    </motion.div>
+                    {/* Course Info */}
+                    <div className="overflow-hidden flex-1 text-left">
+                      <p className="truncate text-sm font-semibold m-0 leading-tight">
+                        {course.code}
+                      </p>
+                      <p className="text-xs truncate m-0 opacity-70">
+                        {course.section}
+                      </p>
+                    </div>
+                  </motion.button>
                 );
               })}
-
-              {/* ENROLLED / SUBJECTS LIST SECTION (Google Classroom Matching Layout) */}
-              <div className="mt-4">
-                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors duration-300" style={{ color: 'var(--color-muted)' }}>
-                  Enrolled Courses
-                </div>
-                <div className="mt-1 space-y-1">
-                  {activeEnrolledCourses.map((course) => {
-                    // Generate a miniature color circle indicator matching the main card theme color
-                    const colorMap = {
-                      'bg-green-600': '#16a34a',
-                      'bg-blue-600': '#2563eb',
-                      'bg-slate-600': '#475569',
-                      'bg-cyan-700': '#0891b2',
-                      'bg-sky-800': '#0c4a6e',
-                      'bg-teal-700': '#0f766e',
-                      'bg-blue-500': '#3b82f6',
-                      'bg-blue-700': '#1d4ed8',
-                    };
-                    const bgCircleColor = colorMap[course.color] || '#4b5563';
-                    const isActive = activeItem === course.id;
-
-                    return (
-                      <button
-                        key={course.id}
-                        onClick={() => {
-                          handleSubjectSelect(course);
-                          setSidebarOpen(false);
-                        }}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-sm font-medium hover:scale-[1.02] hover:shadow-md transition-all duration-150 group border-none cursor-pointer"
-                        style={{
-                          backgroundColor: isActive 
-                            ? 'var(--gradient-electric)' 
-                            : 'transparent',
-                          color: isActive 
-                            ? '#ffffff' 
-                            : 'var(--color-primary)',
-                        }}
-                      >
-                        {/* Miniature Colored Circle with Initial letter */}
-                        <div 
-                          className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white shadow-sm shrink-0 group-hover:scale-110 transition-transform"
-                          style={{ backgroundColor: bgCircleColor }}
-                        >
-                          {course.code.charAt(0)}
-                        </div>
-                        {/* Subject Code and Section Row */}
-                        <div className="overflow-hidden flex-1">
-                          <p className="truncate font-semibold m-0 leading-tight" style={{ color: isActive ? '#ffffff' : 'var(--color-primary)' }}>
-                            {course.code}
-                          </p>
-                          <p className="text-[11px] truncate m-0 opacity-70" style={{ color: isActive ? '#ffffff' : 'var(--color-muted)' }}>
-                            {course.section}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </nav>
-
-            <div className="p-4 border-t" style={{ borderColor: 'var(--border-light)' }}>
-              <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all border-none cursor-pointer font-bold text-sm">
-                <LogOut className="w-5 h-5" />
-                <span>Sign Out</span>
-              </button>
             </div>
+
+            {/* Additional Items */}
+            <div className="pt-4 pb-2">
+              <p className="px-4 text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+                Other
+              </p>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setActiveNav('Tasks');
+                setSidebarOpen(false);
+              }}
+              className={`sidebar-menu-item w-full border-none`}
+              style={{
+                backgroundColor: activeNav === 'Tasks' ? '#e0f2fe' : 'transparent',
+                color: activeNav === 'Tasks' ? '#0369a1' : 'var(--color-secondary)',
+              }}
+            >
+              <CheckSquare size={20} />
+              <span className="font-medium text-sm">To-do</span>
+            </motion.button>
+          </nav>
+
+          {/* Bottom Settings Section */}
+          <div className="p-4 border-t space-y-2" style={{ borderColor: 'var(--border-light)' }}>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setActiveNav('Settings');
+                setSidebarOpen(false);
+              }}
+              className={`sidebar-menu-item w-full border-none`}
+              style={{
+                backgroundColor: activeNav === 'Settings' ? '#e0f2fe' : 'transparent',
+                color: activeNav === 'Settings' ? '#0369a1' : 'var(--color-secondary)',
+              }}
+            >
+              <Settings size={20} />
+              <span className="font-medium text-sm">Settings</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleLogout}
+              className="sidebar-menu-item w-full border-none bg-red-500/10 text-red-600 hover:bg-red-500/20"
+            >
+              <LogOut size={20} />
+              <span className="font-medium text-sm">Sign Out</span>
+            </motion.button>
           </div>
         </motion.aside>
       </>
@@ -732,288 +702,255 @@ const App = () => {
   };
 
   // =========================================================================
-  // --- SUB-VIEW RESTORATION: CALENDAR & TASKS WITH PERFECT DARK MODE ---
+  // --- TASK 2: SUBJECT VIEW WITH RTD BUTTON & STREAM LAYOUT ---
   // =========================================================================
-
-  const CalendarView = () => {
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const currentMonth = "May 2026";
-    
-    // Simple mock matrix for rendering days
-    const calendarDays = Array.from({ length: 31 }, (_, i) => i + 1);
-
+  const SubjectStreamView = ({ course }) => {
     return (
-      <div className="p-6 overflow-auto flex-1 transition-colors duration-300" style={{ backgroundColor: 'var(--bg-main)' }}>
-        <div className="mb-6">
-          <button
-            onClick={() => setActiveNav('Home')}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border-none cursor-pointer text-sm font-semibold hover:scale-105 transition-all duration-200"
-            style={{ 
-              background: 'var(--gradient-electric)', 
-              color: '#ffffff',
-              boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)'
-            }}
-          >
-            ← Return to Dashboard
-          </button>
-        </div>
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold m-0" style={{ color: 'var(--color-primary)' }}>Academic Calendar</h2>
-          <p className="m-0 mt-1 text-sm" style={{ color: 'var(--color-secondary)' }}>Track your class schedules and events</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <motion.div 
-            whileHover={{ translateY: -2 }}
-            transition={{ duration: 0.2 }}
-            className="lg:col-span-2 rounded-2xl border p-6 shadow-sm hover:shadow-lg transition-all duration-200"
-            style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}
-          >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold m-0" style={{ color: 'var(--color-primary)' }}>{currentMonth}</h3>
-            </div>
-            
-            <div className="grid grid-cols-7 gap-2 text-center font-bold text-xs mb-4" style={{ color: 'var(--color-muted)' }}>
-              {daysOfWeek.map(day => <div key={day}>{day}</div>)}
-            </div>
-
-            <div className="grid grid-cols-7 gap-2">
-              {calendarDays.map(day => (
-                <motion.div 
-                  key={day} 
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-3 border rounded-xl text-center text-sm font-medium relative min-h-[50px] flex flex-col justify-between cursor-pointer transition-all duration-200"
-                  style={{ borderColor: 'var(--border-light)', color: 'var(--color-primary)' }}
-                >
-                  <span>{day}</span>
-                  {day === 19 && (
-                    <div className="w-2 h-2 rounded-full mx-auto mt-1" title="Today" style={{ background: 'var(--gradient-electric)' }} />
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          <div className="space-y-4">
-            <motion.div 
-              whileHover={{ translateY: -2 }}
-              transition={{ duration: 0.2 }}
-              className="rounded-2xl border p-4 shadow-sm hover:shadow-lg transition-all duration-200"
-              style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}
-            >
-              <h3 className="text-sm font-bold mb-3" style={{ color: 'var(--color-primary)' }}>Schedules Today</h3>
-              <p className="text-xs m-0" style={{ color: 'var(--color-muted)' }}>No synchronous sessions recorded for today.</p>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const TasksView = () => {
-    return (
-      <div className="p-6 overflow-auto flex-1 transition-colors duration-300" style={{ backgroundColor: 'var(--bg-main)' }}>
-        <div className="mb-6">
-          <button
-            onClick={() => setActiveNav('Home')}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border-none cursor-pointer text-sm font-semibold hover:scale-105 transition-all duration-200"
-            style={{ 
-              background: 'var(--gradient-electric)', 
-              color: '#ffffff',
-              boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)'
-            }}
-          >
-            ← Return to Dashboard
-          </button>
-        </div>
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold m-0" style={{ color: 'var(--color-primary)' }}>Tasks & Assignments</h2>
-          <p className="m-0 mt-1 text-sm" style={{ color: 'var(--color-secondary)' }}>Manage your academic tasks and deadlines</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-4">
-            <motion.div 
-              whileHover={{ translateY: -2 }}
-              transition={{ duration: 0.2 }}
-              className="rounded-2xl border p-6 shadow-sm hover:shadow-lg transition-all duration-200"
-              style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold m-0 text-base" style={{ color: 'var(--color-primary)' }}>Pending Tasks</h3>
-                <span className="text-xs px-2.5 py-1 rounded-full font-bold" style={{ background: 'var(--gradient-electric)', color: '#ffffff' }}>Active</span>
-              </div>
-              
-              <div className="space-y-3">
-                {tasks && tasks.length > 0 ? (
-                  tasks.map(task => (
-                    <motion.div 
-                      key={task.id}
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.2 }}
-                      className="p-4 border rounded-xl flex items-center justify-between cursor-pointer transition-all duration-200 hover:shadow-md"
-                      style={{ borderColor: 'var(--border-light)' }}
-                    >
-                      <div>
-                        <h4 className="text-sm font-bold m-0" style={{ color: 'var(--color-primary)' }}>{task.title}</h4>
-                        <p className="text-xs m-0 mt-1" style={{ color: 'var(--color-muted)' }}>Due: {task.dueDate}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs px-2 py-0.5 rounded-md font-medium" style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--color-secondary)' }}>
-                          {task.priority}
-                        </span>
-                      </div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <p className="text-sm text-center py-6" style={{ color: 'var(--color-muted)' }}>Hooray! No pending tasks found.</p>
-                )}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // --- COURSES VIEW ---
-  const CoursesView = () => (
-    <div className="p-6">
-      <div className="mb-6">
-        <button
-          onClick={() => setActiveNav('Home')}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border-none cursor-pointer text-sm font-semibold hover:scale-105 transition-all duration-200 mb-4"
-          style={{ 
-            background: 'var(--gradient-electric)', 
-            color: '#ffffff',
-            boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)'
-          }}
-        >
-          ← Return to Dashboard
-        </button>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>
-          All Courses
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">Browse and manage your enrolled courses</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredCourses.map((course, index) => (
-          <motion.div
-            key={course.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(0,0,0,0.12)' }}
-            onClick={() => handleCourseClick(course)}
-            className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-transparent transition-all"
-          >
-            <div className={`h-24 ${course.color} p-4 relative overflow-hidden`}>
-              <div className="absolute -bottom-4 -right-4 w-16 h-16 rounded-full bg-white/10"></div>
-              <span className="text-white/80 text-xs font-semibold">{course.code}</span>
-              <h3 className="text-white font-bold text-sm mt-1 line-clamp-2">{course.title}</h3>
-            </div>
-            <div className="p-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{course.professor}</p>
-              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                <span>{course.room}</span>
-                <span>{course.progress}% complete</span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-
-  // --- SETTINGS VIEW ---
-  const SettingsView = () => (
-    <div className="p-6">
-      <div className="mb-6">
-        <button
-          onClick={() => setActiveNav('Home')}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border-none cursor-pointer text-sm font-semibold hover:scale-105 transition-all duration-200 mb-4"
-          style={{ 
-            background: 'var(--gradient-electric)', 
-            color: '#ffffff',
-            boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)'
-          }}
-        >
-          ← Return to Dashboard
-        </button>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>
-          Settings
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">Customize your EduPulse experience</p>
-      </div>
-
-      <div className="max-w-2xl space-y-6">
-        {/* Appearance */}
+      <div className="flex-1 overflow-auto flex flex-col" style={{ backgroundColor: 'var(--bg-main)' }}>
+        {/* TASK 2.1: RTD Button Row - SEPARATED & NON-OVERLAPPING */}
         <motion.div 
-          whileHover={{ translateY: -2 }}
-          transition={{ duration: 0.2 }}
-          className="rounded-2xl border p-6 shadow-sm hover:shadow-lg transition-all duration-200"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="sticky top-0 z-20 p-4 border-b" 
           style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}
         >
-          <h3 className="font-bold mb-4" style={{ color: 'var(--color-primary)' }}>Appearance</h3>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium" style={{ color: 'var(--color-primary)' }}>Dark Mode</p>
-              <p className="text-sm" style={{ color: 'var(--color-muted)' }}>Toggle dark theme for better night viewing</p>
-            </div>
-            <button
-              onClick={toggleDarkMode}
-              className={`relative w-14 h-7 rounded-full transition-colors ${isDarkMode ? 'bg-blue-600' : 'bg-gray-300'}`}
-            >
-              <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow transition-transform ${isDarkMode ? 'translate-x-8' : 'translate-x-1'}`}></div>
-            </button>
-          </div>
+          <motion.button
+            whileHover={{ scale: 1.02, x: -4 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              setSelectedCourseDetail(null);
+              setActiveItem(null);
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border-none cursor-pointer text-sm font-semibold transition-all bouncy-button"
+            style={{ 
+              background: 'linear-gradient(135deg, #4f46e5, #0ea5e9)', 
+              color: '#ffffff',
+              boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)'
+            }}
+          >
+            <ChevronLeft size={16} />
+            Return to Dashboard
+          </motion.button>
         </motion.div>
 
-        {/* Account */}
+        {/* TASK 2.2: PREMIUM GRADIENT BANNER */}
         <motion.div 
-          whileHover={{ translateY: -2 }}
-          transition={{ duration: 0.2 }}
-          className="rounded-2xl border p-6 shadow-sm hover:shadow-lg transition-all duration-200"
-          style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-6 rounded-2xl border-none m-4 mb-0 text-white relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #4f46e5, #0ea5e9)' }}
         >
-          <h3 className="font-bold mb-4" style={{ color: 'var(--color-primary)' }}>Account</h3>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ background: 'var(--gradient-electric)' }}>
-                {currentUser ? currentUser.charAt(0).toUpperCase() : 'S'}
-              </div>
+          {/* Decorative Background */}
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
+          <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full"></div>
+
+          {/* Content */}
+          <div className="relative z-10">
+            <div className="flex items-start justify-between mb-3">
               <div>
-                <p className="font-medium" style={{ color: 'var(--color-primary)' }}>{currentUser || 'Student'}</p>
-                <p className="text-sm" style={{ color: 'var(--color-muted)' }}>BSIT 3J • 3rd Year</p>
+                <p className="text-xs font-semibold opacity-90 uppercase tracking-wide m-0">{course.code} • {course.section}</p>
+                <h2 className="text-3xl font-bold mt-2 mb-0 leading-tight">{course.title}</h2>
+              </div>
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                <BookOpen size={24} className="text-white" />
               </div>
             </div>
+            <p className="text-sm opacity-80 m-0">Instructed by {course.professor} • {course.room}</p>
           </div>
         </motion.div>
-      </div>
-    </div>
-  );
 
-  // --- MAIN CONTENT RENDERER ---
-  const renderMainContent = () => {
-    switch(activeNav) {
-      case 'Home':
-        return <DashboardHome />;
-      case 'Courses':
-        return <CoursesView />;
-      case 'Calendar':
-        return <CalendarView />;
-      case 'Tasks':
-        return <TasksView />;
-      case 'Settings':
-        return <SettingsView />;
-      default:
-        return <DashboardHome />;
-    }
+        {/* TASK 2.3: CLASSROOM HORIZONTAL NAV TABS */}
+        <div className="px-4 pt-4 flex gap-0 border-b" style={{ borderColor: 'var(--border-light)' }}>
+          {['Stream', 'Classwork', 'People'].map((tab) => {
+            const isActive = activeStreamTab === tab;
+            return (
+              <motion.button
+                key={tab}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setActiveStreamTab(tab)}
+                className="stream-nav-tab border-none bg-transparent px-4 py-3"
+                style={{
+                  color: isActive ? '#0ea5e9' : 'var(--color-secondary)',
+                  borderBottom: isActive ? '3px solid #0ea5e9' : '3px solid transparent',
+                  fontWeight: isActive ? '700' : '600',
+                }}
+              >
+                {tab}
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* TASK 2.4: TWO-COLUMN LAYOUT - Stream Feed */}
+        <div className="flex-1 overflow-y-auto p-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl">
+            
+            {/* LEFT SIDEBAR: Meet Card + Upcoming Tasks */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="space-y-4 lg:col-span-1"
+            >
+              {/* Meet Integration Card */}
+              <motion.div 
+                whileHover={{ translateY: -4, boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)' }}
+                className="stream-post-card p-4 bouncy-button"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <Video size={20} className="text-white" />
+                  </div>
+                  <h3 className="font-bold text-base m-0" style={{ color: 'var(--color-primary)' }}>Google Meet</h3>
+                </div>
+                <p className="text-xs mb-4 m-0" style={{ color: 'var(--color-muted)' }}>Join the live classroom session</p>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => window.open(course.meetLink, '_blank')}
+                  className="w-full py-2 rounded-2xl text-white font-semibold text-sm border-none cursor-pointer bouncy-button"
+                  style={{ background: 'linear-gradient(135deg, #4f46e5, #0ea5e9)' }}
+                >
+                  Join Now
+                </motion.button>
+              </motion.div>
+
+              {/* Upcoming Tasks Card */}
+              <motion.div 
+                whileHover={{ translateY: -4 }}
+                className="stream-post-card p-4 bouncy-button"
+              >
+                <h3 className="font-bold text-base mb-3 m-0" style={{ color: 'var(--color-primary)' }}>Upcoming</h3>
+                {tasks.slice(0, 2).map(task => (
+                  <div key={task.id} className="mb-3 pb-3 border-b" style={{ borderColor: 'var(--border-light)' }}>
+                    <p className="text-xs font-semibold m-0 line-clamp-2" style={{ color: 'var(--color-secondary)' }}>
+                      {task.title}
+                    </p>
+                    <p className="text-xs m-0 mt-1" style={{ color: 'var(--color-muted)' }}>Due: {task.dueDate}</p>
+                  </div>
+                ))}
+              </motion.div>
+            </motion.div>
+
+            {/* RIGHT PANEL: Stream Feed */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="lg:col-span-2 space-y-4"
+            >
+              {/* Announce Something */}
+              <motion.div 
+                whileHover={{ translateY: -2 }}
+                className="stream-post-card p-4 bouncy-button"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white text-sm font-bold">
+                    {currentUser.charAt(0).toUpperCase()}
+                  </div>
+                  <input 
+                    type="text"
+                    placeholder="Announce something to your class..."
+                    className="flex-1 bg-transparent outline-none text-sm border-none"
+                    style={{ color: 'var(--color-secondary)' }}
+                    readOnly
+                  />
+                </div>
+              </motion.div>
+
+              {/* Announcements Stream */}
+              <div className="space-y-4">
+                {/* Post 1 */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ translateY: -2 }}
+                  className="stream-post-card overflow-hidden bouncy-button"
+                >
+                  {/* Post Header */}
+                  <div className="p-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center text-white text-sm font-bold">
+                          {course.professor.split(' ')[0].charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-bold text-sm m-0" style={{ color: 'var(--color-primary)' }}>Prof. {course.professor}</p>
+                          <p className="text-xs m-0" style={{ color: 'var(--color-muted)' }}>Posted 1 hour ago</p>
+                        </div>
+                      </div>
+                      <button className="p-1 border-none bg-transparent cursor-pointer">
+                        <MoreVertical size={18} style={{ color: 'var(--color-muted)' }} />
+                      </button>
+                    </div>
+                  </div>
+                  {/* Post Body */}
+                  <div className="p-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
+                    <p className="text-sm leading-relaxed m-0" style={{ color: 'var(--color-secondary)' }}>
+                      {course.announcement}
+                    </p>
+                  </div>
+                  {/* Comment Section */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-800/50">
+                    <div className="flex gap-2 items-center text-xs font-semibold mb-3" style={{ color: 'var(--color-muted)' }}>
+                      <Users size={14} />
+                      <span>2 class comments</span>
+                    </div>
+                    {/* Comment Input */}
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="text"
+                        placeholder="Add a comment..."
+                        className="flex-1 px-3 py-2 bg-white dark:bg-gray-700 rounded-full text-xs border-none outline-none"
+                        style={{ color: 'var(--color-primary)' }}
+                      />
+                      <motion.button 
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="p-2 border-none bg-transparent cursor-pointer"
+                        style={{ color: 'var(--color-secondary)' }}
+                      >
+                        <Send size={14} />
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Post 2 */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  whileHover={{ translateY: -2 }}
+                  className="stream-post-card overflow-hidden bouncy-button"
+                >
+                  <div className="p-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
+                        S
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm m-0" style={{ color: 'var(--color-primary)' }}>System Notification</p>
+                        <p className="text-xs m-0" style={{ color: 'var(--color-muted)' }}>3 hours ago</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm m-0" style={{ color: 'var(--color-secondary)' }}>
+                      Assignment deadline extended to Friday. Make sure to submit your work before 5:00 PM.
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
-  // --- DASHBOARD HOME (original dashboard content) ---
+  // --- DASHBOARD HOME ---
   const DashboardHome = () => (
     <div className="p-6">
       {/* Stats Grid */}
@@ -1023,7 +960,7 @@ const App = () => {
           animate={{ opacity: 1, y: 0 }}
           whileHover={{ translateY: -2 }}
           transition={{ duration: 0.2 }}
-          className="p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all duration-200"
+          className="p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all bouncy-button"
           style={{ background: 'linear-gradient(135deg, #4f46e5, #0ea5e9)', borderColor: 'transparent' }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -1040,7 +977,7 @@ const App = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.2 }}
           whileHover={{ translateY: -2 }}
-          className="p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all duration-200"
+          className="p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all bouncy-button"
           style={{ background: 'linear-gradient(135deg, #10b981, #059669)', borderColor: 'transparent' }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -1057,7 +994,7 @@ const App = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.2 }}
           whileHover={{ translateY: -2 }}
-          className="p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all duration-200"
+          className="p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all bouncy-button"
           style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', borderColor: 'transparent' }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -1074,7 +1011,7 @@ const App = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.2 }}
           whileHover={{ translateY: -2 }}
-          className="p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all duration-200"
+          className="p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all bouncy-button"
           style={{ background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', borderColor: 'transparent' }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -1089,7 +1026,7 @@ const App = () => {
         </motion.div>
       </div>
 
-      {/* Course Grid - Google Classroom Style */}
+      {/* Course Grid */}
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>
@@ -1106,18 +1043,17 @@ const App = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               whileHover={{ translateY: -4, boxShadow: '0 20px 40px rgba(79, 70, 229, 0.15)' }}
-              onClick={() => handleCourseClick(course)}
-              className="group rounded-3xl overflow-hidden cursor-pointer border transition-all duration-200"
+              onClick={() => handleSubjectSelect(course)}
+              className="group rounded-3xl overflow-hidden cursor-pointer border transition-all duration-200 bouncy-button"
               style={{ minHeight: '280px', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-light)' }}
             >
-              {/* Google Classroom Style Banner Header */}
+              {/* Banner */}
               <div 
                 className={`relative h-28 ${course.color} p-5 flex flex-col justify-between`}
                 style={{ 
                   backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%)` 
                 }}
               >
-                {/* Top row - Code and Section */}
                 <div className="flex items-start justify-between">
                   <div>
                     <span className="text-white/90 text-xs font-semibold tracking-wide uppercase">
@@ -1133,19 +1069,16 @@ const App = () => {
                   </div>
                 </div>
                 
-                {/* Course Title */}
                 <h3 className="text-white font-bold text-base leading-tight line-clamp-2 pr-4" 
                     style={{ fontFamily: 'var(--font-family)', textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
                   {course.title}
                 </h3>
                 
-                {/* Decorative element */}
                 <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-white/10"></div>
               </div>
               
               {/* Card Body */}
               <div className="p-5 flex flex-col gap-4">
-                {/* Professor Info */}
                 <div className="flex items-center gap-3">
                   <div className={`w-9 h-9 rounded-full ${course.color} flex items-center justify-center text-white text-xs font-bold shadow-sm`}>
                     {course.professor.split(' ').map(n => n[0]).join('').slice(0, 2)}
@@ -1158,7 +1091,6 @@ const App = () => {
                   </div>
                 </div>
                 
-                {/* Progress Bar */}
                 <div>
                   <div className="flex justify-between items-center text-xs mb-2">
                     <span className="font-medium" style={{ color: 'var(--color-secondary)' }}>Course Progress</span>
@@ -1177,7 +1109,6 @@ const App = () => {
                   </div>
                 </div>
                 
-                {/* Latest Announcement Preview */}
                 <div className="rounded-2xl p-3 border transition-all duration-200 hover:shadow-md" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-light)' }}>
                   <div className="flex items-start gap-2">
                     <MessageSquare size={14} className="mt-0.5 flex-shrink-0" style={{ color: 'var(--color-muted)' }} />
@@ -1189,19 +1120,6 @@ const App = () => {
                     </div>
                   </div>
                 </div>
-                
-                {/* Action Button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.open(course.meetLink, '_blank');
-                  }}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-white rounded-2xl text-sm font-semibold hover:shadow-lg active:scale-[0.98] transition-all duration-200"
-                  style={{ fontFamily: 'var(--font-family)', background: 'var(--gradient-electric)' }}
-                >
-                  <Video size={16} />
-                  Join Meet
-                </button>
               </div>
             </motion.div>
           ))}
@@ -1210,9 +1128,9 @@ const App = () => {
     </div>
   );
 
-  // --- DASHBOARD WRAPPER (with header) ---
+  // --- DASHBOARD WRAPPER ---
   const Dashboard = () => (
-    <div className="flex-1 overflow-auto">
+    <div className="flex-1 overflow-auto flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-30 border-b bg-white dark:bg-gray-900 transition-all duration-300"
               style={{ borderColor: 'var(--border-light)' }}>
@@ -1220,7 +1138,7 @@ const App = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+              className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg bouncy-button"
             >
               <Menu size={20} />
             </button>
@@ -1233,7 +1151,6 @@ const App = () => {
           </div>
           
           <div className="flex items-center gap-3">
-            {/* Search */}
             <div className="hidden md:flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
               <Search size={16} className="text-gray-500" />
               <input
@@ -1246,10 +1163,11 @@ const App = () => {
               />
             </div>
             
-            {/* Notifications */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+              className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg bouncy-button"
             >
               <Bell size={20} />
               {getUnreadCount() > 0 && (
@@ -1257,22 +1175,27 @@ const App = () => {
                   {getUnreadCount()}
                 </span>
               )}
-            </button>
+            </motion.button>
             
-            {/* Dark Mode Toggle */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               onClick={toggleDarkMode}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg bouncy-button"
             >
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+            </motion.button>
           </div>
         </div>
       </header>
 
-      {/* Main Content - Render based on activeNav */}
-      <main>
-        {renderMainContent()}
+      {/* Main Content */}
+      <main className="flex-1 overflow-auto">
+        {selectedCourseDetail && activeItem ? (
+          <SubjectStreamView course={selectedCourseDetail} />
+        ) : (
+          <DashboardHome />
+        )}
       </main>
     </div>
   );
@@ -1290,144 +1213,44 @@ const App = () => {
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>Notifications</h3>
-              <button onClick={() => setShowNotifications(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowNotifications(false)} className="text-gray-400 hover:text-gray-600 border-none bg-transparent cursor-pointer">
                 <X size={16} />
               </button>
             </div>
           </div>
           
           <div className="max-h-96 overflow-y-auto">
-            {notifications.length === 0 ? (
-              <div className="p-8 text-center text-gray-500">
-                <Bell size={32} className="mx-auto mb-2 opacity-20" />
-                <p>No notifications</p>
-              </div>
-            ) : (
-              notifications.map(notification => (
-                <motion.div
-                  key={notification.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  onClick={() => handleNotificationClick(notification)}
-                  className={`p-4 border-b cursor-pointer transition-colors border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${!notification.read ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''}`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-lg ${
-                      notification.type === 'assignment' ? 'bg-blue-100 text-blue-600' :
-                      notification.type === 'grade' ? 'bg-green-100 text-green-600' :
-                      'bg-gray-100 text-gray-600'
-                    }`}>
-                      {notification.type === 'assignment' ? <FileText size={16} /> :
-                       notification.type === 'grade' ? <CheckSquare size={16} /> :
-                       <Bell size={16} />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 dark:text-white text-sm" style={{ fontFamily: 'var(--font-family)' }}>{notification.title}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{notification.message}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">{notification.time}</p>
-                    </div>
-                    {!notification.read && (
-                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                    )}
+            {notifications.map(notification => (
+              <motion.div
+                key={notification.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={() => handleNotificationClick(notification)}
+                className={`p-4 border-b cursor-pointer transition-colors border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 bouncy-button ${!notification.read ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''}`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`p-2 rounded-lg ${
+                    notification.type === 'assignment' ? 'bg-blue-100 text-blue-600' :
+                    notification.type === 'grade' ? 'bg-green-100 text-green-600' :
+                    'bg-gray-100 text-gray-600'
+                  }`}>
+                    {notification.type === 'assignment' ? <FileText size={16} /> :
+                     notification.type === 'grade' ? <CheckSquare size={16} /> :
+                     <Bell size={16} />}
                   </div>
-                </motion.div>
-              ))
-            )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900 dark:text-white text-sm" style={{ fontFamily: 'var(--font-family)' }}>{notification.title}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{notification.message}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">{notification.time}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       )}
     </AnimatePresence>
   );
-
-  // --- COURSE MODAL ---
-  const CourseModal = () => {
-    if (!showCourseModal || !selectedCourseDetail) return null;
-    
-    return (
-      <AnimatePresence>
-        {showCourseModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-            onClick={() => setShowCourseModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>{selectedCourseDetail.title}</h2>
-                    <p className="text-gray-600 dark:text-gray-400">{selectedCourseDetail.code} • {selectedCourseDetail.section}</p>
-                  </div>
-                  <button onClick={() => setShowCourseModal(false)} className="text-gray-400 hover:text-gray-600">
-                    <X size={24} />
-                  </button>
-                </div>
-              </div>
-              
-              {/* Content */}
-              <div className="p-6 overflow-y-auto max-h-96">
-                <div className="space-y-6">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Instructor</p>
-                      <p className="font-medium text-gray-900 dark:text-white">{selectedCourseDetail.professor}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Schedule</p>
-                      <p className="font-medium text-gray-900 dark:text-white">{selectedCourseDetail.sched}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Room</p>
-                      <p className="font-medium text-gray-900 dark:text-white">{selectedCourseDetail.room}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Progress</p>
-                      <p className="font-medium text-gray-900 dark:text-white">{selectedCourseDetail.progress}%</p>
-                    </div>
-                  </div>
-                  
-                  {/* Google Meet Integration */}
-                  <div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-blue-600 rounded-lg">
-                        <Video size={20} className="text-white" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'var(--font-family)' }}>Google Meet Integration</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Join your virtual classroom instantly</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => window.open(selectedCourseDetail.meetLink, '_blank')}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all"
-                    >
-                      <Camera size={20} />
-                      Join Google Meet Class
-                    </button>
-                  </div>
-                  
-                  {/* Announcement */}
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2" style={{ fontFamily: 'var(--font-family)' }}>Latest Announcement</h4>
-                    <p className="text-gray-600 dark:text-gray-300">{selectedCourseDetail.announcement}</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    );
-  };
 
   // --- FLOATING CHAT ---
   const FloatingChat = () => (
@@ -1440,7 +1263,6 @@ const App = () => {
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             className="mb-4 w-96 rounded-2xl shadow-2xl border overflow-hidden bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
           >
-            {/* Header */}
             <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
@@ -1452,13 +1274,17 @@ const App = () => {
                     <p className="text-xs text-white/80">Always here to help</p>
                   </div>
                 </div>
-                <button onClick={() => setIsChatOpen(false)} className="text-white/80 hover:text-white">
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setIsChatOpen(false)} 
+                  className="text-white/80 hover:text-white border-none bg-transparent cursor-pointer"
+                >
                   <X size={16} />
-                </button>
+                </motion.button>
               </div>
             </div>
             
-            {/* Messages */}
             <div className="h-96 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
@@ -1484,29 +1310,9 @@ const App = () => {
                     </div>
                   </motion.div>
                 )}
-                
-                {isAiLoading && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-start gap-3"
-                  >
-                    <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                      <Zap size={16} className="text-white" />
-                    </div>
-                    <div className="max-w-[80%] bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
               </div>
             </div>
             
-            {/* Input */}
             <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
               <div className="flex gap-2">
                 <input
@@ -1518,32 +1324,28 @@ const App = () => {
                   style={{ fontFamily: 'var(--font-family)' }}
                   onKeyPress={(e) => e.key === 'Enter' && sendAiMessage()}
                 />
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={sendAiMessage}
                   disabled={isAiLoading || !aiMessage.trim()}
-                  className="p-3 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-white disabled:opacity-50 hover:from-purple-700 hover:to-blue-700 transition-all"
+                  className="p-3 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-white disabled:opacity-50 hover:from-purple-700 hover:to-blue-700 transition-all border-none cursor-pointer bouncy-button"
                 >
                   <Send size={16} />
-                </button>
+                </motion.button>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
       
-      {/* Floating Button */}
       <motion.button
         onClick={() => setIsChatOpen(!isChatOpen)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="w-14 h-14 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full shadow-lg flex items-center justify-center text-white hover:shadow-xl transition-all"
+        className="w-14 h-14 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full shadow-lg flex items-center justify-center text-white hover:shadow-xl transition-all border-none cursor-pointer bouncy-button"
       >
         <MessageSquare size={24} />
-        {getUnreadCount() > 0 && (
-          <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold">
-            {getUnreadCount()}
-          </div>
-        )}
       </motion.button>
     </div>
   );
@@ -1558,7 +1360,6 @@ const App = () => {
       <Sidebar />
       <Dashboard />
       <NotificationDropdown />
-      <CourseModal />
       <FloatingChat />
     </div>
   );
